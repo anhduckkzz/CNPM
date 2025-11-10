@@ -1,11 +1,15 @@
+import { CheckCircle2 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 const ReportSection = ({
   title,
   report,
+  onAction,
 }: {
   title: string;
   report: { reportName: string; academicYear: string; semester?: string; filters: { label: string; value: string }[]; options: string[] };
+  onAction: (message: string) => void;
 }) => (
   <section className="rounded-[32px] bg-white p-8 shadow-soft">
     <p className="text-sm uppercase tracking-widest text-slate-400">{title}</p>
@@ -47,13 +51,25 @@ const ReportSection = ({
       </div>
     </div>
     <div className="mt-6 flex flex-wrap gap-4">
-      <button className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-soft" type="button">
+      <button
+        className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-primary/90"
+        type="button"
+        onClick={() => onAction(`Generated ${report.reportName}`)}
+      >
         Generate Report
       </button>
-      <button className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-500" type="button">
+      <button
+        className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-500 transition hover:border-primary/40 hover:text-primary"
+        type="button"
+        onClick={() => onAction(`Sent ${report.reportName} to Office of Student Affairs`)}
+      >
         Send Report to Office of Student Affairs
       </button>
-      <button className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-500" type="button">
+      <button
+        className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-500 transition hover:border-primary/40 hover:text-primary"
+        type="button"
+        onClick={() => onAction(`Sent ${report.reportName} to Academic Department`)}
+      >
         Send Report to Academic Department
       </button>
     </div>
@@ -63,17 +79,49 @@ const ReportSection = ({
 const ReportBuilderPage = () => {
   const { portal, role } = useAuth();
   const reports = portal?.reports;
+  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (message: string) => {
+    setToast({ visible: true, message });
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
+  };
+
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    },
+    [],
+  );
 
   if (role !== 'staff' || !reports) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Report builder available for staff only.</div>;
   }
 
   return (
-    <div className="space-y-8">
-      <ReportSection title="Academic Report" report={reports.academic} />
-      <ReportSection title="Scholarship Report" report={reports.scholarship} />
-      <ReportSection title="Feedback Generation" report={reports.feedback} />
-    </div>
+    <>
+      <div className="space-y-8">
+        <ReportSection title="Academic Report" report={reports.academic} onAction={showToast} />
+        <ReportSection title="Scholarship Report" report={reports.scholarship} onAction={showToast} />
+        <ReportSection title="Feedback Generation" report={reports.feedback} onAction={showToast} />
+      </div>
+
+      <div
+        aria-live="assertive"
+        className={`pointer-events-none fixed left-6 top-6 z-[60] w-full max-w-xs transform rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm shadow-lg transition-all duration-300 ${
+          toast.visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
+        }`}
+      >
+        <div className="pointer-events-auto flex items-start gap-3 text-emerald-700">
+          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+          <div>
+            <p className="font-semibold">Success</p>
+            <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

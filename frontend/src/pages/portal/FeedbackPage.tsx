@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { CheckCircle2, Star } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const FeedbackPage = () => {
@@ -7,6 +7,21 @@ const FeedbackPage = () => {
   const feedback = portal?.feedback;
   const [rating, setRating] = useState(4);
   const [experience, setExperience] = useState(4);
+  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (message: string) => {
+    setToast({ visible: true, message });
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
+  };
+
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    },
+    [],
+  );
 
   if (!feedback) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Feedback data unavailable.</div>;
@@ -15,8 +30,9 @@ const FeedbackPage = () => {
   const ratingLabels = feedback.ratingScale.slice(0, 5);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-      <section className="rounded-[32px] bg-white p-8 shadow-soft">
+    <>
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+        <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <p className="text-sm uppercase tracking-widest text-slate-400">{feedback.title}</p>
         <h1 className="text-3xl font-semibold text-ink">{feedback.instructions}</h1>
         <div className="mt-6 space-y-4">
@@ -74,7 +90,11 @@ const FeedbackPage = () => {
               defaultValue="Please improve system performance and navigation clarity."
             />
           </label>
-          <button className="w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft" type="button">
+          <button
+            className="w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-primary/90"
+            type="button"
+            onClick={() => showToast('Student feedback submitted')}
+          >
             Submit Student Feedback
           </button>
         </div>
@@ -99,6 +119,22 @@ const FeedbackPage = () => {
         </div>
       </aside>
     </div>
+
+      <div
+        aria-live="assertive"
+        className={`pointer-events-none fixed left-6 top-6 z-[60] w-full max-w-xs transform rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm shadow-lg transition-all duration-300 ${
+          toast.visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
+        }`}
+      >
+        <div className="pointer-events-auto flex items-start gap-3 text-emerald-700">
+          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+          <div>
+            <p className="font-semibold">Success</p>
+            <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
