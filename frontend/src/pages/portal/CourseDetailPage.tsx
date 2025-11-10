@@ -33,40 +33,6 @@ const CourseDetailPage = () => {
     navigate(`/portal/${role}/course-detail/${courseId}/quiz/${quizId}`);
   };
 
-  const goToQuestion = (index: number) => {
-    if (!questions.length) return;
-    const clamped = Math.min(Math.max(index, 0), questions.length - 1);
-    setCurrentQuestionIndex(clamped);
-  };
-
-  const handleSubmitQuiz = () => {
-    if (!questions.length || !activeQuiz) return;
-    const correctCount = questions.reduce(
-      (total, question) => (selectedAnswers[question.id] === question.correctOptionId ? total + 1 : total),
-      0,
-    );
-    const elapsedMinutes =
-      quizStartTime !== null ? Math.max(1, Math.round((Date.now() - quizStartTime) / 60000)) : Math.max(minutesBudget, 1);
-    const scorePercent = Math.round((correctCount / questions.length) * 100);
-    const completionPercent = Math.round((answeredCount / questions.length) * 100);
-
-    setQuizResult({
-      scorePercent,
-      correctCount,
-      totalQuestions: questions.length,
-      answeredCount,
-      timeSpentMinutes: elapsedMinutes,
-      summaryStats: [
-        { label: 'Correct', value: `${correctCount}/${questions.length}` },
-        { label: 'Accuracy', value: `${scorePercent}%` },
-        { label: 'Completion', value: `${completionPercent}%` },
-        { label: 'Time Spent', value: `${elapsedMinutes} min` },
-      ],
-      focusAreas: activeQuiz.focusAreas,
-    });
-  };
-
-
   return (
 
     <div className="space-y-6">

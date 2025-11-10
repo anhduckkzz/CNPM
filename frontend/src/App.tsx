@@ -8,6 +8,7 @@ import AnnouncementsPage from './pages/portal/AnnouncementsPage';
 import CourseMatchingPage from './pages/portal/CourseMatchingPage';
 import CoursesPage from './pages/portal/CoursesPage';
 import CourseDetailPage from './pages/portal/CourseDetailPage';
+import CourseQuizPage from './pages/portal/CourseQuizPage';
 import QuizSessionPage from './pages/portal/QuizSessionPage';
 import QuizSummaryPage from './pages/portal/QuizSummaryPage';
 import SchedulePage from './pages/portal/SchedulePage';
@@ -34,6 +35,7 @@ function App() {
             <Route path="course-matching" element={<CourseMatchingPage />} />
             <Route path="courses" element={<CoursesPage />} />
             <Route path="course-detail/:courseId" element={<CourseDetailPage />} />
+            <Route path="course-detail/:courseId/quiz/:quizId" element={<CourseQuizPage />} />
             <Route path="quiz/:courseId" element={<QuizSessionPage />} />
             <Route path="quiz/:courseId/completed" element={<QuizSummaryPage />} />
             <Route path="schedule" element={<SchedulePage />} />

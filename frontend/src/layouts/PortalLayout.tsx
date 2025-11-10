@@ -15,6 +15,10 @@ const PortalLayout = () => {
   const isSidebarOpen = isSidebarHovered;
 
   const sidebarLinks = useMemo(() => portal?.navigation.sidebar ?? [], [portal]);
+  const derivedTitle =
+    location.pathname.split('/').filter(Boolean).slice(-1)[0]?.replace(/-/g, ' ') || 'dashboard';
+  const inQuizFlow = location.pathname.includes('/quiz') || location.pathname.includes('/course-detail');
+  const headerTitle = inQuizFlow ? 'Quiz' : derivedTitle;
 
   if (!portal || !role) {
     return (
@@ -125,9 +129,7 @@ const PortalLayout = () => {
 
         <main className="flex-1 space-y-6">
           <header className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-soft lg:flex-row lg:items-center lg:justify-between">
-            <h1 className="text-2xl font-semibold capitalize text-ink">
-              {location.pathname.split('/').filter(Boolean).slice(-1)[0]?.replace(/-/g, ' ') || 'dashboard'}
-            </h1>
+            <h1 className="text-2xl font-semibold capitalize text-ink">{headerTitle}</h1>
             <div className="flex flex-wrap items-center gap-3">
               <div className="text-right">
                 <p className="text-xs text-slate-400">Logged in as</p>
