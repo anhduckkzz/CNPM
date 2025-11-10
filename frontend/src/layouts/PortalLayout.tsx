@@ -145,7 +145,7 @@ const PortalLayout = () => {
           </header>
 
           <section>
-            <Outlet />
+            <Outlet context={{ isSidebarOpen }} />
           </section>
 
           <footer className="rounded-3xl bg-white px-6 py-4 text-sm text-slate-400 shadow-soft">

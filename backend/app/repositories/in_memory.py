@@ -67,9 +67,9 @@ class PortalRepository:
                     {
                         'title': 'Student Hub',
                         'links': [
-                            {'label': 'Tutor-Student Course Match', 'path': '/portal/student/course-matching'},
+                            {'label': 'Course Registration', 'path': '/portal/student/course-matching'},
                             {'label': 'My Schedule', 'path': '/portal/student/schedule'},
-                            {'label': 'Session Feedback', 'path': '/portal/student/feedback', 'badge': 'New'},
+                            {'label': 'Session Feedback', 'path': '/portal/student/feedback'},
                         ],
                     },
                 ],
@@ -110,7 +110,7 @@ class PortalRepository:
                 ],
             },
             'courseMatching': {
-                'title': 'Tutor-Student Course Matching',
+                'title': 'Course Registration',
                 'description': 'Discover and manage courses that align with your learning goals.',
                 'filters': ['All Categories', 'All Statuses', 'All Formats'],
                 'recommended': self._recommended_courses('student'),
@@ -495,7 +495,7 @@ class PortalRepository:
                         'title': 'Tutor Console',
                         'links': [
                             {'label': 'Dashboard', 'path': '/portal/tutor/home'},
-                            {'label': 'Tutor-Student Course Match', 'path': '/portal/tutor/course-matching'},
+                            {'label': 'Course Registration', 'path': '/portal/tutor/course-matching'},
                             {'label': 'Courses', 'path': '/portal/tutor/courses'},
                             {'label': 'Course Support', 'path': '/portal/tutor/course-detail/c-data-structures'},
                             {'label': 'My Schedule', 'path': '/portal/tutor/schedule'},

@@ -12,6 +12,8 @@ const FeedbackPage = () => {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Feedback data unavailable.</div>;
   }
 
+  const ratingLabels = feedback.ratingScale.slice(0, 5);
+
   return (
     <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
@@ -53,19 +55,17 @@ const FeedbackPage = () => {
           </div>
           <div className="rounded-2xl bg-slate-50 p-4">
             <p className="text-sm font-semibold text-slate-500">Overall System Experience</p>
-            <input
-              type="range"
-              min={1}
-              max={feedback.ratingScale.length}
+            <select
+              className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-ink"
               value={experience}
               onChange={(e) => setExperience(Number(e.target.value))}
-              className="mt-4 w-full accent-primary"
-            />
-            <div className="mt-2 flex justify-between text-xs text-slate-500">
-              {feedback.ratingScale.map((label) => (
-                <span key={label}>{label}</span>
+            >
+              {ratingLabels.map((label, index) => (
+                <option key={label} value={index + 1}>
+                  {label}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
           <label className="block text-sm font-semibold text-slate-500">
             System Feedback
