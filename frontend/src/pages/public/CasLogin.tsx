@@ -65,7 +65,7 @@ const CasLogin = () => {
                 disabled={isSubmitting}
                 className="flex-1 rounded-2xl bg-primary px-4 py-3 font-semibold text-white shadow-soft disabled:opacity-60"
               >
-                {isSubmitting ? 'Signing in�?�' : 'Login'}
+                {isSubmitting ? 'Signing in...' : 'Login'}
               </button>
               <button
                 type="button"
@@ -111,4 +111,3 @@ const CasLogin = () => {
 };
 
 export default CasLogin;
-
