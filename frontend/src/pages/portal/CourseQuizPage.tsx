@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, Timer, Trophy, Target, BarChart3, Activity, X } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
 import type { CourseDetailSection } from '../../types/portal';
 
 type QuizOption = { id: string; label: string; value: string };
@@ -378,8 +379,9 @@ const buildQuizContent = (
 const CourseQuizPage = () => {
   const { portal, role } = useAuth();
   const navigate = useNavigate();
-  const { courseId, quizId } = useParams();
-  const course = courseId ? portal?.courseDetails?.[courseId] : undefined;
+  const { courseId: courseSlugParam, quizId } = useParams();
+  const normalizedCourseId = courseIdFromSlug(courseSlugParam);
+  const course = normalizedCourseId ? portal?.courseDetails?.[normalizedCourseId] : undefined;
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
@@ -412,7 +414,14 @@ const CourseQuizPage = () => {
         <button
           type="button"
           className="font-semibold text-primary underline-offset-2 hover:underline"
-          onClick={() => (role ? navigate(`/portal/${role}/course-detail/${course.courseId}`) : navigate(-1))}
+        onClick={() => {
+          if (!role) {
+            navigate(-1);
+            return;
+          }
+          const slug = courseSlugParam ?? toCourseSlug(course.courseId) ?? normalizedCourseId;
+          navigate(`/portal/${role}/course-detail/${slug}`);
+        }}
         >
           Return to course
         </button>
@@ -486,11 +495,12 @@ const CourseQuizPage = () => {
   };
 
   const handleReturnToCourse = () => {
-    if (role) {
-      navigate(`/portal/${role}/course-detail/${course.courseId}`);
-    } else {
+    if (!role) {
       navigate(-1);
+      return;
     }
+    const slug = courseSlugParam ?? toCourseSlug(course.courseId) ?? normalizedCourseId;
+    navigate(`/portal/${role}/course-detail/${slug}`);
   };
 
   return (

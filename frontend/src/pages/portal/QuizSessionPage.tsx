@@ -1,21 +1,32 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { courseIdFromSlug } from '../../utils/courseSlug';
 
 const QuizSessionPage = () => {
   const navigate = useNavigate();
   const { portal, role } = useAuth();
-  const { courseId } = useParams();
+  const { courseId: courseSlug } = useParams();
+  const normalizedCourseId = courseIdFromSlug(courseSlug);
   const quiz = portal?.quizSession;
   const [selectedOption, setSelectedOption] = useState<string>();
 
-  if (!quiz || quiz.courseId !== courseId) {
+  if (!quiz || (normalizedCourseId && quiz.courseId !== normalizedCourseId)) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Quiz session not found.</div>;
   }
 
+  const courseTitle = useMemo(() => {
+    if (!portal) return quiz.title;
+    return (
+      portal.courseDetails?.[quiz.courseId]?.title ??
+      portal.courses?.courses?.find((course) => course.id === quiz.courseId)?.title ??
+      quiz.title
+    );
+  }, [portal, quiz.courseId, quiz.title]);
+
   const submit = () => {
-    if (!role || !courseId) return;
-    navigate(`/portal/${role}/quiz/${courseId}/completed`);
+    if (!role || !courseSlug) return;
+    navigate(`/portal/${role}/quiz/${courseSlug}/completed`);
   };
 
   return (
@@ -23,7 +34,7 @@ const QuizSessionPage = () => {
       <div className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm uppercase tracking-widest text-slate-400">Quiz</p>
+            <p className="text-sm uppercase tracking-widest text-slate-400">{courseTitle}</p>
             <h1 className="text-2xl font-semibold text-ink">{quiz.title}</h1>
           </div>
           <div className="rounded-2xl border border-slate-100 px-6 py-3 text-center">

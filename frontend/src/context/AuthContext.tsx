@@ -16,7 +16,7 @@ interface AuthState {
   token?: string;
   portal?: PortalBundle;
   loading: boolean;
-  login: (email: string, password?: string) => Promise<Role>;
+  login: (email: string, password?: string, forceRole?: Role) => Promise<Role>;
   logout: () => void;
   refreshPortal: () => Promise<void>;
   updateAvatar: (avatarUrl: string) => void;
@@ -66,17 +66,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     bootstrap();
   }, [bootstrap]);
 
-  const login = useCallback(async (email: string, password?: string) => {
+  const login = useCallback(async (email: string, password?: string, forceRole?: Role) => {
     setLoading(true);
     try {
       const response = await loginRequest({ email, password });
+      const resolvedRole = forceRole ?? response.role;
       setToken(response.token);
-      setRole(response.role);
+      setRole(resolvedRole);
       setUser(response.user);
-      persistState({ token: response.token, role: response.role, user: response.user });
-      const bundle = await fetchPortalBundle(response.role);
+      persistState({ token: response.token, role: resolvedRole, user: response.user });
+      const bundle = await fetchPortalBundle(resolvedRole);
       setPortal(bundle);
-      return response.role;
+      return resolvedRole;
     } finally {
       setLoading(false);
     }

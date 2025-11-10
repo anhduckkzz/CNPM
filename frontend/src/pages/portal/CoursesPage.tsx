@@ -2,6 +2,7 @@ import { BookOpen } from 'lucide-react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { toCourseSlug } from '../../utils/courseSlug';
 
 const FALLBACK_IMAGES = [
   'https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=900&q=80',
@@ -69,7 +70,11 @@ const CoursesPage = () => {
               <button
                 type="button"
                 className="mt-5 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
-                onClick={() => role && navigate(`/portal/${role}/course-detail/${course.id}`)}
+                onClick={() => {
+                  if (!role) return;
+                  const slug = toCourseSlug(course.id) ?? course.id;
+                  navigate(`/portal/${role}/course-detail/${slug}`);
+                }}
               >
                 Access Course
               </button>

@@ -8,8 +8,9 @@ const CasLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const defaultRole = useMemo(() => new URLSearchParams(location.search).get('role'), [location.search]);
-  const [email, setEmail] = useState(defaultRole === 'staff' ? 'staff@hcmut.edu.vn' : 'student@hcmut.edu.vn');
-  const [password, setPassword] = useState(defaultRole === 'staff' ? 'password' : '�?��?��?��?��?��?��?��?�');
+  const isAdminView = defaultRole === 'staff';
+  const [email, setEmail] = useState(isAdminView ? 'staff@hcmut.edu.vn' : 'student@hcmut.edu.vn');
+  const [password, setPassword] = useState(isAdminView ? 'password' : '12345678');
   const [error, setError] = useState<string>();
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -17,8 +18,31 @@ const CasLogin = () => {
     event.preventDefault();
     setError(undefined);
     setSubmitting(true);
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!normalizedEmail.endsWith('@hcmut.edu.vn')) {
+      setError('You are not allowed to use this services.');
+      setSubmitting(false);
+      return;
+    }
+
+    if (!isAdminView && password !== '12345678') {
+      setError('Wrong password');
+      setSubmitting(false);
+      return;
+    }
+
+    if (isAdminView && normalizedEmail !== 'staff@hcmut.edu.vn') {
+      setError("You don't have permission to access this site.");
+      setSubmitting(false);
+      return;
+    }
+
+    const forcedRole = isAdminView ? 'staff' : 'student';
+
     try {
-      const role = await login(email, password);
+      const role = await login(normalizedEmail, password, forcedRole);
       navigate(`/portal/${role}/home`, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in right now.');
@@ -78,7 +102,7 @@ const CasLogin = () => {
                 Clear
               </button>
             </div>
-            <button type="button" className="mt-4 text-sm font-semibold text-primary">
+            <button type="button" className="mt-4 text-sm font-semibold text-primary" onClick={() => navigate('/change-password')}>
               Change password?
             </button>
           </form>

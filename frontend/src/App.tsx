@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PortalLayout from './layouts/PortalLayout';
 import SSOLanding from './pages/public/SSOLanding';
 import CasLogin from './pages/public/CasLogin';
+import ChangePassword from './pages/public/ChangePassword';
 import AnnouncementsPage from './pages/portal/AnnouncementsPage';
 import CourseMatchingPage from './pages/portal/CourseMatchingPage';
 import CoursesPage from './pages/portal/CoursesPage';
@@ -21,6 +22,7 @@ import StaffRecordsPage from './pages/portal/StaffRecordsPage';
 import NotifyStudentPage from './pages/portal/NotifyStudentPage';
 import ReportBuilderPage from './pages/portal/ReportBuilderPage';
 import StaffFeedbackGeneratorPage from './pages/portal/StaffFeedbackGeneratorPage';
+import JoinSessionPage from './pages/portal/JoinSessionPage';
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SSOLanding />} />
         <Route path="/cas-login" element={<CasLogin />} />
+        <Route path="/change-password" element={<ChangePassword />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/portal/:role" element={<PortalLayout />}>
@@ -36,6 +39,7 @@ function App() {
             <Route path="courses" element={<CoursesPage />} />
             <Route path="course-detail/:courseId" element={<CourseDetailPage />} />
             <Route path="course-detail/:courseId/quiz/:quizId" element={<CourseQuizPage />} />
+            <Route path="course-detail/:courseId/session/:sessionId" element={<JoinSessionPage />} />
             <Route path="quiz/:courseId" element={<QuizSessionPage />} />
             <Route path="quiz/:courseId/completed" element={<QuizSummaryPage />} />
             <Route path="schedule" element={<SchedulePage />} />

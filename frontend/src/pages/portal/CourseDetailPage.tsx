@@ -1,6 +1,7 @@
 import { CalendarDays, Clock3, FileText, FileSpreadsheet, FileVideo, Code, FileText as FileDoc } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
 
 type MaterialEntry = string | { title: string; type?: string };
 
@@ -17,8 +18,9 @@ const materialIconMap: Record<string, typeof FileText> = {
 const CourseDetailPage = () => {
   const { portal, role } = useAuth();
   const navigate = useNavigate();
-  const { courseId } = useParams();
-  const course = courseId ? portal?.courseDetails?.[courseId] : undefined;
+  const { courseId: courseSlugParam } = useParams();
+  const normalizedCourseId = courseIdFromSlug(courseSlugParam);
+  const course = normalizedCourseId ? portal?.courseDetails?.[normalizedCourseId] : undefined;
 
   if (!course) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Course details not available.</div>;
@@ -29,8 +31,17 @@ const CourseDetailPage = () => {
   );
 
   const handleAttemptQuiz = (quizId: string) => {
-    if (!role || !courseId) return;
-    navigate(`/portal/${role}/course-detail/${courseId}/quiz/${quizId}`);
+    if (!role) return;
+    const slug = courseSlugParam ?? toCourseSlug(course?.courseId) ?? normalizedCourseId;
+    if (!slug) return;
+    navigate(`/portal/${role}/course-detail/${slug}/quiz/${quizId}`);
+  };
+
+  const handleJoinSession = (sessionId: string) => {
+    if (!role) return;
+    const slug = courseSlugParam ?? toCourseSlug(course?.courseId) ?? normalizedCourseId;
+    if (!slug) return;
+    navigate(`/portal/${role}/course-detail/${slug}/session/${sessionId}`);
   };
 
   return (
@@ -97,15 +108,11 @@ const CourseDetailPage = () => {
                 </div>
 
                 <button
-
                   type="button"
-
+                  onClick={() => handleJoinSession(session.id)}
                   className="rounded-full border border-primary/20 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/5"
-
                 >
-
                   {session.cta}
-
                 </button>
 
               </div>

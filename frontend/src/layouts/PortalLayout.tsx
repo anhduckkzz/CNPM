@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
+import { courseIdFromSlug } from '../utils/courseSlug';
 
 const hcmutLogoUrl = '/images/HCMUT-BachKhoa-Logo.png';
 
@@ -17,8 +18,28 @@ const PortalLayout = () => {
   const sidebarLinks = useMemo(() => portal?.navigation.sidebar ?? [], [portal]);
   const derivedTitle =
     location.pathname.split('/').filter(Boolean).slice(-1)[0]?.replace(/-/g, ' ') || 'dashboard';
-  const inQuizFlow = location.pathname.includes('/quiz') || location.pathname.includes('/course-detail');
-  const headerTitle = inQuizFlow ? 'Quiz' : derivedTitle;
+  const courseSlug = useMemo(() => {
+    const segments = location.pathname.split('/').filter(Boolean);
+    const courseDetailIndex = segments.indexOf('course-detail');
+    if (courseDetailIndex !== -1 && segments[courseDetailIndex + 1]) {
+      return segments[courseDetailIndex + 1];
+    }
+    const quizIndex = segments.indexOf('quiz');
+    if (quizIndex !== -1 && segments[quizIndex + 1]) {
+      return segments[quizIndex + 1];
+    }
+    return undefined;
+  }, [location.pathname]);
+  const courseHeaderTitle = useMemo(() => {
+    if (!courseSlug) return undefined;
+    const courseKey = courseIdFromSlug(courseSlug);
+    if (!courseKey) return undefined;
+    return (
+      portal?.courseDetails?.[courseKey]?.title ??
+      portal?.courses?.courses?.find((course) => course.id === courseKey)?.title
+    );
+  }, [courseSlug, portal]);
+  const headerTitle = courseHeaderTitle ?? derivedTitle;
 
   if (!portal || !role) {
     return (
