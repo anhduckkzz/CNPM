@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-import os
 from dataclasses import asdict
 from typing import Dict
 
 from app.models.user import Role, User
 
-DEFAULT_STATIC_ORIGIN = 'http://localhost:8000'
-HERO_IMAGE_PATH = '/images/hcmut2.png'
-STATIC_BASE_URL = os.getenv('PORTAL_STATIC_BASE_URL', DEFAULT_STATIC_ORIGIN).rstrip('/') or DEFAULT_STATIC_ORIGIN
-HERO_IMAGE_URL = f'{STATIC_BASE_URL}{HERO_IMAGE_PATH}'
+HERO_IMAGE_URL = '/images/hcmut2.png'
 
 
 class PortalRepository:

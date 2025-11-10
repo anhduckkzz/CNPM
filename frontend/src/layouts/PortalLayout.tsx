@@ -5,10 +5,7 @@ import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
 
-const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api';
-const staticHost = apiBaseUrl.replace(/\/api\/?$/, '') || 'http://localhost:8000';
-const resolvedStaticHost = staticHost.replace(/\/$/, '');
-const hcmutLogoUrl = `${resolvedStaticHost}/images/HCMUT-BachKhoa-Logo.png`;
+const hcmutLogoUrl = '/images/HCMUT-BachKhoa-Logo.png';
 
 const PortalLayout = () => {
   const { portal, user, logout } = useAuth();
