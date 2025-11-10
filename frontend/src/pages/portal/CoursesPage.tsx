@@ -1,8 +1,10 @@
 import { BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const CoursesPage = () => {
-  const { portal } = useAuth();
+  const { portal, role } = useAuth();
+  const navigate = useNavigate();
   const registered = portal?.courses;
 
   if (!registered) {
@@ -37,6 +39,7 @@ const CoursesPage = () => {
               <button
                 type="button"
                 className="mt-5 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                onClick={() => role && navigate(`/portal/${role}/course-detail/${course.id}`)}
               >
                 Access Course
               </button>
