@@ -121,13 +121,13 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
 
   const historyData: Record<HistoryTab, Array<{ id: string; name: string; major: string; amount: string; date: string }>> = {
     scholarship: [
-      { id: 'GR-2354', name: 'Nguyen Thi An', major: 'Computer Science', amount: '$3,500 Academic Excellence Grant', date: 'Mar 12, 2024' },
+      { id: 'GR-2354', name: 'Nguy\u1ec5n Th\u1ecb An', major: 'Computer Science', amount: '$3,500 Academic Excellence Grant', date: 'Mar 12, 2024' },
       { id: 'GR-2410', name: 'Tran Van Binh', major: 'Electrical Eng.', amount: '$2,000 Leadership Scholarship', date: 'Feb 09, 2024' },
       { id: 'GR-2468', name: 'Le Thi Cuc', major: 'Chemical Eng.', amount: '$4,200 Research Fellowship', date: 'Jan 30, 2024' },
     ],
     training: [
       { id: 'TC-8842', name: 'Pham Minh Duy', major: 'Civil Eng.', amount: '18 hrs Safety Compliance', date: 'Mar 01, 2024' },
-      { id: 'TC-8891', name: 'Nguyen Thi An', major: 'Computer Science', amount: '16 hrs Lab Conduct Certification', date: 'Feb 14, 2024' },
+      { id: 'TC-8891', name: 'Nguy\u1ec5n Th\u1ecb An', major: 'Computer Science', amount: '16 hrs Lab Conduct Certification', date: 'Feb 14, 2024' },
       { id: 'TC-8899', name: 'Le Thi Cuc', major: 'Chemical Eng.', amount: '20 hrs Research Lab Readiness', date: 'Feb 02, 2024' },
     ],
   };

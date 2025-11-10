@@ -20,7 +20,7 @@ class PortalRepository:
         self._user_directory = {
             'student': User(
                 identifier='stu-20127001',
-                name='Nguyen Van A',
+                name='Nguy\u1ec5n V\u0103n An',
                 email='student@hcmut.edu.vn',
                 title='Student, Computer Science',
                 avatar='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80',
@@ -28,7 +28,7 @@ class PortalRepository:
             ),
             'tutor': User(
                 identifier='tutor-1975',
-                name='Nguyen Van A',
+                name='Nguy\u1ec5n V\u0103n An',
                 email='tutor@hcmut.edu.vn',
                 title='Tutor, Data Structures',
                 avatar='https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80',
@@ -36,7 +36,7 @@ class PortalRepository:
             ),
             'staff': User(
                 identifier='staff-osa',
-                name='Tran Thi Minh Chau',
+                name='Tr\u1ea7n Th\u1ecb Minh Ch\xe2u',
                 email='staff@hcmut.edu.vn',
                 title='Office of Student Affairs',
                 avatar='https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80',
@@ -146,7 +146,7 @@ class PortalRepository:
                         {
                             'id': 'slot-a',
                             'section': 'CO1002 at CC01 at In-person',
-                            'tutor': 'Nguyen Van A',
+                            'tutor': 'Nguy\u1ec5n V\u0103n An',
                             'format': 'Blended',
                             'capacity': '77/100',
                             'days': 'Monday (7h-9h)',
@@ -155,7 +155,7 @@ class PortalRepository:
                         {
                             'id': 'slot-b',
                             'section': 'CO1002 at CC02 at Online',
-                            'tutor': 'Nguyen Van B',
+                            'tutor': 'Nguy\u1ec5n V\u0103n B\xecnh',
                             'format': 'Online',
                             'capacity': '68/100',
                             'days': 'Tuesday (7h-9h)',
@@ -164,7 +164,7 @@ class PortalRepository:
                         {
                             'id': 'slot-c',
                             'section': 'CO1002 at CC03 at In-person',
-                            'tutor': 'Nguyen Van C',
+                            'tutor': 'Nguy\u1ec5n V\u0103n C\u01b0\u1eddng',
                             'format': 'In-person',
                             'capacity': '68/100',
                             'days': 'Wednesday (7h-9h)',
@@ -173,7 +173,7 @@ class PortalRepository:
                         {
                             'id': 'slot-d',
                             'section': 'CO1002 at CC04 at In-person',
-                            'tutor': 'Nguyen Van D',
+                            'tutor': 'Nguy\u1ec5n V\u0103n D\u0169ng',
                             'format': 'In-person',
                             'capacity': '56/100',
                             'days': 'Thursday (7h-9h)',
@@ -429,7 +429,7 @@ class PortalRepository:
                     ],
                     'materials': [
                         {'title': 'Dirac Notation Primer', 'type': 'pdf'},
-                        {'title': 'Schrödinger Equation Set', 'type': 'slides'},
+                        {'title': 'Schr\xf6dinger Equation Set', 'type': 'slides'},
                         {'title': 'Quantum Experiment Recap', 'type': 'video'},
                         {'title': 'Qubit Simulation Starter Pack', 'type': 'code'},
                     ],
@@ -704,7 +704,7 @@ class PortalRepository:
                 ],
             },
             'academicRecords': {
-                'studentInfo': {'name': 'John M. Doe', 'studentId': 'S123456789', 'semester': 'Fall 2023'},
+                'studentInfo': {'name': 'L\xea Minh Khoa', 'studentId': '2310456', 'semester': 'Fall 2023'},
                 'gpa': '3.85',
                 'standing': 'Excellent Academic Standing',
                 'grades': [
@@ -721,8 +721,8 @@ class PortalRepository:
                     {'title': 'TutorLink Merit Scholarship', 'amount': '$1,500', 'description': 'Merit-based scholarship for high-achieving students.'},
                 ],
                 'tutorLessons': [
-                    {'title': 'Algebra Fundamentals', 'tutor': 'Jane Smith'},
-                    {'title': 'Physics I Lab', 'tutor': 'Michael Johnson'},
+                    {'title': 'Algebra Fundamentals', 'tutor': 'Nguy\u1ec5n Th\u1ecb Minh Ch\xe2u'},
+                    {'title': 'Physics I Lab', 'tutor': 'Tr\u1ea7n H\u1eefu Kh\xe1nh'},
                     {'title': 'Organic Chemistry', 'tutor': 'Emily White'},
                     {'title': 'Advanced Calculus', 'tutor': 'David Lee'},
                 ],
@@ -869,10 +869,10 @@ class PortalRepository:
             },
             'tutorFeedback': {
                 'attendance': [
-                    {'id': 'stu-1', 'name': 'Nguyen Thi A', 'attended': True, 'inClassScore': 9},
-                    {'id': 'stu-2', 'name': 'Tran Van Binh', 'attended': True, 'inClassScore': 8},
-                    {'id': 'stu-3', 'name': 'Le Kim C', 'attended': True, 'inClassScore': 10},
-                    {'id': 'stu-4', 'name': 'Pham Minh Duy', 'attended': False, 'inClassScore': 0},
+                    {'id': 'stu-1', 'name': 'Nguy\u1ec5n Th\u1ecb \xc1nh', 'attended': True, 'inClassScore': 9},
+                    {'id': 'stu-2', 'name': 'Tr\u1ea7n V\u0103n B\xecnh', 'attended': True, 'inClassScore': 8},
+                    {'id': 'stu-3', 'name': 'L\xea Kim Chi', 'attended': True, 'inClassScore': 10},
+                    {'id': 'stu-4', 'name': 'Ph\u1ea1m Minh Duy', 'attended': False, 'inClassScore': 0},
                 ],
                 'sessionRating': 5,
                 'history': student_bundle['feedback']['history'],
@@ -937,10 +937,10 @@ class PortalRepository:
                     {'label': 'Pending Training Credits', 'value': '15', 'caption': 'Students awaiting credit approval'},
                 ],
                 'table': [
-                    {'order': 1, 'studentId': '2356224', 'name': 'Nguyen Thi An', 'major': 'Computer Science', 'gpa': '3.85', 'status': 'Active'},
-                    {'order': 2, 'studentId': '2353154', 'name': 'Tran Van Binh', 'major': 'Electrical Eng.', 'gpa': '3.60', 'status': 'Active'},
-                    {'order': 3, 'studentId': '2357160', 'name': 'Le Thi Cuc', 'major': 'Chemical Eng.', 'gpa': '3.92', 'status': 'Active'},
-                    {'order': 4, 'studentId': '2357281', 'name': 'Pham Minh Duy', 'major': 'Civil Eng.', 'gpa': '3.45', 'status': 'Active'},
+                    {'order': 1, 'studentId': '2315622', 'name': 'Nguy\u1ec5n Th\u1ecb An', 'major': 'Computer Science', 'gpa': '3.85', 'status': 'Active'},
+                    {'order': 2, 'studentId': '2315315', 'name': 'Tr\u1ea7n V\u0103n B\xecnh', 'major': 'Electrical Eng.', 'gpa': '3.60', 'status': 'Active'},
+                    {'order': 3, 'studentId': '2315716', 'name': 'L\xea Th\u1ecb C\xfac', 'major': 'Chemical Eng.', 'gpa': '3.92', 'status': 'Active'},
+                    {'order': 4, 'studentId': '2315728', 'name': 'Ph\u1ea1m Minh Duy', 'major': 'Civil Eng.', 'gpa': '3.45', 'status': 'Active'},
                 ],
                 'notifications': [
                     {'title': 'Scholarship Awarded', 'body': "You've been awarded the Academic Excellence Grant.", 'timeAgo': '2 hours ago'},
@@ -957,7 +957,7 @@ class PortalRepository:
                 'recipients': ['Tutor Program', 'Office of Student Affairs', 'Academic Department'],
                 'templates': ['Academic Alert', 'Scholarship Update', 'System Maintenance'],
                 'channels': ['Send Notification', 'Send to Office of Student Affairs', 'Send to Academic Department'],
-                'selectedStudents': ['Alice Smith (Math 101)', 'Bob Johnson (CS 201)', 'Charlie Brown (Lit 303)'],
+                'selectedStudents': ['Tr\u1ea7n Th\u1ecb Lan (Math 101)', 'Nguy\u1ec5n \u0110\u1ee9c Long (CS 201)', 'Ph\u1ea1m Gia B\u1ea3o (Lit 303)'],
             },
             'reports': {
                 'academic': {
