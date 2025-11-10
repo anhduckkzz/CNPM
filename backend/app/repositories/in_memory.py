@@ -812,8 +812,6 @@ class PortalRepository:
                         'links': [
                             {'label': 'Dashboard', 'path': '/portal/tutor/home'},
                             {'label': 'Course Registration', 'path': '/portal/tutor/course-matching'},
-                            {'label': 'Courses', 'path': '/portal/tutor/courses'},
-                            {'label': 'Course Support', 'path': '/portal/tutor/course-detail/c-data-structures'},
                             {'label': 'My Schedule', 'path': '/portal/tutor/schedule'},
                             {'label': 'Session Feedback', 'path': '/portal/tutor/tutor-feedback'},
                         ],
@@ -901,10 +899,7 @@ class PortalRepository:
                         'title': 'Staff Operations',
                         'links': [
                             {'label': 'Academic Records', 'path': '/portal/staff/academic-records'},
-                            {'label': 'Scholarship Board', 'path': '/portal/staff/records'},
                             {'label': 'Feedback Generation', 'path': '/portal/staff/feedback-generation'},
-                            {'label': 'Notify Students', 'path': '/portal/staff/notify-students'},
-                            {'label': 'Generate Reports', 'path': '/portal/staff/reports'},
                         ],
                     },
                 ],
@@ -947,9 +942,9 @@ class PortalRepository:
                     {'title': 'New Academic Report', 'body': 'A new academic performance report is ready for viewing.', 'timeAgo': 'Yesterday'},
                 ],
                 'quickActions': [
-                    {'label': 'Generate Academic Report', 'path': '/portal/staff/reports'},
-                    {'label': 'Generate Scholarship Report', 'path': '/portal/staff/reports'},
-                    {'label': 'Notify Student', 'path': '/portal/staff/notify-students'},
+                    {'label': 'Open Scholarship Board', 'path': '/portal/staff/records'},
+                    {'label': 'Notify Students', 'path': '/portal/staff/notify-students'},
+                    {'label': 'Generate Reports', 'path': '/portal/staff/reports'},
                 ],
                 'tabs': ['Student Academic Records', 'Scholarship & Training Credits', 'Award Management'],
             },

@@ -38,10 +38,14 @@ const SSOLanding = () => {
           >
             Log in with HCMUT SSO (HCMUT account)
           </button>
-          <div className="mt-6 rounded-2xl border border-slate-200 px-4 py-3 text-slate-500">
+          <button
+            type="button"
+            onClick={() => navigate('/cas-login?role=staff')}
+            className="mt-6 w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-600 transition hover:border-primary/40 hover:text-primary"
+          >
             Administrator
-          </div>
-          <div className="mt-4 text-sm text-slate-500">English â–¾</div>
+          </button>
+          <div className="mt-4 text-sm text-slate-500">English ▼</div>
         </div>
       </main>
       <footer className="px-8 pb-6 text-sm text-slate-400">

@@ -1,13 +1,15 @@
 import type { FormEvent } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const CasLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('student@hcmut.edu.vn');
-  const [password, setPassword] = useState('••••••••');
+  const location = useLocation();
+  const defaultRole = useMemo(() => new URLSearchParams(location.search).get('role'), [location.search]);
+  const [email, setEmail] = useState(defaultRole === 'staff' ? 'staff@hcmut.edu.vn' : 'student@hcmut.edu.vn');
+  const [password, setPassword] = useState(defaultRole === 'staff' ? 'password' : '�?��?��?��?��?��?��?��?�');
   const [error, setError] = useState<string>();
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -63,7 +65,7 @@ const CasLogin = () => {
                 disabled={isSubmitting}
                 className="flex-1 rounded-2xl bg-primary px-4 py-3 font-semibold text-white shadow-soft disabled:opacity-60"
               >
-                {isSubmitting ? 'Signing in…' : 'Login'}
+                {isSubmitting ? 'Signing in�?�' : 'Login'}
               </button>
               <button
                 type="button"
@@ -102,10 +104,11 @@ const CasLogin = () => {
         </div>
       </div>
       <footer className="mt-auto px-8 py-6 text-sm text-white/70">
-        © {new Date().getFullYear()} Ho Chi Minh University of Technology. All rights reserved.
+        Ac {new Date().getFullYear()} Ho Chi Minh University of Technology. All rights reserved.
       </footer>
     </div>
   );
 };
 
 export default CasLogin;
+

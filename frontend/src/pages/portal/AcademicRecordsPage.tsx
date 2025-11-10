@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, UserRound } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { AcademicRecordSection, StaffRecordsSection } from '../../types/portal';
 
@@ -32,12 +33,28 @@ const AcademicRecordsPage = () => {
 };
 
 const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => {
+  const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = useState<Record<DropdownSection['id'], boolean>>({
     scholarship: true,
     training: false,
     academic: false,
   });
   const [activeHistoryTab, setActiveHistoryTab] = useState<HistoryTab>('scholarship');
+  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (message: string) => {
+    setToast({ visible: true, message });
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
+  };
+
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    },
+    [],
+  );
 
   const baseRows = useMemo(
     () =>
@@ -203,7 +220,11 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                               if (column.isAction) {
                                 return (
                                   <td key={column.key} className="px-3 py-3 text-right">
-                                    <button type="button" className="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-semibold text-ink">
+                                    <button
+                                      type="button"
+                                      onClick={() => showToast(`Prepared dossier for ${row.name}`)}
+                                      className="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-semibold text-ink hover:border-primary/40 hover:text-primary"
+                                    >
                                       {value}
                                     </button>
                                   </td>
@@ -250,7 +271,10 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                   <button
                     key={tab}
                     type="button"
-                    onClick={() => setActiveHistoryTab(tab)}
+                    onClick={() => {
+                      setActiveHistoryTab(tab);
+                      showToast(tab === 'scholarship' ? 'Viewing scholarship grants' : 'Viewing training credits');
+                    }}
                     className={`rounded-full px-4 py-1 text-sm font-semibold ${
                       activeHistoryTab === tab ? 'bg-white text-ink shadow-soft' : 'text-slate-500'
                     }`}
@@ -300,6 +324,10 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                   <button
                     key={action.label}
                     type="button"
+                    onClick={() => {
+                      navigate(action.path);
+                      showToast(`${action.label} opened`);
+                    }}
                     className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold transition hover:opacity-90 ${action.className}`}
                   >
                     <span>{action.label}</span>
