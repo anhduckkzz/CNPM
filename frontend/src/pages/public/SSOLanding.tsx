@@ -1,4 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+﻿import { useNavigate } from 'react-router-dom';
+
+const hcmutLogoUrl = '/images/HCMUT-BachKhoa-Logo.png';
 
 const SSOLanding = () => {
   const navigate = useNavigate();
@@ -6,8 +8,8 @@ const SSOLanding = () => {
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="flex items-center justify-between px-8 py-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-lg font-bold text-white">
-            BK
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-1 shadow-soft">
+            <img src={hcmutLogoUrl} alt="HCMUT logo" className="h-full w-full object-contain" />
           </div>
           <div>
             <p className="text-sm text-slate-500">Ho Chi Minh City University of Technology</p>
@@ -24,8 +26,8 @@ const SSOLanding = () => {
       </header>
       <main className="flex flex-1 items-center justify-center px-4 pb-12">
         <div className="w-full max-w-3xl rounded-[32px] bg-white p-12 text-center shadow-soft">
-          <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 text-3xl font-bold text-primary">
-            BK
+          <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/5 p-3">
+            <img src={hcmutLogoUrl} alt="HCMUT logo" className="h-full w-full object-contain" />
           </div>
           <p className="text-3xl font-semibold text-primary">HCMUT e-learning</p>
           <p className="mt-2 text-lg text-slate-500">Log in with your account on:</p>
@@ -39,14 +41,17 @@ const SSOLanding = () => {
           <div className="mt-6 rounded-2xl border border-slate-200 px-4 py-3 text-slate-500">
             Administrator
           </div>
-          <div className="mt-4 text-sm text-slate-500">English ▾</div>
+          <div className="mt-4 text-sm text-slate-500">English â–¾</div>
         </div>
       </main>
       <footer className="px-8 pb-6 text-sm text-slate-400">
-        © {new Date().getFullYear()} BKEL · Developed based on Moodle · Made for demo purposes.
+        <span aria-hidden="true">©</span> {new Date().getFullYear()} BKEL · Developed based on Moodle.
       </footer>
     </div>
   );
 };
 
 export default SSOLanding;
+
+
+
