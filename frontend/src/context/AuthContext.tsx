@@ -19,6 +19,7 @@ interface AuthState {
   login: (email: string, password?: string) => Promise<Role>;
   logout: () => void;
   refreshPortal: () => Promise<void>;
+  updateAvatar: (avatarUrl: string) => void;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -95,6 +96,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setPortal(bundle);
   }, [role]);
 
+  const updateAvatar = useCallback(
+    (avatarUrl: string) => {
+      setUser((prev) => {
+        if (!prev) return prev;
+        const nextUser = { ...prev, avatar: avatarUrl };
+        if (token && role) {
+          persistState({ token, role, user: nextUser });
+        }
+        return nextUser;
+      });
+      setPortal((prev) => (prev ? { ...prev, user: { ...prev.user, avatar: avatarUrl } } : prev));
+    },
+    [persistState, role, token],
+  );
+
   const value = useMemo<AuthState>(
     () => ({
       user,
@@ -105,8 +121,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       login,
       logout,
       refreshPortal,
+      updateAvatar,
     }),
-    [user, role, token, portal, loading, login, logout, refreshPortal],
+    [user, role, token, portal, loading, login, logout, refreshPortal, updateAvatar],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

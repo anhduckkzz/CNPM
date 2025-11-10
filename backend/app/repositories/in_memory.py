@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import os
 from dataclasses import asdict
 from typing import Dict
 
 from app.models.user import Role, User
+
+DEFAULT_STATIC_ORIGIN = 'http://localhost:8000'
+HERO_IMAGE_PATH = '/images/hcmut2.png'
+STATIC_BASE_URL = os.getenv('PORTAL_STATIC_BASE_URL', DEFAULT_STATIC_ORIGIN).rstrip('/') or DEFAULT_STATIC_ORIGIN
+HERO_IMAGE_URL = f'{STATIC_BASE_URL}{HERO_IMAGE_PATH}'
 
 
 class PortalRepository:
@@ -58,6 +64,7 @@ class PortalRepository:
                         'links': [
                             {'label': 'Dashboard', 'path': '/portal/student/home'},
                             {'label': 'Profile', 'path': '/portal/student/profile'},
+                            {'label': 'Courses', 'path': '/portal/student/courses'},
                             {'label': 'Academic Records', 'path': '/portal/student/academic-records'},
                         ],
                     },
@@ -67,14 +74,13 @@ class PortalRepository:
                             {'label': 'Tutor-Student Course Match', 'path': '/portal/student/course-matching'},
                             {'label': 'My Schedule', 'path': '/portal/student/schedule'},
                             {'label': 'Session Feedback', 'path': '/portal/student/feedback', 'badge': 'New'},
-                            {'label': 'Reschedule Availability', 'path': '/portal/student/reschedule'},
                         ],
                     },
                 ],
             },
             'user': asdict(self._user_directory['student']),
             'announcements': {
-                'heroImage': 'https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1600&q=80',
+                'heroImage': HERO_IMAGE_URL,
                 'title': 'Site Announcements',
                 'subtitle': 'Latest updates for the HCMUT community.',
                 'items': [
@@ -179,6 +185,48 @@ class PortalRepository:
                         },
                     ],
                 },
+            },
+            'courses': {
+                'title': 'Courses',
+                'description': 'Your registered classes for this semester.',
+                'courses': [
+                    {
+                        'id': 'course-1',
+                        'title': 'Introduction to Programming',
+                        'code': 'CO1002',
+                        'thumbnail': 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80',
+                    },
+                    {
+                        'id': 'course-2',
+                        'title': 'Advanced Calculus',
+                        'code': 'M1T003',
+                        'thumbnail': 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80',
+                    },
+                    {
+                        'id': 'course-3',
+                        'title': 'Quantum Physics',
+                        'code': 'PH4021',
+                        'thumbnail': 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
+                    },
+                    {
+                        'id': 'course-4',
+                        'title': 'Literary Analysis',
+                        'code': 'EN1004',
+                        'thumbnail': 'https://images.unsplash.com/photo-1455885666463-1b2ac11fca08?auto=format&fit=crop&w=900&q=80',
+                    },
+                    {
+                        'id': 'course-5',
+                        'title': 'Data Structures and Algorithms',
+                        'code': 'CO2002',
+                        'thumbnail': 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80',
+                    },
+                    {
+                        'id': 'course-6',
+                        'title': 'Cellular Biology',
+                        'code': 'BI3002',
+                        'thumbnail': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+                    },
+                ],
             },
             'courseDetails': {
                 'c-data-structures': {
@@ -452,9 +500,9 @@ class PortalRepository:
                         'links': [
                             {'label': 'Dashboard', 'path': '/portal/tutor/home'},
                             {'label': 'Tutor-Student Course Match', 'path': '/portal/tutor/course-matching'},
+                            {'label': 'Courses', 'path': '/portal/tutor/courses'},
                             {'label': 'Course Support', 'path': '/portal/tutor/course-detail/c-data-structures'},
                             {'label': 'My Schedule', 'path': '/portal/tutor/schedule'},
-                            {'label': 'Reschedule Availability', 'path': '/portal/tutor/reschedule'},
                             {'label': 'Session Feedback', 'path': '/portal/tutor/tutor-feedback'},
                         ],
                     },
@@ -551,7 +599,7 @@ class PortalRepository:
             },
             'user': asdict(self._user_directory['staff']),
             'announcements': {
-                'heroImage': 'https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1600&q=80',
+                'heroImage': HERO_IMAGE_URL,
                 'title': 'Office of Student Affairs',
                 'subtitle': 'Monitor scholarships, reports, and compliance from a single control room.',
                 'items': [],

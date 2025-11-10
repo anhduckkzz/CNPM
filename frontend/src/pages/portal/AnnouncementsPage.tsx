@@ -9,9 +9,13 @@ const AnnouncementsPage = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-[32px] bg-slate-900 shadow-soft">
-        <img src={data.heroImage} alt="Campus" className="h-80 w-full object-cover opacity-80" />
+    <div className="space-y-6 px-2">
+      <div className="relative mx-auto max-w-[1600px] overflow-hidden rounded-[32px] bg-slate-900 shadow-soft">
+        <img
+          src={data.heroImage}
+          alt="Campus"
+          className="mx-auto h-80 w-full object-cover object-center opacity-80 md:h-[28rem]"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0" />
         <div className="absolute bottom-0 left-0 right-0 p-10 text-white">
           <p className="text-sm uppercase tracking-widest text-white/70">HCMUT Portal</p>

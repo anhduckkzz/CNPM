@@ -1,17 +1,21 @@
-import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
-import { Menu, LayoutGrid, User2, BookOpen, CalendarDays, MessageSquare, Repeat, BellRing, FileText } from 'lucide-react';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { LayoutGrid, User2, BookOpen, CalendarDays, MessageSquare, Repeat, BellRing, FileText } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth } from '../context/AuthContext';
+
+const apiBaseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api';
+const staticHost = apiBaseUrl.replace(/\/api\/?$/, '') || 'http://localhost:8000';
+const resolvedStaticHost = staticHost.replace(/\/$/, '');
+const hcmutLogoUrl = `${resolvedStaticHost}/images/HCMUT-BachKhoa-Logo.png`;
 
 const PortalLayout = () => {
   const { portal, user, logout } = useAuth();
   const { role } = useParams();
   const location = useLocation();
-  const [isPinnedOpen, setPinnedOpen] = useState(true);
-  const [isHovering, setHovering] = useState(false);
-
-  const isSidebarOpen = isPinnedOpen || isHovering;
+  const [isSidebarHovered, setSidebarHovered] = useState(false);
+  const isSidebarOpen = isSidebarHovered;
 
   const sidebarLinks = useMemo(() => portal?.navigation.sidebar ?? [], [portal]);
 
@@ -39,61 +43,33 @@ const PortalLayout = () => {
     <div className="min-h-screen bg-slate-50 text-ink">
       <div className="mx-auto flex max-w-[1440px] gap-6 px-6 py-8 lg:flex-row">
         <aside
-          onMouseEnter={() => !isPinnedOpen && setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
+          onMouseEnter={() => setSidebarHovered(true)}
+          onMouseLeave={() => setSidebarHovered(false)}
           className={clsx(
-            'group hidden rounded-3xl bg-white p-5 shadow-soft transition-[width] duration-300 lg:block',
-            isSidebarOpen ? 'w-64' : 'w-24',
+            'group hidden rounded-3xl bg-white p-5 shadow-soft transition-[width] duration-500 ease-out lg:block',
+            isSidebarOpen ? 'w-72' : 'w-20',
           )}
         >
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              aria-label="Toggle navigation"
-              className={clsx(
-                'flex items-center gap-3 rounded-2xl border border-slate-100 text-left transition-all duration-300',
-                isSidebarOpen ? 'w-full px-3 py-2' : 'w-11 justify-center border-transparent px-0 py-0',
-              )}
-              onClick={() => setPinnedOpen((prev) => !prev)}
-            >
-              <div
-                className={clsx(
-                  'flex items-center justify-center rounded-2xl bg-primary text-lg font-bold text-white transition-all duration-300',
-                  isSidebarOpen ? 'h-11 w-11' : 'h-11 w-11',
-                )}
-              >
-                BK
-              </div>
-              <div
-                className={clsx(
-                  'transition-all duration-300',
-                  isSidebarOpen ? 'opacity-100 translate-x-0' : 'hidden',
-                )}
-              >
-                <p className="text-xs uppercase tracking-wide text-slate-400">HCMUT e-learning</p>
-                <p className="text-sm font-semibold capitalize text-ink">{role} view</p>
-              </div>
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50"
-              onClick={() => setPinnedOpen((prev) => !prev)}
-            >
-              <Menu size={18} />
-            </button>
+          <div
+            className={clsx(
+              'flex items-center gap-3 rounded-2xl transition-all duration-500 ease-out',
+              isSidebarOpen ? 'border border-slate-100 px-3 py-2' : 'px-0 py-0',
+            )}
+          >
+            <img
+              src={hcmutLogoUrl}
+              alt="HCMUT logo"
+              className="h-11 w-11 shrink-0 rounded-2xl border border-primary/10 bg-white p-1 object-contain shadow-sm"
+            />
+            <div className={clsx('transition-all duration-300 ease-out', isSidebarOpen ? 'opacity-100 translate-x-0' : 'hidden')}>
+              <p className="text-xs uppercase tracking-wide text-slate-400">HCMUT e-learning</p>
+              <p className="text-sm font-semibold capitalize text-ink">{role} view</p>
+            </div>
           </div>
 
           <div className="mt-8 space-y-6">
             {sidebarLinks.map((section) => (
               <div key={section.title}>
-                <p
-                  className={clsx(
-                    'mb-3 text-xs uppercase tracking-wide text-slate-400 transition-opacity duration-300',
-                    isSidebarOpen ? 'opacity-100' : 'opacity-0',
-                  )}
-                >
-                  {section.title}
-                </p>
                 <div className="space-y-2">
                   {section.links.map((link) => (
                     <NavLink
@@ -102,36 +78,45 @@ const PortalLayout = () => {
                       title={!isSidebarOpen ? link.label : undefined}
                       className={({ isActive }) =>
                         clsx(
-                          'flex items-center gap-3 overflow-hidden rounded-2xl px-3 py-2 text-sm font-medium transition hover:bg-slate-50',
-                          isActive ? 'bg-primary text-white shadow-soft' : 'text-slate-500',
+                          'flex items-center overflow-hidden rounded-2xl px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                          isSidebarOpen ? 'gap-3' : 'gap-0',
+                          isSidebarOpen ? 'justify-start' : 'justify-center',
+                          isActive
+                            ? isSidebarOpen
+                              ? 'bg-primary text-white shadow-soft hover:bg-primary'
+                              : 'text-primary'
+                            : 'text-slate-500 hover:bg-slate-50',
                         )
                       }
                     >
-                      <span
-                        className={clsx(
-                          'flex h-9 w-9 items-center justify-center rounded-2xl border text-primary',
-                          isSidebarOpen ? 'border-primary/10 bg-primary/5' : 'border-transparent bg-transparent',
-                        )}
-                      >
-                        {linkIcon(link.label)}
-                      </span>
-                      <span
-                        className={clsx(
-                          'flex-1 truncate transition-all duration-300',
-                          isSidebarOpen ? 'opacity-100 translate-x-0' : 'pointer-events-none -translate-x-4 opacity-0',
-                        )}
-                      >
-                        {link.label}
-                      </span>
-                      {link.badge && (
-                        <span
-                          className={clsx(
-                            'rounded-full bg-white/10 px-3 py-0.5 text-xs font-semibold text-white transition-opacity duration-300',
-                            isSidebarOpen ? 'opacity-100' : 'opacity-0',
+                      {({ isActive }) => (
+                        <>
+                          <span
+                            className={clsx(
+                              'flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border transition-colors duration-300',
+                              isActive
+                                ? 'border-white bg-white text-primary shadow-soft'
+                                : isSidebarOpen
+                                  ? 'border-primary/10 bg-primary/5 text-primary'
+                                  : 'border-transparent bg-transparent text-primary',
+                            )}
+                          >
+                            {linkIcon(link.label)}
+                          </span>
+                          <span
+                            className={clsx(
+                              'whitespace-nowrap transition-all duration-300',
+                              isSidebarOpen ? 'flex-1 translate-x-0 opacity-100 text-inherit' : 'pointer-events-none -translate-x-4 opacity-0 w-0',
+                            )}
+                          >
+                            {link.label}
+                          </span>
+                          {isSidebarOpen && link.badge && (
+                            <span className="rounded-full bg-white/10 px-3 py-0.5 text-xs font-semibold text-white">
+                              {link.badge}
+                            </span>
                           )}
-                        >
-                          {link.badge}
-                        </span>
+                        </>
                       )}
                     </NavLink>
                   ))}
@@ -139,39 +124,13 @@ const PortalLayout = () => {
               </div>
             ))}
           </div>
-
-          <div className="mt-10 space-y-2 text-xs text-slate-400">
-            {['Settings', 'Quick Links', 'Legal'].map((item) => (
-              <button
-                key={item}
-                type="button"
-                className={clsx(
-                  'block w-full rounded-xl px-3 py-2 text-left transition hover:text-primary',
-                  !isSidebarOpen && 'text-center text-[10px]',
-                )}
-                title={!isSidebarOpen ? item : undefined}
-              >
-                {isSidebarOpen ? item : item.charAt(0)}
-              </button>
-            ))}
-          </div>
         </aside>
 
         <main className="flex-1 space-y-6">
           <header className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-soft lg:flex-row lg:items-center lg:justify-between">
-            <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500">
-              {portal.navigation.topLinks.map((link) => (
-                <span
-                  key={link}
-                  className={[
-                    'rounded-full px-4 py-1.5 capitalize',
-                    location.pathname.includes(link.toLowerCase()) ? 'bg-primary text-white' : 'bg-slate-50',
-                  ].join(' ')}
-                >
-                  {link}
-                </span>
-              ))}
-            </nav>
+            <h1 className="text-2xl font-semibold capitalize text-ink">
+              {location.pathname.split('/').filter(Boolean).slice(-1)[0]?.replace(/-/g, ' ') || 'dashboard'}
+            </h1>
             <div className="flex flex-wrap items-center gap-3">
               <div className="text-right">
                 <p className="text-xs text-slate-400">Logged in as</p>
@@ -193,7 +152,7 @@ const PortalLayout = () => {
           </section>
 
           <footer className="rounded-3xl bg-white px-6 py-4 text-sm text-slate-400 shadow-soft">
-            &copy; {new Date().getFullYear()} HCMUT e-learning Experience. Crafted for smooth interactions.
+            &copy; {new Date().getFullYear()} HCMUT Tutor Support System.
           </footer>
         </main>
       </div>

@@ -96,6 +96,19 @@ export interface CourseDetailSection {
   }>;
 }
 
+export interface RegisteredCourse {
+  id: string;
+  title: string;
+  code: string;
+  thumbnail: string;
+}
+
+export interface RegisteredCoursesSection {
+  title: string;
+  description: string;
+  courses: RegisteredCourse[];
+}
+
 export interface QuizSessionSection {
   courseId: string;
   title: string;
@@ -243,6 +256,7 @@ export interface PortalBundle {
   courseMatching?: CourseMatchingSection;
   courseDetail?: CourseDetailSection;
   courseDetails?: Record<string, CourseDetailSection>;
+  courses?: RegisteredCoursesSection;
   courseSupport?: {
     upload: { title: string; maxSize: string; description: string };
     quiz: { title: string; placeholders: { quizTitle: string; availability: string[] } };

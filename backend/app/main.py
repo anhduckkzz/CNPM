@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr
 
 from app.repositories.in_memory import PortalRepository
@@ -30,6 +33,11 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+IMAGES_DIR = BACKEND_DIR / 'static' / 'images'
+
+if IMAGES_DIR.exists():
+    app.mount('/images', StaticFiles(directory=IMAGES_DIR), name='images')
 
 @app.get('/health')
 def health_check():

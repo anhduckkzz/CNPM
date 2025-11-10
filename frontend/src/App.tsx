@@ -6,6 +6,7 @@ import SSOLanding from './pages/public/SSOLanding';
 import CasLogin from './pages/public/CasLogin';
 import AnnouncementsPage from './pages/portal/AnnouncementsPage';
 import CourseMatchingPage from './pages/portal/CourseMatchingPage';
+import CoursesPage from './pages/portal/CoursesPage';
 import CourseDetailPage from './pages/portal/CourseDetailPage';
 import QuizSessionPage from './pages/portal/QuizSessionPage';
 import QuizSummaryPage from './pages/portal/QuizSummaryPage';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/portal/:role" element={<PortalLayout />}>
             <Route path="home" element={<AnnouncementsPage />} />
             <Route path="course-matching" element={<CourseMatchingPage />} />
+            <Route path="courses" element={<CoursesPage />} />
             <Route path="course-detail/:courseId" element={<CourseDetailPage />} />
             <Route path="quiz/:courseId" element={<QuizSessionPage />} />
             <Route path="quiz/:courseId/completed" element={<QuizSummaryPage />} />
