@@ -6,7 +6,6 @@ const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const START_HOUR = 7;
 const END_HOUR = 18;
 const TOTAL_MINUTES = (END_HOUR - START_HOUR) * 60;
-const TIMETABLE_HEIGHT = 640;
 const MIN_BLOCK_HEIGHT = (45 / TOTAL_MINUTES) * 100;
 const timeStops = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, idx) => START_HOUR + idx);
 

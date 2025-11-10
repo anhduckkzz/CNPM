@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState, useEffect, ChangeEvent } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
+import type { ChangeEvent } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 type ContactCard = {
