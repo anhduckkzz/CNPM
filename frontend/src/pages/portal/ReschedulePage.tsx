@@ -1,14 +1,14 @@
 import { CheckCircle2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import type { RescheduleSection } from '../../types/portal';
 
 type SlotType = 'free' | 'busy' | 'open';
 
 const blockStyles: Record<SlotType, string> = {
-  free: 'bg-emerald-100 border-emerald-200 text-emerald-700',
-  busy: 'bg-rose-100 border-rose-200 text-rose-700',
-  open: 'bg-white border-slate-200 text-slate-500',
+  free: 'bg-emerald-50/80 text-emerald-800 ring-emerald-200/80',
+  busy: 'bg-rose-50/80 text-rose-800 ring-rose-200/80',
+  open: 'bg-white text-slate-500 ring-transparent',
 };
 
 const statusOptions: Array<{ value: SlotType; label: string; description: string; swatch: string }> = [
@@ -22,6 +22,19 @@ const ReschedulePage = () => {
   const reschedule = portal?.reschedule;
   const [gridState, setGridState] = useState<RescheduleSection['grid']>(reschedule?.grid ?? []);
   const [selectedType, setSelectedType] = useState<SlotType>('free');
+  const dayColumns = useMemo(() => gridState.map((row) => row.day), [gridState]);
+  const timelineLabels = useMemo(() => {
+    const labels: string[] = [];
+    for (let hour = 1; hour <= 11; hour += 1) {
+      labels.push(`${hour.toString().padStart(2, '0')}:00 AM`);
+    }
+    labels.push('12:00 PM');
+    for (let hour = 1; hour <= 11; hour += 1) {
+      labels.push(`${hour.toString().padStart(2, '0')}:00 PM`);
+    }
+    labels.push('12:00 AM');
+    return labels;
+  }, []);
   const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -68,7 +81,9 @@ const ReschedulePage = () => {
                 type="button"
                 onClick={() => setSelectedType(option.value)}
                 className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                  selectedType === option.value ? 'border-primary bg-primary/5 shadow-soft' : 'border-slate-100 bg-slate-50'
+                  selectedType === option.value
+                    ? 'border-purple-500 bg-purple-50 text-purple-700 shadow-soft'
+                    : 'border-slate-100 bg-slate-50 text-slate-600'
                 }`}
               >
                 <span className={`h-4 w-4 rounded-full ${option.swatch}`} />
@@ -80,28 +95,51 @@ const ReschedulePage = () => {
             ))}
           </div>
         </div>
-        <div className="mt-6 grid gap-5">
-          {gridState.map((row, rowIndex) => (
-            <div key={row.day}>
-              <div className="mb-2 flex items-center justify-between text-sm font-semibold text-slate-500">
-                <span>{row.day}</span>
-                <span className="text-xs uppercase tracking-wide text-slate-400">Click blocks to update</span>
+        <div className="mt-8 max-h-[540px] overflow-auto rounded-[28px] border border-slate-100">
+          <div className="min-w-[960px]">
+            <div
+              className="sticky top-0 z-20 grid bg-slate-50 text-xs font-semibold uppercase tracking-widest text-slate-400"
+              style={{ gridTemplateColumns: `140px repeat(${dayColumns.length}, minmax(0, 1fr))` }}
+            >
+              <div className="sticky left-0 z-30 border-r border-slate-100 bg-slate-50 px-4 py-3 text-center text-slate-500">
+                Time / Day
               </div>
-              <div className="grid grid-cols-8 gap-2">
-                {row.blocks.map((slot, colIndex) => (
-                  <button
-                    key={`${row.day}-${colIndex}`}
-                    type="button"
-                    onClick={() => handleCellClick(rowIndex, colIndex)}
-                    onDoubleClick={() => handleCellClick(rowIndex, colIndex, 'open')}
-                    className={`h-16 rounded-2xl border text-xs font-semibold transition ${blockStyles[slot as SlotType]}`}
-                  >
-                    {slot === 'open' ? 'Open' : slot === 'free' ? 'Free' : 'Busy'}
-                  </button>
-                ))}
-              </div>
+              {dayColumns.map((day) => (
+                <div
+                  key={`day-${day}`}
+                  className="border-r border-slate-100 px-4 py-3 text-center text-slate-500"
+                >
+                  {day}
+                </div>
+              ))}
             </div>
-          ))}
+            {timelineLabels.map((label, timeIndex) => (
+              <div
+                key={`time-row-${timeIndex}`}
+                className="grid border-t border-slate-100"
+                style={{ gridTemplateColumns: `140px repeat(${dayColumns.length}, minmax(0, 1fr))` }}
+              >
+                <div className="sticky left-0 z-10 border-r border-slate-100 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  {label}
+                </div>
+                {gridState.map((row, dayIndex) => {
+                  const slot = row.blocks[timeIndex] as SlotType | undefined;
+                  return (
+                    <button
+                      key={`${row.day}-${label}`}
+                      type="button"
+                      onClick={() => handleCellClick(dayIndex, timeIndex)}
+                      onDoubleClick={() => handleCellClick(dayIndex, timeIndex, 'open')}
+                      className={`flex h-16 w-full items-center justify-center border-r border-slate-100 text-xs font-semibold transition duration-200 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${blockStyles[(slot ?? 'open') as SlotType]}`}
+                      style={{ boxShadow: 'inset 0 0 0 1px rgba(148, 163, 184, 0.25)' }}
+                    >
+                      {slot === 'open' || !slot ? 'Open' : slot === 'free' ? 'Free' : 'Busy'}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
       <aside className="rounded-[32px] bg-white p-8 shadow-soft">

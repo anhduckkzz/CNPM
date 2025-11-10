@@ -143,6 +143,8 @@ export interface ScheduleSection {
   events: ScheduleEvent[];
   upcoming: Array<{
     id: string;
+    courseId: string;
+    sessionId: string;
     title: string;
     date: string;
     time: string;

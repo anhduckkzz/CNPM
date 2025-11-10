@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { useAuth } from '../../context/AuthContext';
 import type { ScheduleEvent } from '../../types/portal';
+import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
 
 type PortalOutletContext = {
   isSidebarOpen: boolean;
@@ -49,6 +50,7 @@ const SchedulePage = () => {
   const { role } = useParams();
   const { isSidebarOpen } = useOutletContext<PortalOutletContext>();
   const schedule = portal?.schedule;
+  const registered = portal?.courses;
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
 
   const grouped = schedule?.events.reduce<Record<string, ScheduleEvent[]>>((acc, event) => {
@@ -222,21 +224,33 @@ const SchedulePage = () => {
       <aside className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm uppercase tracking-widest text-slate-400">Upcoming Sessions</p>
-            <h2 className="text-2xl font-semibold text-ink">Stay organized</h2>
+            <p className="text-sm uppercase tracking-widest text-slate-400">Course Registered</p>
+            <h2 className="text-2xl font-semibold text-ink">Quick access</h2>
           </div>
         </div>
         <div className="mt-6 space-y-4">
-          {schedule.upcoming.map((item) => (
-            <div key={item.id} className="rounded-2xl border border-slate-100 p-4">
-              <p className="text-xs font-semibold text-primary">{item.date}</p>
-              <p className="text-lg font-semibold text-ink">{item.title}</p>
-              <p className="text-sm text-slate-500">{item.time}</p>
-              <button className="mt-2 text-sm font-semibold text-primary" type="button">
-                {item.cta}
-              </button>
-            </div>
-          ))}
+          {registered?.courses.length ? (
+            registered.courses.map((course) => {
+              const slug = toCourseSlug(course.id) ?? course.id;
+              return (
+                <div key={course.id} className="rounded-2xl border border-slate-100 p-4">
+                  <p className="text-xs font-semibold text-primary">{course.code}</p>
+                  <p className="text-lg font-semibold text-ink">{course.title}</p>
+                  <button
+                    className="mt-3 text-sm font-semibold text-primary"
+                    type="button"
+                    onClick={() => role && navigate(`/portal/${role}/course-detail/${slug}`)}
+                  >
+                    View details
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <p className="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">
+              No registered courses available right now.
+            </p>
+          )}
         </div>
         <div className="mt-6 flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
           <span className="text-sm font-semibold text-slate-600">Notifications</span>
