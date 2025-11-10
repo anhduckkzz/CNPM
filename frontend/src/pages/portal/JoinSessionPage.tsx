@@ -66,7 +66,7 @@ const JoinSessionPage = () => {
             <div className="rounded-2xl border border-slate-100 p-4">
               <p className="text-xs uppercase tracking-wide text-slate-400">Platform</p>
               <p className="mt-1 text-lg font-semibold text-ink">Zoom Meetings</p>
-              <p className="text-sm text-slate-500">We will forward you to the Zoom client via the mocked API hook.</p>
+              <p className="text-sm text-slate-500">Access provided through our simulated Zoom launch.</p>
             </div>
           </div>
 
