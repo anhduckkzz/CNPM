@@ -89,7 +89,7 @@ const PortalLayout = () => {
             </div>
           </div>
 
-          <div className="mt-8 space-y-6">
+          <div className="mt-8 space-y-2">
             {sidebarLinks.map((section) => (
               <div key={section.title}>
                 <div className="space-y-2">

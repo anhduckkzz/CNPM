@@ -13,7 +13,7 @@ const ProtectedRoute = ({ allow, redirect = '/' }: Props) => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50 text-lg font-semibold text-primary">
-        Loading experience...
+        Website loading, hang on a minute (^_^)
       </div>
     );
   }

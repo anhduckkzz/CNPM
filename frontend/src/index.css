@@ -32,3 +32,31 @@ body {
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+.ai-scan-grid {
+  position: relative;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+.ai-scan-beam {
+  position: absolute;
+  inset: -50% -40%;
+  background: linear-gradient(90deg, transparent, rgba(92, 110, 245, 0.5), transparent);
+  animation: portal-scan 1.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes portal-scan {
+  0% {
+    transform: translateX(-60%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(60%);
+    opacity: 0;
+  }
+}

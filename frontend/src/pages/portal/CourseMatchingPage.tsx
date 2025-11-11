@@ -1,16 +1,103 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import type { CourseMatchingSection, ScheduleSection } from '../../types/portal';
+
+type SlotOption = CourseMatchingSection['modal']['slots'][number];
+type ScheduleEvent = ScheduleSection['events'][number];
+
+const dayLabelMap: Record<string, string> = {
+  monday: 'Mon',
+  tuesday: 'Tue',
+  wednesday: 'Wed',
+  thursday: 'Thu',
+  friday: 'Fri',
+  saturday: 'Sat',
+  sunday: 'Sun',
+};
+
+const parseSlotDays = (label: string) => {
+  const matches = label.match(/Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday/gi) ?? [];
+  return matches.map((entry) => dayLabelMap[entry.toLowerCase()] ?? entry.slice(0, 3));
+};
+
+const parseSlotWindow = (label: string) => {
+  const match = label.match(/(\d{1,2})h\s*-\s*(\d{1,2})h/i);
+  if (!match) return null;
+  const start = parseInt(match[1], 10) * 60;
+  const end = parseInt(match[2], 10) * 60;
+  return { start, end };
+};
+
+const parseEventMinutes = (timeValue: string) => {
+  const [hour = '0', minute = '0'] = timeValue.split(':');
+  return parseInt(hour, 10) * 60 + parseInt(minute, 10);
+};
+
+const rangesOverlap = (startA: number, endA: number, startB: number, endB: number) =>
+  Math.max(startA, startB) < Math.min(endA, endB);
+
+const capacityFillRatio = (capacity: string) => {
+  const match = capacity.match(/(\d+)\s*\/\s*(\d+)/);
+  if (!match) return 1;
+  const current = parseInt(match[1], 10);
+  const total = parseInt(match[2], 10) || 1;
+  return current / total;
+};
+
+const scoreSlot = (slot: SlotOption, events: ScheduleEvent[]) => {
+  const days = parseSlotDays(slot.days);
+  const window = parseSlotWindow(slot.days);
+  const conflictPenalty = days.reduce((penalty, day) => {
+    const dayEvents = events.filter((event) => event.day.toLowerCase().startsWith(day.toLowerCase()));
+    if (!window) {
+      return penalty + dayEvents.length;
+    }
+    return (
+      penalty +
+      dayEvents.reduce((count, event) => {
+        const start = parseEventMinutes(event.start);
+        const end = parseEventMinutes(event.end);
+        return count + (rangesOverlap(window.start, window.end, start, end) ? 1 : 0);
+      }, 0)
+    );
+  }, 0);
+  return conflictPenalty * 10 + capacityFillRatio(slot.capacity);
+};
+
+const pickBestSlot = (slotOptions: SlotOption[], events: ScheduleEvent[]) => {
+  if (!slotOptions.length) return null;
+  return slotOptions.slice().sort((a, b) => scoreSlot(a, events) - scoreSlot(b, events))[0];
+};
+
+interface AutoMatchState {
+  active: boolean;
+  running: boolean;
+  progress: number;
+  stage: string;
+  result: SlotOption | null;
+  error: string | null;
+}
 
 const CourseMatchingPage = () => {
-  const { portal, role } = useAuth();
+  const { portal } = useAuth();
   const data = portal?.courseMatching;
   const [activeCourseId, setActiveCourseId] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [autoMatchState, setAutoMatchState] = useState<AutoMatchState>({
+    active: false,
+    running: false,
+    progress: 0,
+    stage: '',
+    result: null,
+    error: null,
+  });
+  const autoMatchTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoMatchSelectionRef = useRef<SlotOption | null>(null);
 
   interface CancelFormState {
     open: boolean;
@@ -33,6 +120,40 @@ const CourseMatchingPage = () => {
     reason: '',
     details: '',
   });
+  const scheduleEvents = useMemo(() => portal?.schedule?.events ?? [], [portal?.schedule?.events]);
+  const stageThresholds = useMemo(
+    () => [
+      { threshold: 25, label: 'Scanning weekly availability for conflicts...' },
+      { threshold: 55, label: 'Matching open windows with tutor sections...' },
+      { threshold: 85, label: 'Checking seat availability and travel buffers...' },
+      { threshold: 100, label: 'Locking in the best section for your week...' },
+    ],
+    [],
+  );
+  const getStageLabel = useCallback(
+    (value: number) =>
+      stageThresholds.find((stage) => value <= stage.threshold)?.label ??
+      stageThresholds[stageThresholds.length - 1].label,
+    [stageThresholds],
+  );
+  const stopAutoMatchTimer = useCallback(() => {
+    if (autoMatchTimer.current) {
+      clearInterval(autoMatchTimer.current);
+      autoMatchTimer.current = null;
+    }
+  }, []);
+  const resetAutoMatch = useCallback(() => {
+    stopAutoMatchTimer();
+    autoMatchSelectionRef.current = null;
+    setAutoMatchState({
+      active: false,
+      running: false,
+      progress: 0,
+      stage: '',
+      result: null,
+      error: null,
+    });
+  }, [stopAutoMatchTimer]);
 
   if (!data) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Course matching data unavailable.</div>;
@@ -44,8 +165,13 @@ const CourseMatchingPage = () => {
   const showModal = isModalOpen && modalCourse;
   const slots = data.modal.slots;
   const portalTarget = typeof document !== 'undefined' ? document.body : null;
+  useEffect(() => {
+    if (!showModal) {
+      resetAutoMatch();
+    }
+  }, [resetAutoMatch, showModal]);
 
-  const showToast = (message: string) => {
+  const showToast = useCallback((message: string) => {
     setToast({ visible: true, message });
     if (toastTimer.current) {
       clearTimeout(toastTimer.current);
@@ -53,15 +179,16 @@ const CourseMatchingPage = () => {
     toastTimer.current = setTimeout(() => {
       setToast((prev) => ({ ...prev, visible: false }));
     }, 2500);
-  };
+  }, []);
 
   useEffect(() => {
     return () => {
       if (toastTimer.current) {
         clearTimeout(toastTimer.current);
       }
+      stopAutoMatchTimer();
     };
-  }, []);
+  }, [stopAutoMatchTimer]);
 
   useEffect(() => {
     setCancelForm((prev) => ({
@@ -78,6 +205,7 @@ const CourseMatchingPage = () => {
   };
 
   const closeModal = () => {
+    resetAutoMatch();
     setModalOpen(false);
     setActiveCourseId(null);
   };
@@ -115,9 +243,76 @@ const CourseMatchingPage = () => {
     closeCancelForm();
   };
 
-  const handleRegisterSlot = (sectionLabel: string) => {
-    showToast(`Successfully registered for ${sectionLabel}.`);
-  };
+  const handleRegisterSlot = useCallback(
+    (sectionLabel: string) => {
+      showToast(`Successfully registered for ${sectionLabel}.`);
+    },
+    [showToast],
+  );
+
+  const startAutoMatch = useCallback(() => {
+    if (!modalCourse) {
+      return;
+    }
+    if (!slots.length) {
+      setAutoMatchState({
+        active: true,
+        running: false,
+        progress: 0,
+        stage: 'Unable to find any open sections right now.',
+        result: null,
+        error: 'No sections are currently available for automatching.',
+      });
+      return;
+    }
+    const bestSlot = pickBestSlot(slots, scheduleEvents);
+    if (!bestSlot) {
+      setAutoMatchState({
+        active: true,
+        running: false,
+        progress: 0,
+        stage: 'Unable to find a compatible section.',
+        result: null,
+        error: 'Every section conflicts with your current schedule.',
+      });
+      return;
+    }
+    autoMatchSelectionRef.current = bestSlot;
+    setAutoMatchState({
+      active: true,
+      running: true,
+      progress: 5,
+      stage: getStageLabel(5),
+      result: null,
+      error: null,
+    });
+    stopAutoMatchTimer();
+    autoMatchTimer.current = setInterval(() => {
+      setAutoMatchState((prev) => {
+        if (!prev.running) {
+          return prev;
+        }
+        const nextProgress = Math.min(100, prev.progress + Math.random() * 18);
+        const nextStage = getStageLabel(nextProgress);
+        if (nextProgress >= 100) {
+          stopAutoMatchTimer();
+          const chosenSlot = autoMatchSelectionRef.current;
+          if (chosenSlot) {
+            handleRegisterSlot(chosenSlot.section);
+          }
+          return {
+            ...prev,
+            running: false,
+            progress: 100,
+            stage: 'Section assigned based on your availability.',
+            result: chosenSlot ?? null,
+            error: chosenSlot ? null : 'No compatible section found.',
+          };
+        }
+        return { ...prev, progress: nextProgress, stage: nextStage };
+      });
+    }, 450);
+  }, [getStageLabel, handleRegisterSlot, modalCourse, scheduleEvents, slots, stopAutoMatchTimer]);
 
   return (
     <div className="space-y-8">
@@ -127,9 +322,6 @@ const CourseMatchingPage = () => {
             <h1 className="text-3xl font-semibold text-ink">{data.title}</h1>
             <p className="mt-2 max-w-2xl text-slate-500">{data.description}</p>
           </div>
-          <button className="rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft" type="button">
-            Auto Match for {role}
-          </button>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-4">
           <input className="rounded-2xl border border-slate-200 px-4 py-3" placeholder="Search for courses…" />
@@ -211,7 +403,7 @@ const CourseMatchingPage = () => {
         portalTarget &&
         createPortal(
           <div className="fixed inset-0 z-50 flex min-h-screen w-screen items-center justify-center bg-slate-900/40 px-4 py-8">
-            <div className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
+            <div className="relative max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[32px] bg-white shadow-2xl">
               <div className="flex items-start gap-4 border-b border-slate-100 p-6">
                 <img src={modalCourse.thumbnail} alt={modalCourse.title} className="h-24 w-32 rounded-2xl object-cover" />
                 <div className="flex-1">
@@ -220,10 +412,17 @@ const CourseMatchingPage = () => {
                   <p className="mt-2 text-sm text-slate-500">
                     Credits: 4 <span className="mx-2 text-slate-300">|</span> Prerequisite: None
                   </p>
-                  <button className="mt-3 w-full rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white" type="button">
-                    Automatching
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={startAutoMatch}
+                  disabled={autoMatchState.running}
+                  className={`mt-3 w-full rounded-full px-6 py-2 text-sm font-semibold text-white transition ${
+                    autoMatchState.running ? 'cursor-wait bg-primary/50' : 'bg-primary hover:bg-primary-dark'
+                  }`}
+                >
+                  {autoMatchState.running ? 'Scanning…' : 'Automatching'}
+                </button>
+              </div>
                 <button
                   type="button"
                   onClick={closeModal}
@@ -259,6 +458,97 @@ const CourseMatchingPage = () => {
                 </div>
               </div>
             </div>
+            {autoMatchState.active && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[32px] bg-slate-950/80 p-6 text-white backdrop-blur">
+                <div className="relative w-full max-w-xl space-y-5 rounded-[28px] border border-primary/40 bg-slate-900/70 p-6 shadow-2xl">
+                  <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.3em] text-primary/60">
+                    <span>
+                      {autoMatchState.running
+                        ? 'AI automatching in progress'
+                        : autoMatchState.error
+                          ? 'Automatching blocked'
+                          : 'Match assigned'}
+                    </span>
+                    <span>{autoMatchState.running ? `${Math.round(autoMatchState.progress)}%` : 'Done'}</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-primary/60 via-emerald-400 to-primary/80 transition-all duration-300"
+                      style={{ width: `${autoMatchState.running ? autoMatchState.progress : 100}%` }}
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-slate-100">
+                    {autoMatchState.stage || 'Initializing automatching sequence...'}
+                  </p>
+                  {autoMatchState.running && (
+                    <div className="ai-scan-grid relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <div className="ai-scan-beam" />
+                      <p className="relative text-xs uppercase tracking-[0.3em] text-white/70">Scanning schedule blocks</p>
+                      <div className="relative mt-3 flex flex-wrap gap-2 text-xs text-white/80">
+                        {scheduleEvents.slice(0, 3).map((event) => (
+                          <span key={event.id} className="rounded-full border border-white/30 px-3 py-1">
+                            {event.day} {event.start}-{event.end}
+                          </span>
+                        ))}
+                        {!scheduleEvents.length && (
+                          <span className="rounded-full border border-white/30 px-3 py-1">No conflicts detected</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {!autoMatchState.running && autoMatchState.result && !autoMatchState.error && (
+                    <div className="space-y-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-4 text-left text-emerald-50">
+                      <p className="text-xs uppercase tracking-[0.3em] text-emerald-200">Assigned section</p>
+                      <h4 className="text-lg font-semibold text-white">{autoMatchState.result.section}</h4>
+                      <p className="text-sm text-emerald-100">Tutor: {autoMatchState.result.tutor}</p>
+                      <div className="mt-2 flex flex-wrap gap-2 text-xs text-emerald-100">
+                        <span className="rounded-full border border-emerald-200/40 px-3 py-1">{autoMatchState.result.days}</span>
+                        <span className="rounded-full border border-emerald-200/40 px-3 py-1">
+                          Capacity {autoMatchState.result.capacity}
+                        </span>
+                        <span className="rounded-full border border-emerald-200/40 px-3 py-1">{autoMatchState.result.format}</span>
+                      </div>
+                      <p className="mt-2 text-xs text-emerald-200">
+                        Slot locked automatically. You can rescan or switch sections anytime.
+                      </p>
+                    </div>
+                  )}
+                  {autoMatchState.error && (
+                    <div className="rounded-2xl border border-rose-400/50 bg-rose-500/20 p-4 text-left text-rose-100">
+                      {autoMatchState.error}
+                    </div>
+                  )}
+                  <div className="flex flex-wrap justify-end gap-3 text-sm">
+                    {autoMatchState.running ? (
+                      <button
+                        type="button"
+                        className="rounded-full border border-white/30 px-4 py-2 text-white transition hover:bg-white/10"
+                        onClick={resetAutoMatch}
+                      >
+                        Cancel scan
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="rounded-full border border-white/30 px-4 py-2 text-white transition hover:bg-white/10"
+                          onClick={resetAutoMatch}
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-full bg-primary px-4 py-2 font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                          onClick={startAutoMatch}
+                        >
+                          Scan again
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>,
           portalTarget,
         )}
