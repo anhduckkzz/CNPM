@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { useAuth } from '../../context/AuthContext';
 import type { ScheduleEvent } from '../../types/portal';
-import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
+import { toCourseSlug } from '../../utils/courseSlug';
 
 type PortalOutletContext = {
   isSidebarOpen: boolean;

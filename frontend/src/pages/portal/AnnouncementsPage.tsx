@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -7,6 +8,7 @@ const AnnouncementsPage = () => {
   const { portal } = useAuth();
   const data = portal?.announcements;
   const [activeId, setActiveId] = useState<string | null>(null);
+  const portalTarget = typeof document !== 'undefined' ? document.body : null;
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -74,73 +76,76 @@ const AnnouncementsPage = () => {
         ))}
       </div>
 
-      {activeAnnouncement && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 py-8"
-          onClick={closeModal}
-        >
+      {activeAnnouncement &&
+        portalTarget &&
+        createPortal(
           <div
-            className="relative w-full max-w-2xl rounded-[32px] bg-white p-8 shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+            className="fixed inset-0 z-50 flex min-h-screen w-screen items-center justify-center bg-slate-900/50 px-4 py-8"
+            onClick={closeModal}
           >
-            <button
-              type="button"
-              onClick={closeModal}
-              className="absolute right-4 top-4 rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50"
+            <div
+              className="relative w-full max-w-2xl rounded-[32px] bg-white p-8 shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
             >
-              <X size={16} />
-              <span className="sr-only">Close</span>
-            </button>
-            <p className="text-xs uppercase tracking-widest text-slate-400">Announcement detail</p>
-            <h3 className="mt-2 text-3xl font-semibold text-ink">{activeAnnouncement.title}</h3>
-            <p className="mt-2 text-sm text-slate-500">
-              {activeAnnouncement.author} · {activeAnnouncement.role} · {activeAnnouncement.timestamp}
-            </p>
-            <div className="mt-6 space-y-4 text-sm leading-relaxed text-slate-600">
-              <p>
-                {activeAnnouncement.body} To support this initiative we have compiled a short action checklist with
-                deadlines, recommended tools, and support contacts. Please review the guidance and share any blockers with
-                your department coordinator.
+              <button
+                type="button"
+                onClick={closeModal}
+                className="absolute right-4 top-4 rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50"
+              >
+                <X size={16} />
+                <span className="sr-only">Close</span>
+              </button>
+              <p className="text-xs uppercase tracking-widest text-slate-400">Announcement detail</p>
+              <h3 className="mt-2 text-3xl font-semibold text-ink">{activeAnnouncement.title}</h3>
+              <p className="mt-2 text-sm text-slate-500">
+                {activeAnnouncement.author} - {activeAnnouncement.role} - {activeAnnouncement.timestamp}
               </p>
-              <p>
-                Need the official reference?{' '}
-                <a
-                  href="https://www.hcmut.edu.vn/vi"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
-                >
-                  Read the full circular on the HCMUT site
-                </a>{' '}
-                or visit the{' '}
-                <a
-                  href="https://elearning.hcmut.edu.vn"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
-                >
-                  e-learning service desk
-                </a>{' '}
-                for step-by-step walkthroughs.
-              </p>
-              <div className="rounded-2xl bg-slate-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Next actions</p>
-                <ul className="mt-2 list-disc space-y-1 pl-5">
-                  <li>Share this announcement with your cohort or faculty mailing list.</li>
-                  <li>Bookmark key deadlines in the portal calendar to ensure reminders.</li>
-                  <li>
-                    Submit open questions through the{' '}
-                    <a href="mailto:support@hcmut.edu.vn" className="text-primary underline">
-                      support@hcmut.edu.vn
-                    </a>{' '}
-                    channel for a 24h response.
-                  </li>
-                </ul>
+              <div className="mt-6 space-y-4 text-sm leading-relaxed text-slate-600">
+                <p>
+                  {activeAnnouncement.body} To support this initiative we have compiled a short action checklist with
+                  deadlines, recommended tools, and support contacts. Please review the guidance and share any blockers
+                  with your department coordinator.
+                </p>
+                <p>
+                  Need the official reference?{' '}
+                  <a
+                    href="https://www.hcmut.edu.vn/vi"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
+                  >
+                    Read the full circular on the HCMUT site
+                  </a>{' '}
+                  or visit the{' '}
+                  <a
+                    href="https://elearning.hcmut.edu.vn"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
+                  >
+                    e-learning service desk
+                  </a>{' '}
+                  for step-by-step walkthroughs.
+                </p>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Next actions</p>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    <li>Share this announcement with your cohort or faculty mailing list.</li>
+                    <li>Bookmark key deadlines in the portal calendar to ensure reminders.</li>
+                    <li>
+                      Submit open questions through the{' '}
+                      <a href="mailto:support@hcmut.edu.vn" className="text-primary underline">
+                        support@hcmut.edu.vn
+                      </a>{' '}
+                      channel for a 24h response.
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          portalTarget,
+        )}
     </div>
   );
 };
