@@ -86,7 +86,11 @@ export interface CourseDetailSection {
     time: string;
     cta: string;
   }>;
-  materials: string[];
+  materials: Array<{
+    title: string;
+    type?: string;
+    url?: string;
+  }>;
   quizzes: Array<{
     id: string;
     title: string;

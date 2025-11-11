@@ -67,17 +67,31 @@ const CoursesPage = () => {
                 <p className="text-lg font-semibold text-ink">{course.title}</p>
                 <p className="text-sm text-slate-500">Course ID: {course.code}</p>
               </div>
-              <button
-                type="button"
-                className="mt-5 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
-                onClick={() => {
-                  if (!role) return;
-                  const slug = toCourseSlug(course.id) ?? course.id;
-                  navigate(`/portal/${role}/course-detail/${slug}`);
-                }}
-              >
-                Access Course
-              </button>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  className="flex-1 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                  onClick={() => {
+                    if (!role) return;
+                    const slug = toCourseSlug(course.id) ?? course.id;
+                    navigate(`/portal/${role}/course-detail/${slug}`);
+                  }}
+                >
+                  Access Course
+                </button>
+                {role === 'tutor' && (
+                  <button
+                    type="button"
+                    className="rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-primary/40 hover:text-primary"
+                    onClick={() => {
+                      const slug = toCourseSlug(course.id) ?? course.id;
+                      navigate(`/portal/${role}/course-admin/${slug}`);
+                    }}
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
             </article>
           ))}
         </div>

@@ -1,29 +1,53 @@
 {
     "navigation": {
-        "topLinks": ["courses", "profile"],
+        "topLinks": [
+            "courses",
+            "profile"
+        ],
         "sidebar": [
             {
                 "title": "Quick Access",
                 "links": [
-                    {"label": "Dashboard", "path": "/portal/student/home"},
-                    {"label": "Profile", "path": "/portal/student/profile"},
-                    {"label": "Courses", "path": "/portal/student/courses"},
-                    {"label": "Academic Records", "path": "/portal/student/academic-records"}
+                    {
+                        "label": "Dashboard",
+                        "path": "/portal/student/home"
+                    },
+                    {
+                        "label": "Profile",
+                        "path": "/portal/student/profile"
+                    },
+                    {
+                        "label": "Courses",
+                        "path": "/portal/student/courses"
+                    },
+                    {
+                        "label": "Academic Records",
+                        "path": "/portal/student/academic-records"
+                    }
                 ]
             },
             {
                 "title": "Student Hub",
                 "links": [
-                    {"label": "Course Registration", "path": "/portal/student/course-matching"},
-                    {"label": "My Schedule", "path": "/portal/student/schedule"},
-                    {"label": "Session Feedback", "path": "/portal/student/feedback"}
+                    {
+                        "label": "Course Registration",
+                        "path": "/portal/student/course-matching"
+                    },
+                    {
+                        "label": "My Schedule",
+                        "path": "/portal/student/schedule"
+                    },
+                    {
+                        "label": "Session Feedback",
+                        "path": "/portal/student/feedback"
+                    }
                 ]
             }
         ]
     },
     "user": {
         "identifier": "stu-20127001",
-        "name": "Nguy\u1ec5n V\u0103n An",
+        "name": "Nguyễn Văn An",
         "email": "student@hcmut.edu.vn",
         "title": "Student, Computer Science",
         "avatar": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80",
@@ -66,7 +90,11 @@
     "courseMatching": {
         "title": "Course Registration",
         "description": "Discover and manage courses that align with your learning goals.",
-        "filters": ["All Categories", "All Statuses", "All Formats"],
+        "filters": [
+            "All Categories",
+            "All Statuses",
+            "All Formats"
+        ],
         "recommended": [
             {
                 "id": "c-intro-programming",
@@ -155,7 +183,7 @@
                 {
                     "id": "slot-a",
                     "section": "CO1002 at CC01 at In-person",
-                    "tutor": "Nguy\u1ec5n V\u0103n An",
+                    "tutor": "Nguyễn Văn An",
                     "format": "Blended",
                     "capacity": "77/100",
                     "days": "Monday (7h-9h)",
@@ -164,7 +192,7 @@
                 {
                     "id": "slot-b",
                     "section": "CO1002 at CC02 at Online",
-                    "tutor": "Nguy\u1ec5n V\u0103n B\u00ecnh",
+                    "tutor": "Nguyễn Văn Bình",
                     "format": "Online",
                     "capacity": "68/100",
                     "days": "Tuesday (7h-9h)",
@@ -173,7 +201,7 @@
                 {
                     "id": "slot-c",
                     "section": "CO1002 at CC03 at In-person",
-                    "tutor": "Nguy\u1ec5n V\u0103n C\u01b0\u1eddng",
+                    "tutor": "Nguyễn Văn Cường",
                     "format": "In-person",
                     "capacity": "68/100",
                     "days": "Wednesday (7h-9h)",
@@ -182,7 +210,7 @@
                 {
                     "id": "slot-d",
                     "section": "CO1002 at CC04 at In-person",
-                    "tutor": "Nguy\u1ec5n V\u0103n D\u0169ng",
+                    "tutor": "Nguyễn Văn Dũng",
                     "format": "In-person",
                     "capacity": "56/100",
                     "days": "Thursday (7h-9h)",
@@ -268,10 +296,31 @@
                 }
             ],
             "materials": [
-                {"title": "Sorting Algorithms Playbook", "type": "pdf"},
-                {"title": "Graph & Tree Patterns", "type": "video"},
-                {"title": "Linked List Workbook", "type": "pdf"},
-                {"title": "Stack and Queue Patterns", "type": "slides"}
+                {
+                    "title": "Data Structures and Algorithms: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Data Structures and Algorithms: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Data Structures and Algorithms: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Data Structures and Algorithms: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Data Structures and Algorithms: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -324,10 +373,31 @@
                 }
             ],
             "materials": [
-                {"title": "Course Orientation & Style Guide", "type": "pdf"},
-                {"title": "Loops & Iterations Slides", "type": "slides"},
-                {"title": "Function Practice Pack", "type": "pdf"},
-                {"title": "Debugging Checklist", "type": "video"}
+                {
+                    "title": "Introduction to Programming: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Introduction to Programming: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Introduction to Programming: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Introduction to Programming: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Introduction to Programming: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -380,10 +450,31 @@
                 }
             ],
             "materials": [
-                {"title": "Real Analysis Refresher", "type": "pdf"},
-                {"title": "Differential Equations Workbook", "type": "pdf"},
-                {"title": "Laplace Techniques Notes", "type": "slides"},
-                {"title": "Practice Midterm Question Bank", "type": "sheet"}
+                {
+                    "title": "Advanced Calculus: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Advanced Calculus: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Advanced Calculus: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Advanced Calculus: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Advanced Calculus: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -436,10 +527,31 @@
                 }
             ],
             "materials": [
-                {"title": "Dirac Notation Primer", "type": "pdf"},
-                {"title": "Schr\u00f6dinger Equation Set", "type": "slides"},
-                {"title": "Quantum Experiment Recap", "type": "video"},
-                {"title": "Qubit Simulation Starter Pack", "type": "code"}
+                {
+                    "title": "Quantum Physics: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Quantum Physics: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Quantum Physics: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Quantum Physics: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Quantum Physics: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -492,10 +604,31 @@
                 }
             ],
             "materials": [
-                {"title": "Semester Syllabus & Text Packet", "type": "pdf"},
-                {"title": "Critical Theory Summary Cards", "type": "slides"},
-                {"title": "Poetry Analysis Toolkit", "type": "pdf"},
-                {"title": "Workshop Reading Set", "type": "pdf"}
+                {
+                    "title": "Literary Analysis: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Literary Analysis: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Literary Analysis: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Literary Analysis: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Literary Analysis: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -548,10 +681,31 @@
                 }
             ],
             "materials": [
-                {"title": "Microscopy Slides Deck", "type": "slides"},
-                {"title": "Wet Lab Manual", "type": "pdf"},
-                {"title": "Genome Editing Briefing", "type": "video"},
-                {"title": "Cell Cycle Cheat Sheet", "type": "sheet"}
+                {
+                    "title": "Cellular Biology: Learning Path Overview",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Cellular Biology: Differential Equations Workbook",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Cellular Biology: Quick Reference Cards",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Cellular Biology: Systems Design Blueprint",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Cellular Biology: Instructor Notes (TXT)",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
             ],
             "quizzes": [
                 {
@@ -587,40 +741,104 @@
                 "id": "q1",
                 "text": "1 + 1 = ?",
                 "options": [
-                    {"id": "opt-a", "label": "A", "value": "1"},
-                    {"id": "opt-b", "label": "B", "value": "2"},
-                    {"id": "opt-c", "label": "C", "value": "3"},
-                    {"id": "opt-d", "label": "D", "value": "4"}
+                    {
+                        "id": "opt-a",
+                        "label": "A",
+                        "value": "1"
+                    },
+                    {
+                        "id": "opt-b",
+                        "label": "B",
+                        "value": "2"
+                    },
+                    {
+                        "id": "opt-c",
+                        "label": "C",
+                        "value": "3"
+                    },
+                    {
+                        "id": "opt-d",
+                        "label": "D",
+                        "value": "4"
+                    }
                 ]
             },
             {
                 "id": "q2",
                 "text": "Which data structure works on FIFO principle?",
                 "options": [
-                    {"id": "opt-a2", "label": "A", "value": "Stack"},
-                    {"id": "opt-b2", "label": "B", "value": "Queue"},
-                    {"id": "opt-c2", "label": "C", "value": "Tree"},
-                    {"id": "opt-d2", "label": "D", "value": "Graph"}
+                    {
+                        "id": "opt-a2",
+                        "label": "A",
+                        "value": "Stack"
+                    },
+                    {
+                        "id": "opt-b2",
+                        "label": "B",
+                        "value": "Queue"
+                    },
+                    {
+                        "id": "opt-c2",
+                        "label": "C",
+                        "value": "Tree"
+                    },
+                    {
+                        "id": "opt-d2",
+                        "label": "D",
+                        "value": "Graph"
+                    }
                 ]
             },
             {
                 "id": "q3",
                 "text": "What is the time complexity of binary search?",
                 "options": [
-                    {"id": "opt-a3", "label": "A", "value": "O(n)"},
-                    {"id": "opt-b3", "label": "B", "value": "O(log n)"},
-                    {"id": "opt-c3", "label": "C", "value": "O(n log n)"},
-                    {"id": "opt-d3", "label": "D", "value": "O(n^2)"}
+                    {
+                        "id": "opt-a3",
+                        "label": "A",
+                        "value": "O(n)"
+                    },
+                    {
+                        "id": "opt-b3",
+                        "label": "B",
+                        "value": "O(log n)"
+                    },
+                    {
+                        "id": "opt-c3",
+                        "label": "C",
+                        "value": "O(n log n)"
+                    },
+                    {
+                        "id": "opt-d3",
+                        "label": "D",
+                        "value": "O(n^2)"
+                    }
                 ]
             },
             {
                 "id": "q4",
                 "text": "Which sorting algorithm is stable by default?",
                 "options": [
-                    {"id": "opt-a4", "label": "A", "value": "Quick sort"},
-                    {"id": "opt-b4", "label": "B", "value": "Merge sort"},
-                    {"id": "opt-c4", "label": "C", "value": "Heap sort"},
-                    {"id": "opt-d4", "label": "D", "value": "Selection sort"}
+                    {
+                        "id": "opt-a4",
+                        "label": "A",
+                        "value": "Quick sort"
+                    },
+                    {
+                        "id": "opt-b4",
+                        "label": "B",
+                        "value": "Merge sort"
+                    },
+                    {
+                        "id": "opt-c4",
+                        "label": "C",
+                        "value": "Heap sort"
+                    },
+                    {
+                        "id": "opt-d4",
+                        "label": "D",
+                        "value": "Selection sort"
+                    }
                 ]
             }
         ]
@@ -631,34 +849,177 @@
         "score": "8/10",
         "duration": "1 min 40 secs",
         "stats": [
-            {"label": "Correct Answers", "value": "4/5"},
-            {"label": "Review", "value": "Available"}
+            {
+                "label": "Correct Answers",
+                "value": "4/5"
+            },
+            {
+                "label": "Review",
+                "value": "Available"
+            }
         ]
     },
     "schedule": {
         "month": "September 2025",
         "events": [
-            {"id": "ev-1", "title": "Calculus I Lecture", "day": "Mon", "start": "09:00", "end": "11:00", "type": "busy"},
-            {"id": "ev-2", "title": "Database Lab", "day": "Wed", "start": "11:00", "end": "13:00", "type": "busy"},
-            {"id": "ev-3", "title": "Student Consultation", "day": "Fri", "start": "11:00", "end": "12:00", "type": "busy"},
-            {"id": "ev-4", "title": "AI & ML Seminar", "day": "Thu", "start": "15:00", "end": "17:00", "type": "busy"},
-            {"id": "ev-5", "title": "Research Colloquium", "day": "Fri", "start": "15:00", "end": "17:00", "type": "busy"}
+            {
+                "id": "ev-1",
+                "title": "Calculus I Lecture",
+                "day": "Mon",
+                "start": "09:00",
+                "end": "11:00",
+                "type": "busy"
+            },
+            {
+                "id": "ev-2",
+                "title": "Database Lab",
+                "day": "Wed",
+                "start": "11:00",
+                "end": "13:00",
+                "type": "busy"
+            },
+            {
+                "id": "ev-3",
+                "title": "Student Consultation",
+                "day": "Fri",
+                "start": "11:00",
+                "end": "12:00",
+                "type": "busy"
+            },
+            {
+                "id": "ev-4",
+                "title": "AI & ML Seminar",
+                "day": "Thu",
+                "start": "15:00",
+                "end": "17:00",
+                "type": "busy"
+            },
+            {
+                "id": "ev-5",
+                "title": "Research Colloquium",
+                "day": "Fri",
+                "start": "15:00",
+                "end": "17:00",
+                "type": "busy"
+            }
         ],
         "upcoming": [
-            {"id": "up-1", "title": "Introduction to Data Science", "date": "Tue 01", "time": "9:00 AM - 10:30 AM", "cta": "View Details"},
-            {"id": "up-2", "title": "Advanced Algorithms", "date": "Wed 02", "time": "1:00 PM - 2:30 PM", "cta": "View Details"},
-            {"id": "up-3", "title": "Web Development Project", "date": "Thu 03", "time": "11:00 AM - 12:00 PM", "cta": "View Details"}
+            {
+                "id": "up-1",
+                "title": "Introduction to Data Science",
+                "date": "Tue 01",
+                "time": "9:00 AM - 10:30 AM",
+                "cta": "View Details"
+            },
+            {
+                "id": "up-2",
+                "title": "Advanced Algorithms",
+                "date": "Wed 02",
+                "time": "1:00 PM - 2:30 PM",
+                "cta": "View Details"
+            },
+            {
+                "id": "up-3",
+                "title": "Web Development Project",
+                "date": "Thu 03",
+                "time": "11:00 AM - 12:00 PM",
+                "cta": "View Details"
+            }
         ]
     },
     "reschedule": {
         "grid": [
-            {"day": "Monday", "blocks": ["busy", "free", "busy", "busy", "busy", "free", "busy", "busy"]},
-            {"day": "Tuesday", "blocks": ["busy", "free", "busy", "busy", "busy", "free", "busy", "busy"]},
-            {"day": "Wednesday", "blocks": ["free", "free", "busy", "busy", "free", "free", "busy", "busy"]},
-            {"day": "Thursday", "blocks": ["free", "busy", "busy", "busy", "free", "busy", "busy", "busy"]},
-            {"day": "Friday", "blocks": ["free", "busy", "busy", "busy", "free", "busy", "busy", "busy"]},
-            {"day": "Saturday", "blocks": ["open", "open", "open", "open", "open", "open", "open", "open"]},
-            {"day": "Sunday", "blocks": ["open", "open", "open", "open", "open", "open", "open", "open"]}
+            {
+                "day": "Monday",
+                "blocks": [
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy"
+                ]
+            },
+            {
+                "day": "Tuesday",
+                "blocks": [
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy"
+                ]
+            },
+            {
+                "day": "Wednesday",
+                "blocks": [
+                    "free",
+                    "free",
+                    "busy",
+                    "busy",
+                    "free",
+                    "free",
+                    "busy",
+                    "busy"
+                ]
+            },
+            {
+                "day": "Thursday",
+                "blocks": [
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy"
+                ]
+            },
+            {
+                "day": "Friday",
+                "blocks": [
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy",
+                    "free",
+                    "busy",
+                    "busy",
+                    "busy"
+                ]
+            },
+            {
+                "day": "Saturday",
+                "blocks": [
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open"
+                ]
+            },
+            {
+                "day": "Sunday",
+                "blocks": [
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open"
+                ]
+            }
         ],
         "instructions": [
             "Left-click and drag to highlight free time.",
@@ -669,8 +1030,18 @@
     "feedback": {
         "title": "Feedback and Evaluation",
         "instructions": "Provide your feedback for a tutoring session.",
-        "sessions": ["CO2021 - Lecture 01 (Data Structures) at 2024-05-15"],
-        "ratingScale": ["Awful", "Poor", "Fair", "Neutral", "Good", "Very Good", "Excellent"],
+        "sessions": [
+            "CO2021 - Lecture 01 (Data Structures) at 2024-05-15"
+        ],
+        "ratingScale": [
+            "Awful",
+            "Poor",
+            "Fair",
+            "Neutral",
+            "Good",
+            "Very Good",
+            "Excellent"
+        ],
         "history": [
             {
                 "id": "fb-1",
@@ -699,49 +1070,183 @@
         ]
     },
     "profile": {
-        "header": {"about": "I'm Student.", "role": "Student"},
+        "header": {
+            "about": "I'm Student.",
+            "role": "Student"
+        },
         "contact": [
-            {"label": "Email Address", "value": "nguyenvana@hcmut.edu.vn", "icon": "mail"},
-            {"label": "Phone Number", "value": "0901 234 567", "icon": "phone"},
-            {"label": "Address", "value": "123 Le Van Duyet Street, Binh Thanh Distr", "icon": "map"}
+            {
+                "label": "Email Address",
+                "value": "nguyenvana@hcmut.edu.vn",
+                "icon": "mail"
+            },
+            {
+                "label": "Phone Number",
+                "value": "0901 234 567",
+                "icon": "phone"
+            },
+            {
+                "label": "Address",
+                "value": "123 Le Van Duyet Street, Binh Thanh Distr",
+                "icon": "map"
+            }
         ],
         "academics": [
-            {"label": "Student ID", "value": "20127001"},
-            {"label": "Support Needs", "value": ["Calculus 1", "Digital System"], "type": "tags"},
-            {"label": "Platform Links", "value": ["https://facebook.com/in/nguyenvana"], "type": "tags"}
+            {
+                "label": "Student ID",
+                "value": "20127001"
+            },
+            {
+                "label": "Support Needs",
+                "value": [
+                    "Calculus 1",
+                    "Digital System"
+                ],
+                "type": "tags"
+            },
+            {
+                "label": "Platform Links",
+                "value": [
+                    "https://facebook.com/in/nguyenvana"
+                ],
+                "type": "tags"
+            }
         ]
     },
     "academicRecords": {
-        "studentInfo": {"name": "L\u00ea Minh Khoa", "studentId": "2310456", "semester": "Fall 2023"},
+        "studentInfo": {
+            "name": "Lê Minh Khoa",
+            "studentId": "2310456",
+            "semester": "Fall 2023"
+        },
         "gpa": "3.85",
         "standing": "Excellent Academic Standing",
         "grades": [
-            {"course": "Programming Fundamentals", "grade": "A+", "credits": 4, "scale4": 3.98},
-            {"course": "Discrete Mathematics for Computer Science", "grade": "A", "credits": 3, "scale4": 3.7},
-            {"course": "Data Structures & Algorithms", "grade": "A", "credits": 4, "scale4": 3.85},
-            {"course": "Computer Organization and Architecture", "grade": "C+", "credits": 3, "scale4": 2.6},
-            {"course": "Operating Systems", "grade": "A", "credits": 4, "scale4": 3.8},
-            {"course": "Database Systems", "grade": "A+", "credits": 3, "scale4": 3.95},
-            {"course": "Computer Networks", "grade": "C", "credits": 3, "scale4": 2.4},
-            {"course": "Software Engineering Practices", "grade": "A", "credits": 3, "scale4": 3.6},
-            {"course": "Artificial Intelligence Foundations", "grade": "A", "credits": 3, "scale4": 3.75},
-            {"course": "Machine Learning Fundamentals", "grade": "D+", "credits": 3, "scale4": 2.2},
-            {"course": "Human-Computer Interaction", "grade": "A", "credits": 3, "scale4": 3.55},
-            {"course": "Cybersecurity Principles", "grade": "D+", "credits": 2, "scale4": 2.0},
-            {"course": "Distributed Systems", "grade": "A", "credits": 3, "scale4": 3.65},
-            {"course": "Cloud Computing Architecture", "grade": "A", "credits": 3, "scale4": 3.72},
-            {"course": "Parallel Programming", "grade": "D", "credits": 3, "scale4": 1.8}
+            {
+                "course": "Programming Fundamentals",
+                "grade": "A+",
+                "credits": 4,
+                "scale4": 3.98
+            },
+            {
+                "course": "Discrete Mathematics for Computer Science",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.7
+            },
+            {
+                "course": "Data Structures & Algorithms",
+                "grade": "A",
+                "credits": 4,
+                "scale4": 3.85
+            },
+            {
+                "course": "Computer Organization and Architecture",
+                "grade": "C+",
+                "credits": 3,
+                "scale4": 2.6
+            },
+            {
+                "course": "Operating Systems",
+                "grade": "A",
+                "credits": 4,
+                "scale4": 3.8
+            },
+            {
+                "course": "Database Systems",
+                "grade": "A+",
+                "credits": 3,
+                "scale4": 3.95
+            },
+            {
+                "course": "Computer Networks",
+                "grade": "C",
+                "credits": 3,
+                "scale4": 2.4
+            },
+            {
+                "course": "Software Engineering Practices",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.6
+            },
+            {
+                "course": "Artificial Intelligence Foundations",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.75
+            },
+            {
+                "course": "Machine Learning Fundamentals",
+                "grade": "D+",
+                "credits": 3,
+                "scale4": 2.2
+            },
+            {
+                "course": "Human-Computer Interaction",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.55
+            },
+            {
+                "course": "Cybersecurity Principles",
+                "grade": "D+",
+                "credits": 2,
+                "scale4": 2.0
+            },
+            {
+                "course": "Distributed Systems",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.65
+            },
+            {
+                "course": "Cloud Computing Architecture",
+                "grade": "A",
+                "credits": 3,
+                "scale4": 3.72
+            },
+            {
+                "course": "Parallel Programming",
+                "grade": "D",
+                "credits": 3,
+                "scale4": 1.8
+            }
         ],
         "scholarships": [
-            {"title": "Dean's List Scholarship", "amount": "$2,500", "description": "Awarded to students with exceptional academic performance each semester."},
-            {"title": "STEM Excellence Grant", "amount": "$3,000", "description": "For excellence in Science, Technology, Engineering, and Mathematics."},
-            {"title": "TutorLink Merit Scholarship", "amount": "$1,500", "description": "Merit-based scholarship for high-achieving students."}
+            {
+                "title": "Dean's List Scholarship",
+                "amount": "$2,500",
+                "description": "Awarded to students with exceptional academic performance each semester."
+            },
+            {
+                "title": "STEM Excellence Grant",
+                "amount": "$3,000",
+                "description": "For excellence in Science, Technology, Engineering, and Mathematics."
+            },
+            {
+                "title": "TutorLink Merit Scholarship",
+                "amount": "$1,500",
+                "description": "Merit-based scholarship for high-achieving students."
+            }
         ],
         "tutorLessons": [
-            {"title": "Algebra Fundamentals", "tutor": "Nguy\u1ec5n Th\u1ecb Minh Ch\u00e2u"},
-            {"title": "Physics I Lab", "tutor": "Tr\u1ea7n H\u1eefu Kh\u00e1nh"},
-            {"title": "Organic Chemistry", "tutor": "Emily White"},
-            {"title": "Advanced Calculus", "tutor": "David Lee"}
+            {
+                "title": "Algebra Fundamentals",
+                "tutor": "Nguyễn Thị Minh Châu"
+            },
+            {
+                "title": "Physics I Lab",
+                "tutor": "Trần Hữu Khánh"
+            },
+            {
+                "title": "Organic Chemistry",
+                "tutor": "Emily White"
+            },
+            {
+                "title": "Advanced Calculus",
+                "tutor": "David Lee"
+            }
         ],
         "eligibility": {
             "status": "Eligible",

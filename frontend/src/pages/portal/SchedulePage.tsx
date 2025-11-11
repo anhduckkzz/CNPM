@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
@@ -50,7 +50,24 @@ const SchedulePage = () => {
   const { role } = useParams();
   const { isSidebarOpen } = useOutletContext<PortalOutletContext>();
   const schedule = portal?.schedule;
-  const registered = portal?.courses;
+  const registered = useMemo(() => {
+    if (portal?.courses?.courses?.length) {
+      return portal.courses;
+    }
+    if (role === 'tutor' && portal?.courseMatching?.history?.length) {
+      return {
+        title: 'Courses you tutor',
+        description: 'Recently registered courses you are teaching.',
+        courses: portal.courseMatching.history.map((course) => ({
+          id: course.id,
+          title: course.title,
+          code: course.code ?? course.id.toUpperCase(),
+          thumbnail: course.thumbnail ?? '',
+        })),
+      };
+    }
+    return portal?.courses;
+  }, [portal?.courses, portal?.courseMatching?.history, role]);
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
 
   const grouped = schedule?.events.reduce<Record<string, ScheduleEvent[]>>((acc, event) => {

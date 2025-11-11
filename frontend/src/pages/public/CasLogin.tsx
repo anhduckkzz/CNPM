@@ -2,6 +2,7 @@ import type { FormEvent } from 'react';
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import type { Role } from '../../types/portal';
 
 const CasLogin = () => {
   const { login } = useAuth();
@@ -21,28 +22,33 @@ const CasLogin = () => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
+    let inferredRole: Role = 'student';
+    if (normalizedEmail === 'staff@hcmut.edu.vn') {
+      inferredRole = 'staff';
+    } else if (normalizedEmail === 'tutor@hcmut.edu.vn') {
+      inferredRole = 'tutor';
+    }
+
     if (!normalizedEmail.endsWith('@hcmut.edu.vn')) {
       setError('You are not allowed to use this services.');
       setSubmitting(false);
       return;
     }
 
-    if (!isAdminView && password !== '12345678') {
+    if (inferredRole === 'student' && password !== '12345678') {
       setError('Wrong password');
       setSubmitting(false);
       return;
     }
 
-    if (isAdminView && normalizedEmail !== 'staff@hcmut.edu.vn') {
+    if (inferredRole === 'staff' && normalizedEmail !== 'staff@hcmut.edu.vn') {
       setError("You don't have permission to access this site.");
       setSubmitting(false);
       return;
     }
 
-    const forcedRole = isAdminView ? 'staff' : 'student';
-
     try {
-      const role = await login(normalizedEmail, password, forcedRole);
+      const role = await login(normalizedEmail, password, inferredRole);
       navigate(`/portal/${role}/home`, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in right now.');
