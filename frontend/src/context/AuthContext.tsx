@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { PortalBundle, Role, UserProfile } from '../types/portal';
-import { fetchPortalBundle, loginRequest } from '../lib/api';
+import { fetchPortalBundle, loginRequest, updatePortalBundle } from '../lib/api';
 
 interface AuthState {
   user?: UserProfile;
@@ -20,6 +20,7 @@ interface AuthState {
   logout: () => void;
   refreshPortal: () => Promise<void>;
   updateAvatar: (avatarUrl: string) => void;
+  updatePortal: (newPortal: Partial<PortalBundle> | ((prev: PortalBundle) => PortalBundle)) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -97,6 +98,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setPortal(bundle);
   }, [role]);
 
+  const updatePortal = useCallback(async (newPortal: Partial<PortalBundle> | ((prev: PortalBundle) => PortalBundle)) => {
+    if (!role || !portal) return;
+
+    let updatedBundle: PortalBundle;
+    if (typeof newPortal === 'function') {
+      updatedBundle = newPortal(portal);
+    } else {
+      updatedBundle = { ...portal, ...newPortal };
+    }
+
+    setPortal(updatedBundle);
+    await updatePortalBundle(role, updatedBundle);
+  }, [role, portal]);
+
   const updateAvatar = useCallback(
     (avatarUrl: string) => {
       setUser((prev) => {
@@ -107,9 +122,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
         return nextUser;
       });
-      setPortal((prev) => (prev ? { ...prev, user: { ...prev.user, avatar: avatarUrl } } : prev));
+      updatePortal((prev) => ({ ...prev, user: { ...prev.user, avatar: avatarUrl } }));
     },
-    [persistState, role, token],
+    [persistState, role, token, updatePortal],
   );
 
   const value = useMemo<AuthState>(
@@ -123,8 +138,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logout,
       refreshPortal,
       updateAvatar,
+      updatePortal,
     }),
-    [user, role, token, portal, loading, login, logout, refreshPortal, updateAvatar],
+    [user, role, token, portal, loading, login, logout, refreshPortal, updateAvatar, updatePortal],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

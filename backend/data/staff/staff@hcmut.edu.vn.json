@@ -1,0 +1,105 @@
+{
+    "navigation": {
+        "topLinks": ["courses", "profile"],
+        "sidebar": [
+            {
+                "title": "Staff Operations",
+                "links": [
+                    {"label": "Academic Records", "path": "/portal/staff/academic-records"},
+                    {"label": "Feedback Generation", "path": "/portal/staff/feedback-generation"}
+                ]
+            }
+        ]
+    },
+    "user": {
+        "identifier": "staff-osa",
+        "name": "Tr\u1ea7n Th\u1ecb Minh Ch\u00e2u",
+        "email": "staff@hcmut.edu.vn",
+        "title": "Office of Student Affairs",
+        "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
+        "role": "staff"
+    },
+    "announcements": {
+        "heroImage": "/images/hcmut2.png",
+        "title": "Office of Student Affairs",
+        "subtitle": "Monitor scholarships, reports, and compliance from a single control room.",
+        "items": []
+    },
+    "profile": {
+        "header": {"about": "University staff dedicated to student success.", "role": "Staff"},
+        "contact": [
+            {"label": "Email Address", "value": "osa@hcmut.edu.vn", "icon": "mail"},
+            {"label": "Phone Number", "value": "(84-8) 3864 7256 - 7204", "icon": "phone"},
+            {"label": "Office", "value": "268 Ly Thuong Kiet, District 10, HCMC", "icon": "map"}
+        ],
+        "academics": [
+            {"label": "Department", "value": "Office of Student Affairs"},
+            {"label": "Focus", "value": ["Scholarships", "Academic Records"], "type": "tags"},
+            {"label": "Support Links", "value": ["support@hcmut.edu.vn"], "type": "tags"}
+        ]
+    },
+    "staffRecords": {
+        "metrics": [
+            {"label": "Total Students Enrolled", "value": "8,542", "caption": "Current active student count"},
+            {"label": "Scholarships Awarded (YTD)", "value": "$125,000", "caption": "Total financial aid distributed"},
+            {"label": "Average GPA", "value": "3.68", "caption": "Across all active students"},
+            {"label": "Pending Training Credits", "value": "15", "caption": "Students awaiting credit approval"}
+        ],
+        "table": [
+            {"order": 1, "studentId": "2315622", "name": "Nguy\u1ec5n Th\u1ecb An", "major": "Computer Science", "gpa": "3.85", "status": "Active"},
+            {"order": 2, "studentId": "2315315", "name": "Tr\u1ea7n V\u0103n B\u00ecnh", "major": "Electrical Eng.", "gpa": "3.60", "status": "Active"},
+            {"order": 3, "studentId": "2315716", "name": "L\u00ea Th\u1ecb C\u00fac", "major": "Chemical Eng.", "gpa": "3.92", "status": "Active"},
+            {"order": 4, "studentId": "2315728", "name": "Ph\u1ea1m Minh Duy", "major": "Civil Eng.", "gpa": "3.45", "status": "Active"}
+        ],
+        "notifications": [
+            {"title": "Scholarship Awarded", "body": "You've been awarded the Academic Excellence Grant.", "timeAgo": "2 hours ago"},
+            {"title": "New Academic Report", "body": "A new academic performance report is ready for viewing.", "timeAgo": "Yesterday"}
+        ],
+        "quickActions": [
+            {"label": "Open Scholarship Board", "path": "/portal/staff/records"},
+            {"label": "Notify Students", "path": "/portal/staff/notify-students"},
+            {"label": "Generate Reports", "path": "/portal/staff/reports"}
+        ],
+        "tabs": ["Student Academic Records", "Scholarship & Training Credits", "Award Management"]
+    },
+    "notifications": {
+        "recipients": ["Tutor Program", "Office of Student Affairs", "Academic Department"],
+        "templates": ["Academic Alert", "Scholarship Update", "System Maintenance"],
+        "channels": ["Send Notification", "Send to Office of Student Affairs", "Send to Academic Department"],
+        "selectedStudents": ["Tr\u1ea7n Th\u1ecb Lan (Math 101)", "Nguy\u1ec5n \u0110\u1ee9c Long (CS 201)", "Ph\u1ea1m Gia B\u1ea3o (Lit 303)"]
+    },
+    "reports": {
+        "academic": {
+            "reportName": "Performance Analysis",
+            "academicYear": "2023-2024",
+            "semester": "Full Year",
+            "filters": [
+                {"label": "Student Group", "value": "All Undergraduate"},
+                {"label": "Reporting Period", "value": "Jan 01, 2023 - Dec 31, 2023"}
+            ],
+            "options": [
+                "Calculus I", "Linear Algebra", "Operating Systems", "Web Development", "Physics II",
+                "Data Structures", "Artificial Intelligence", "Database Management"
+            ]
+        },
+        "scholarship": {
+            "reportName": "Spring 2024 Scholarship Report",
+            "academicYear": "2023-2024",
+            "semester": "Spring",
+            "filters": [
+                {"label": "Academic Standing", "value": "Good Standing"},
+                {"label": "Enrollment Status", "value": "Full-time"},
+                {"label": "Minimum GPA", "value": "3.5"}
+            ],
+            "options": ["Academic Merit", "Financial Need", "Specific Major Requirement"]
+        },
+        "feedback": {
+            "reportName": "Feedback Generation",
+            "academicYear": "2024",
+            "filters": [
+                {"label": "Session", "value": "CO2021 - Lecture 01 (Data Structures)"}
+            ],
+            "options": ["Generate Student Report", "Generate Tutor Report", "Generate System Report"]
+        }
+    }
+}

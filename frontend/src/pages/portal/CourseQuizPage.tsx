@@ -1,11 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Timer, Trophy, Target, BarChart3, Activity, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { CheckCircle2, Timer, Trophy, Target, BarChart3, Activity, X, ClipboardList, History } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
 import type { CourseDetailSection } from '../../types/portal';
 
 type QuizOption = { id: string; label: string; value: string };
+
+type QuizHistoryEntry = {
+  attemptLabel: string;
+  timestamp: string;
+  duration: string;
+  scorePercent: number;
+  status: 'Completed' | 'Expired' | 'Missed';
+};
+
+type QuizGradeStats = {
+  best: number;
+  latest: number;
+  average: number;
+};
 
 interface QuizQuestion {
   id: string;
@@ -24,6 +38,9 @@ interface QuizContent {
   durationLabel: string;
   weight: string;
   focusAreas: string[];
+  maxAttempts: number;
+  gradeStats: QuizGradeStats;
+  history: QuizHistoryEntry[];
   questions: QuizQuestion[];
 }
 
@@ -49,7 +66,22 @@ interface CourseMeta {
   weight: string;
   focusAreas: string[];
   description: (courseTitle: string) => string;
+  maxAttempts: number;
+  gradeStats: QuizGradeStats;
+  history: QuizHistoryEntry[];
 }
+
+const formatCountdown = (totalSeconds: number) => {
+  const safeSeconds = Math.max(totalSeconds, 0);
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  const seconds = safeSeconds % 60;
+
+  if (hours > 0) {
+    return `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+  }
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
 
 const COURSE_META: Record<string, CourseMeta> = {
   'c-data-structures': {
@@ -63,6 +95,31 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `Checkpoint for ${title} focusing on translating theory into clear implementation decisions.`,
+    maxAttempts: 3,
+    gradeStats: { best: 94, latest: 88, average: 86 },
+    history: [
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 08, 2025 - 08:05 AM',
+        duration: '23m',
+        scorePercent: 82,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 2',
+        timestamp: 'Sep 15, 2025 - 08:12 AM',
+        duration: '24m',
+        scorePercent: 88,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 3',
+        timestamp: 'Sep 22, 2025 - 08:01 AM',
+        duration: '25m',
+        scorePercent: 94,
+        status: 'Completed',
+      },
+    ],
   },
   'c-intro-programming': {
     timeLimitMinutes: 20,
@@ -75,6 +132,31 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `A friendly pulse-check on ${title} fundamentals before moving into larger projects.`,
+    maxAttempts: 4,
+    gradeStats: { best: 91, latest: 84, average: 87 },
+    history: [
+      {
+        attemptLabel: 'Practice run',
+        timestamp: 'Sep 05, 2025 - 07:55 AM',
+        duration: '18m',
+        scorePercent: 78,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 12, 2025 - 08:02 AM',
+        duration: '19m',
+        scorePercent: 91,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 2',
+        timestamp: 'Sep 19, 2025 - 08:06 AM',
+        duration: '20m',
+        scorePercent: 84,
+        status: 'Completed',
+      },
+    ],
   },
   'c-advanced-calculus': {
     timeLimitMinutes: 30,
@@ -87,6 +169,24 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `Evaluate how confidently you can move between symbolic and geometric thinking in ${title}.`,
+    maxAttempts: 2,
+    gradeStats: { best: 89, latest: 76, average: 82 },
+    history: [
+      {
+        attemptLabel: 'Midterm warm-up',
+        timestamp: 'Sep 03, 2025 - 09:10 AM',
+        duration: '27m',
+        scorePercent: 89,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 17, 2025 - 09:00 AM',
+        duration: '30m',
+        scorePercent: 76,
+        status: 'Completed',
+      },
+    ],
   },
   'c-quantum-physics': {
     timeLimitMinutes: 35,
@@ -99,6 +199,31 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `Scenario-based assessment for ${title} with emphasis on interpretation and notation discipline.`,
+    maxAttempts: 3,
+    gradeStats: { best: 93, latest: 90, average: 88 },
+    history: [
+      {
+        attemptLabel: 'Calibration',
+        timestamp: 'Sep 04, 2025 - 10:15 AM',
+        duration: '32m',
+        scorePercent: 85,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 11, 2025 - 10:05 AM',
+        duration: '34m',
+        scorePercent: 93,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 2',
+        timestamp: 'Sep 18, 2025 - 10:01 AM',
+        duration: '35m',
+        scorePercent: 90,
+        status: 'Completed',
+      },
+    ],
   },
   'c-literary-analysis': {
     timeLimitMinutes: 25,
@@ -111,6 +236,31 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `Structured reflection on ${title} techniques to prep for in-class workshop critiques.`,
+    maxAttempts: 5,
+    gradeStats: { best: 96, latest: 90, average: 92 },
+    history: [
+      {
+        attemptLabel: 'Prompt rehearsal',
+        timestamp: 'Sep 06, 2025 - 02:00 PM',
+        duration: '21m',
+        scorePercent: 90,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 13, 2025 - 02:05 PM',
+        duration: '24m',
+        scorePercent: 96,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 2',
+        timestamp: 'Sep 20, 2025 - 02:04 PM',
+        duration: '25m',
+        scorePercent: 90,
+        status: 'Completed',
+      },
+    ],
   },
   'c-cellular-biology': {
     timeLimitMinutes: 30,
@@ -123,6 +273,31 @@ const COURSE_META: Record<string, CourseMeta> = {
     ],
     description: (title) =>
       `Hands-on readiness quiz for ${title} before entering the next wet-lab block.`,
+    maxAttempts: 3,
+    gradeStats: { best: 88, latest: 80, average: 82 },
+    history: [
+      {
+        attemptLabel: 'Lab readiness',
+        timestamp: 'Sep 07, 2025 - 01:30 PM',
+        duration: '28m',
+        scorePercent: 88,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 1',
+        timestamp: 'Sep 14, 2025 - 01:35 PM',
+        duration: '29m',
+        scorePercent: 80,
+        status: 'Completed',
+      },
+      {
+        attemptLabel: 'Attempt 2',
+        timestamp: 'Sep 21, 2025 - 01:33 PM',
+        duration: '30m',
+        scorePercent: 78,
+        status: 'Expired',
+      },
+    ],
   },
 };
 
@@ -312,6 +487,17 @@ const FALLBACK_META: CourseMeta = {
   weight: 'Quiz weight varies',
   focusAreas: ['Review core definitions', 'Summarize two lecture highlights', 'Prepare one follow-up question'],
   description: (title) => `Quick knowledge pulse-check for ${title}.`,
+  maxAttempts: 3,
+  gradeStats: { best: 85, latest: 80, average: 82 },
+  history: [
+    {
+      attemptLabel: 'Attempt 1',
+      timestamp: 'Sep 01, 2025 - 08:00 AM',
+      duration: '18m',
+      scorePercent: 80,
+      status: 'Completed',
+    },
+  ],
 };
 
 const FALLBACK_QUESTIONS: QuestionTemplate[] = [
@@ -372,6 +558,9 @@ const buildQuizContent = (
     durationLabel: meta.durationLabel,
     weight: meta.weight,
     focusAreas: meta.focusAreas,
+    maxAttempts: meta.maxAttempts,
+    gradeStats: meta.gradeStats,
+    history: meta.history,
     questions: createQuestions(templates, quiz.id),
   };
 };
@@ -387,6 +576,9 @@ const CourseQuizPage = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [quizResult, setQuizResult] = useState<QuizResultSummary | null>(null);
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
+  const [hasAttemptStarted, setHasAttemptStarted] = useState(false);
+  const autoSubmitTriggeredRef = useRef(false);
 
   const activeQuiz = useMemo(() => {
     if (!course || !quizId) return null;
@@ -400,7 +592,10 @@ const CourseQuizPage = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setQuizResult(null);
-    setQuizStartTime(Date.now());
+    setQuizStartTime(null);
+    setRemainingSeconds(null);
+    setHasAttemptStarted(false);
+    autoSubmitTriggeredRef.current = false;
   }, [activeQuiz?.quizId]);
 
   if (!course) {
@@ -434,13 +629,11 @@ const CourseQuizPage = () => {
   const answeredCount = questions.filter((question) => selectedAnswers[question.id]).length;
   const remainingCount = Math.max(questions.length - answeredCount, 0);
   const minutesBudget = activeQuiz.timeLimitMinutes;
-  const hoursLeft = Math.floor(minutesBudget / 60);
-  const minutesLeft = minutesBudget % 60;
   const timerDisplay =
-    hoursLeft > 0
-      ? `${String(hoursLeft).padStart(2, '0')}h ${String(minutesLeft).padStart(2, '0')}m`
+    remainingSeconds !== null
+      ? formatCountdown(remainingSeconds)
       : minutesBudget
-        ? `${minutesBudget} minutes`
+        ? formatCountdown(minutesBudget * 60)
         : 'No timer set';
 
   const progressStats = [
@@ -449,6 +642,28 @@ const CourseQuizPage = () => {
     { label: 'Current', value: questions.length ? `Q${currentQuestionIndex + 1}` : '--' },
     { label: 'Allocation', value: activeQuiz.durationLabel },
   ];
+
+  const overviewRows = [
+    { label: 'Content', value: activeQuiz.description },
+    { label: 'Time', value: activeQuiz.durationLabel },
+    { label: 'Max attempts', value: `${activeQuiz.maxAttempts} per availability window` },
+    {
+      label: 'Grades',
+      value: `Best ${activeQuiz.gradeStats.best}% · Latest ${activeQuiz.gradeStats.latest}% · Avg ${activeQuiz.gradeStats.average}%`,
+    },
+    { label: 'Weight', value: activeQuiz.weight },
+  ];
+
+  const handleBeginAttempt = () => {
+    setHasAttemptStarted(true);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswers({});
+    setQuizResult(null);
+    const startedAt = Date.now();
+    setQuizStartTime(startedAt);
+    setRemainingSeconds(minutesBudget > 0 ? minutesBudget * 60 : null);
+    autoSubmitTriggeredRef.current = false;
+  };
 
   const handleSelect = (questionId: string, optionId: string) => {
     setSelectedAnswers((prev) => ({ ...prev, [questionId]: optionId }));
@@ -460,39 +675,69 @@ const CourseQuizPage = () => {
     setCurrentQuestionIndex(clamped);
   };
 
-  const handleSubmitQuiz = () => {
-    if (!questions.length) return;
-    const correctCount = questions.reduce(
-      (total, question) => (selectedAnswers[question.id] === question.correctOptionId ? total + 1 : total),
-      0,
-    );
-    const elapsedMinutes =
-      quizStartTime !== null ? Math.max(1, Math.round((Date.now() - quizStartTime) / 60000)) : Math.max(minutesBudget, 1);
-    const scorePercent = Math.round((correctCount / questions.length) * 100);
-    const completionPercent = Math.round((answeredCount / questions.length) * 100);
+  const handleSubmitQuiz = useCallback(
+    (autoSubmit = false) => {
+      if (!questions.length || quizResult) return;
+      const correctCount = questions.reduce(
+        (total, question) => (selectedAnswers[question.id] === question.correctOptionId ? total + 1 : total),
+        0,
+      );
+      const elapsedMinutes =
+        quizStartTime !== null ? Math.max(1, Math.round((Date.now() - quizStartTime) / 60000)) : Math.max(minutesBudget, 1);
+      const scorePercent = Math.round((correctCount / questions.length) * 100);
+      const completionPercent = Math.round((answeredCount / questions.length) * 100);
 
-    setQuizResult({
-      scorePercent,
-      correctCount,
-      totalQuestions: questions.length,
-      answeredCount,
-      timeSpentMinutes: elapsedMinutes,
-      summaryStats: [
-        { label: 'Correct', value: `${correctCount}/${questions.length}` },
-        { label: 'Accuracy', value: `${scorePercent}%` },
-        { label: 'Completion', value: `${completionPercent}%` },
-        { label: 'Time Spent', value: `${elapsedMinutes} min` },
-      ],
-      focusAreas: activeQuiz.focusAreas,
-    });
-  };
+      setQuizResult({
+        scorePercent,
+        correctCount,
+        totalQuestions: questions.length,
+        answeredCount,
+        timeSpentMinutes: elapsedMinutes,
+        summaryStats: [
+          { label: 'Correct', value: `${correctCount}/${questions.length}` },
+          { label: 'Accuracy', value: `${scorePercent}%` },
+          { label: 'Completion', value: `${completionPercent}%` },
+          { label: 'Time Spent', value: `${elapsedMinutes} min` },
+        ],
+        focusAreas: activeQuiz.focusAreas,
+      });
+      if (autoSubmit) {
+        setRemainingSeconds(0);
+      }
+    },
+    [questions, quizResult, selectedAnswers, quizStartTime, minutesBudget, answeredCount, activeQuiz.focusAreas],
+  );
 
   const handleRestartQuiz = () => {
+    const restartedAt = Date.now();
+    setHasAttemptStarted(true);
     setCurrentQuestionIndex(0);
     setSelectedAnswers({});
     setQuizResult(null);
-    setQuizStartTime(Date.now());
+    setQuizStartTime(restartedAt);
+    setRemainingSeconds(minutesBudget > 0 ? minutesBudget * 60 : null);
+    autoSubmitTriggeredRef.current = false;
   };
+
+  useEffect(() => {
+    if (!hasAttemptStarted || !quizStartTime || !minutesBudget || quizResult) return;
+    const totalSeconds = minutesBudget * 60;
+
+    const tick = () => {
+      const elapsedSeconds = Math.floor((Date.now() - quizStartTime) / 1000);
+      const nextRemaining = Math.max(totalSeconds - elapsedSeconds, 0);
+      setRemainingSeconds(nextRemaining);
+
+      if (nextRemaining <= 0 && !autoSubmitTriggeredRef.current) {
+        autoSubmitTriggeredRef.current = true;
+        handleSubmitQuiz(true);
+      }
+    };
+
+    tick();
+    const intervalId = window.setInterval(tick, 1000);
+    return () => window.clearInterval(intervalId);
+  }, [hasAttemptStarted, quizStartTime, minutesBudget, quizResult, handleSubmitQuiz]);
 
   const handleReturnToCourse = () => {
     if (!role) {
@@ -505,7 +750,7 @@ const CourseQuizPage = () => {
 
   return (
     <div className="space-y-6">
-      <header className="rounded-[32px] bg-white p-8 shadow-soft">
+      <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Course quiz</p>
@@ -533,10 +778,10 @@ const CourseQuizPage = () => {
             </button>
           </div>
         </div>
-      </header>
 
-      <section className="rounded-[32px] bg-white p-6 shadow-soft">
-        {quizResult ? (
+        <div className="my-8 border-t border-slate-100" />
+        {hasAttemptStarted ? (
+          quizResult ? (
           <div className="grid gap-8 lg:grid-cols-[2fr_3fr]">
             <div className="rounded-3xl bg-slate-50 p-6 text-center">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-xs font-semibold text-primary">
@@ -622,7 +867,7 @@ const CourseQuizPage = () => {
               </div>
             </div>
           </div>
-        ) : (
+          ) : (
           <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
             <div className="space-y-4">
               <div className="rounded-3xl border border-slate-100 p-6">
@@ -679,7 +924,7 @@ const CourseQuizPage = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={handleSubmitQuiz}
+                          onClick={() => handleSubmitQuiz()}
                           className="rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white shadow-soft"
                         >
                           Submit quiz
@@ -727,6 +972,9 @@ const CourseQuizPage = () => {
                   <Timer className="h-10 w-10 text-primary" />
                 </div>
                 <p className="mt-3 text-sm text-slate-500">Keep this window open so the timer remains in sync.</p>
+                {minutesBudget > 0 ? (
+                  <p className="mt-1 text-xs uppercase tracking-[0.2em] text-primary">Auto-submits when the timer expires.</p>
+                ) : null}
               </div>
               <div className="rounded-3xl border border-slate-100 p-6">
                 <div className="flex items-center gap-3">
@@ -762,6 +1010,108 @@ const CourseQuizPage = () => {
                   ))}
                 </ul>
               </div>
+            </div>
+          </div>
+          )
+        ) : (
+          <div className="grid gap-8 lg:grid-cols-[2fr_3fr]">
+            <div className="space-y-4">
+              <div className="rounded-3xl border border-slate-100 p-6">
+                <div className="flex items-center gap-3">
+                  <ClipboardList className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-semibold text-ink">Quiz readiness</p>
+                    <p className="text-xs text-slate-500">Review stats before starting</p>
+                  </div>
+                </div>
+                <dl className="mt-6 space-y-3 text-sm text-slate-600">
+                  {overviewRows.map((row) => (
+                    <div key={row.label} className="flex flex-col rounded-2xl bg-slate-50 px-4 py-3">
+                      <dt className="text-xs uppercase tracking-[0.3em] text-slate-400">{row.label}</dt>
+                      <dd className="mt-2 font-semibold text-ink">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <button
+                  type="button"
+                  onClick={handleBeginAttempt}
+                  className="mt-6 w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-soft"
+                >
+                  Go to quiz
+                </button>
+                <p className="mt-3 text-sm text-slate-500">Timer starts once you enter the quiz environment.</p>
+              </div>
+              <div className="rounded-3xl border border-slate-100 p-6">
+                <div className="flex items-center gap-3">
+                  <Target className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-semibold text-ink">Focus areas</p>
+                    <p className="text-xs text-slate-500">Suggested review topics</p>
+                  </div>
+                </div>
+                <ul className="mt-4 space-y-2 text-sm text-slate-600">
+                  {activeQuiz.focusAreas.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-1 h-4 w-4 text-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="rounded-3xl border border-slate-100 p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <History className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-semibold text-ink">Quiz history</p>
+                    <p className="text-xs text-slate-500">Latest attempts recorded for this quiz</p>
+                  </div>
+                </div>
+                <span className="text-xs uppercase tracking-[0.3em] text-slate-400">
+                  {activeQuiz.history.length ? `${activeQuiz.history.length} entries` : 'No attempts yet'}
+                </span>
+              </div>
+              {activeQuiz.history.length ? (
+                <div className="mt-4 overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-slate-500">
+                        <th className="pb-2 font-medium">Attempt</th>
+                        <th className="pb-2 font-medium">Time</th>
+                        <th className="pb-2 font-medium">Duration</th>
+                        <th className="pb-2 font-medium">Score</th>
+                        <th className="pb-2 font-medium">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {activeQuiz.history.map((entry) => (
+                        <tr key={`${entry.attemptLabel}-${entry.timestamp}`} className="text-slate-600">
+                          <td className="py-3 font-semibold text-ink">{entry.attemptLabel}</td>
+                          <td className="py-3">{entry.timestamp}</td>
+                          <td className="py-3">{entry.duration}</td>
+                          <td className="py-3 font-semibold text-ink">{entry.scorePercent}%</td>
+                          <td className="py-3">
+                            <span
+                              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                                entry.status === 'Completed'
+                                  ? 'bg-green-50 text-green-700'
+                                  : entry.status === 'Expired'
+                                    ? 'bg-amber-50 text-amber-700'
+                                    : 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {entry.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="mt-6 text-sm text-slate-500">No attempts recorded yet. Be the first one!</p>
+              )}
             </div>
           </div>
         )}

@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr
+from typing import Dict
 
 from app.repositories.in_memory import PortalRepository
 from app.services.auth_service import AuthService, PortalService
@@ -58,3 +59,12 @@ def fetch_portal_bundle(role: str):
     if role not in {'student', 'tutor', 'staff'}:
         raise HTTPException(status_code=404, detail='Role not supported')
     return portal_service.bundle_for(role)  # type: ignore[arg-type]
+
+
+@app.put('/api/portal/{role}/bundle')
+def update_portal_bundle(role: str, bundle: Dict):
+    role = role.lower()
+    if role not in {'student', 'tutor', 'staff'}:
+        raise HTTPException(status_code=404, detail='Role not supported')
+    portal_service.update_bundle_for(role, bundle)
+    return {'status': 'success', 'message': f'Bundle for {role} updated successfully.'}

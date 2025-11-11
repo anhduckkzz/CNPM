@@ -25,3 +25,8 @@ export const fetchPortalBundle = async (role: Role) => {
   const { data } = await api.get<PortalBundle>(`/portal/${role}/bundle`);
   return data;
 };
+
+export const updatePortalBundle = async (role: Role, bundle: PortalBundle) => {
+  const { data } = await api.put(`/portal/${role}/bundle`, bundle);
+  return data;
+};

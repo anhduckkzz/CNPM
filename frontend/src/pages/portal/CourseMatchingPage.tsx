@@ -2,11 +2,37 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import type { CourseMatchingSection, ScheduleSection } from '../../types/portal';
+import type { CourseMatchingSection, RegisteredCoursesSection, ScheduleSection, CourseCard } from '../../types/portal';
+import { toCourseSlug } from '../../utils/courseSlug';
 
 type SlotOption = CourseMatchingSection['modal']['slots'][number];
 type ScheduleEvent = ScheduleSection['events'][number];
+
+const DEFAULT_COURSE_MATCHING_SECTION: CourseMatchingSection = {
+  title: '',
+  description: '',
+  filters: [],
+  recommended: [],
+  history: [],
+  modal: {
+    focusCourseId: '',
+    slots: [],
+  },
+};
+
+const DEFAULT_REGISTERED_COURSES_SECTION: RegisteredCoursesSection = {
+  title: '',
+  description: '',
+  courses: [],
+};
+
+const DEFAULT_SCHEDULE_SECTION: ScheduleSection = {
+  month: '',
+  events: [],
+  upcoming: [],
+};
 
 const dayLabelMap: Record<string, string> = {
   monday: 'Mon',
@@ -82,7 +108,8 @@ interface AutoMatchState {
 }
 
 const CourseMatchingPage = () => {
-  const { portal } = useAuth();
+  const { portal, updatePortal, role } = useAuth();
+  const navigate = useNavigate();
   const data = portal?.courseMatching;
   const [activeCourseId, setActiveCourseId] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -159,9 +186,25 @@ const CourseMatchingPage = () => {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Course matching data unavailable.</div>;
   }
 
-  const modalCourse =
-    data.recommended.find((course) => course.id === activeCourseId) ??
-    data.history.find((course) => course.id === activeCourseId);
+  const modalCourse: CourseCard | undefined = useMemo(() => {
+    const recommendedCourse = data.recommended.find((course) => course.id === activeCourseId);
+    if (recommendedCourse) return recommendedCourse;
+
+    const registeredCourse = portal?.courses?.courses.find((course) => course.id === activeCourseId);
+    if (registeredCourse) {
+      // Convert RegisteredCourse to CourseCard by providing default values for missing properties
+      return {
+        ...registeredCourse,
+        tutor: 'N/A',
+        format: 'N/A',
+        capacity: 'N/A',
+        badge: 'Registered',
+        actionLabel: 'Go To Your Course',
+        accent: '#FFD7E2',
+      };
+    }
+    return undefined;
+  }, [activeCourseId, data.recommended, portal?.courses?.courses]);
   const showModal = isModalOpen && modalCourse;
   const slots = data.modal.slots;
   const portalTarget = typeof document !== 'undefined' ? document.body : null;
@@ -240,14 +283,129 @@ const CourseMatchingPage = () => {
   const handleCancelSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     showToast(`Cancellation submitted for ${cancelForm.courseTitle || 'selected course'}.`);
+  
+    if (!portal || !data) return;
+
+    const courseToCancel =
+      data.recommended.find((course) => course.id === cancelForm.courseId) ??
+      data.history.find((course) => course.id === cancelForm.courseId);
+
+    if (!courseToCancel) return;
+
+    const currentCourseMatching = portal.courseMatching || DEFAULT_COURSE_MATCHING_SECTION;
+    const currentCourses = portal.courses || DEFAULT_REGISTERED_COURSES_SECTION;
+    const currentSchedule = portal.schedule || DEFAULT_SCHEDULE_SECTION;
+
+    const updatedRecommended = [...currentCourseMatching.recommended, { ...courseToCancel, actionLabel: 'Register Course' }];
+
+    const updatedCourses = currentCourses.courses.filter(
+      (course) => course.id !== cancelForm.courseId
+    );
+
+    const updatedScheduleEvents = currentSchedule.events.filter(
+      (event) => !event.id.startsWith(cancelForm.courseId)
+    );
+
+    updatePortal({
+      ...portal,
+      courseMatching: {
+        ...currentCourseMatching,
+        recommended: updatedRecommended,
+      },
+      courses: {
+        ...currentCourses,
+        courses: updatedCourses,
+      },
+      schedule: {
+        ...currentSchedule,
+        events: updatedScheduleEvents,
+      },
+    });
+
     closeCancelForm();
   };
 
   const handleRegisterSlot = useCallback(
-    (sectionLabel: string) => {
-      showToast(`Successfully registered for ${sectionLabel}.`);
+    (slot: SlotOption, modalCourse: CourseMatchingSection['recommended'][number]) => {
+      if (!portal) return;
+
+      const currentCourseMatching = portal.courseMatching || DEFAULT_COURSE_MATCHING_SECTION;
+      const currentCourses = portal.courses || DEFAULT_REGISTERED_COURSES_SECTION;
+      const currentSchedule = portal.schedule || DEFAULT_SCHEDULE_SECTION;
+
+      // Prevent duplicate registration
+      if (currentCourses.courses.some(course => course.id === modalCourse.id)) {
+        showToast(`Error: You are already registered for ${modalCourse.title}.`);
+        closeModal();
+        return;
+      }
+
+      const newCourse = {
+        id: modalCourse.id,
+        title: modalCourse.title,
+        code: modalCourse.code,
+        format: slot.format,
+        capacity: slot.capacity,
+        tutor: slot.tutor,
+        thumbnail: modalCourse.thumbnail,
+        badge: 'In progress',
+        accent: '#FFD7E2', // This might need to be dynamic or removed
+        actionLabel: 'Go To Your Course',
+      };
+
+      const timeMatch = slot.days.match(/(\d{1,2})h-(\d{1,2})h/);
+      let startTime = '00:00';
+      let endTime = '00:00';
+      if (timeMatch) {
+        startTime = `${timeMatch[1].padStart(2, '0')}:00`;
+        endTime = `${timeMatch[2].padStart(2, '0')}:00`;
+      }
+
+      const newScheduleEvent: ScheduleEvent = {
+        id: `${modalCourse.id}-${slot.id}`,
+        title: `${modalCourse.title} (${slot.section})`,
+        day: slot.days.split(' ')[0].substring(0, 3), // Extract day from "Monday (7h-9h)" to "Mon"
+        start: startTime,
+        end: endTime,
+        type: 'busy',
+      };
+
+      const updatedRecommended = currentCourseMatching.recommended.filter(
+        (course) => course.id !== modalCourse.id
+      );
+
+      const updatedCourses = [...currentCourses.courses];
+      if (!updatedCourses.some(course => course.id === newCourse.id)) {
+        updatedCourses.push({
+          id: newCourse.id,
+          title: newCourse.title,
+          code: newCourse.code,
+          thumbnail: newCourse.thumbnail,
+        });
+      }
+
+      const updatedScheduleEvents = [...currentSchedule.events, newScheduleEvent];
+
+      updatePortal({
+        ...portal,
+        courseMatching: {
+          ...currentCourseMatching,
+          recommended: updatedRecommended,
+        },
+        courses: {
+          ...currentCourses,
+          courses: updatedCourses,
+        },
+        schedule: {
+          ...currentSchedule,
+          events: updatedScheduleEvents,
+        },
+      });
+
+      showToast(`Successfully registered for ${slot.section}.`);
+      closeModal();
     },
-    [showToast],
+    [portal, modalCourse, showToast, updatePortal, closeModal],
   );
 
   const startAutoMatch = useCallback(() => {
@@ -297,8 +455,8 @@ const CourseMatchingPage = () => {
         if (nextProgress >= 100) {
           stopAutoMatchTimer();
           const chosenSlot = autoMatchSelectionRef.current;
-          if (chosenSlot) {
-            handleRegisterSlot(chosenSlot.section);
+          if (chosenSlot && modalCourse) {
+            handleRegisterSlot(chosenSlot, modalCourse);
           }
           return {
             ...prev,
@@ -370,21 +528,24 @@ const CourseMatchingPage = () => {
           <span className="text-sm text-slate-500">View and manage courses you are attending</span>
         </div>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {data.history.map((course) => (
+          {(portal?.courses?.courses || []).map((course) => (
             <div key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
               <img src={course.thumbnail} alt={course.title} className="h-32 w-full rounded-2xl object-cover" />
               <div className="mt-4 flex-1">
                 <p className="text-lg font-semibold text-ink">{course.title}</p>
-                <p className="text-sm text-slate-500">Tutor: {course.tutor}</p>
-                <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
-                  <span className="rounded-full bg-slate-100 px-3 py-1">{course.format}</span>
-                  <span className="rounded-full bg-slate-100 px-3 py-1">{course.capacity}</span>
-                  <span className="rounded-full bg-primary/10 px-3 py-1 text-primary">{course.badge}</span>
-                </div>
+                <p className="text-sm text-slate-500">Course ID: {course.code}</p>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3">
-                <button className="rounded-2xl bg-primary px-4 py-3 font-semibold text-white shadow-soft" type="button" onClick={() => openModal(course.id)}>
-                  {course.actionLabel}
+                <button
+                  className="rounded-2xl bg-primary px-4 py-3 font-semibold text-white shadow-soft"
+                  type="button"
+                  onClick={() => {
+                    if (!role) return;
+                    const slug = toCourseSlug(course.id) ?? course.id;
+                    navigate(`/portal/${role}/course-detail/${slug}`);
+                  }}
+                >
+                  Access Course
                 </button>
                 <button
                   className="rounded-2xl border border-red-200 px-4 py-3 font-semibold text-red-500"
@@ -448,7 +609,7 @@ const CourseMatchingPage = () => {
                         <button
                           type="button"
                           className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white"
-                          onClick={() => handleRegisterSlot(slot.section)}
+                          onClick={() => handleRegisterSlot(slot, modalCourse)}
                         >
                           {slot.cta}
                         </button>

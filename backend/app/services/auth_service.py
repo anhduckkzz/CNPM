@@ -34,3 +34,6 @@ class PortalService:
 
     def bundle_for(self, role: Role):
         return self._repository.get_portal_bundle(role)
+
+    def update_bundle_for(self, role: Role, bundle: Dict):
+        self._repository.update_portal_bundle(role, bundle)
