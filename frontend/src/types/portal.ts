@@ -212,7 +212,7 @@ export interface AcademicRecordSection {
   };
   gpa: string;
   standing: string;
-  grades: Array<{ course: string; grade: string; credits: number }>;
+  grades: Array<{ course: string; grade: string; credits: number; scale4?: number }>;
   scholarships: Array<{ title: string; amount: string; description: string }>;
   tutorLessons: Array<{ title: string; tutor: string }>;
   eligibility: {

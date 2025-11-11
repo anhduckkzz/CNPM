@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, UserRound } from 'lucide-react';
+import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, Sparkles, UserRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { AcademicRecordSection, StaffRecordsSection } from '../../types/portal';
@@ -22,6 +22,14 @@ type StaffStudentProfile = StaffRecordsSection['table'][number] & {
   overallGpa: string;
   eligibility: string;
 };
+
+const SCORE_SCAN_STAGES = [
+  { threshold: 15, label: 'Initializing AI scan...' },
+  { threshold: 35, label: 'Mapping performance bands' },
+  { threshold: 60, label: 'Scanning GPA anomalies' },
+  { threshold: 85, label: 'Detecting red-flag courses' },
+  { threshold: 101, label: 'Finalizing insights' },
+];
 
 const AcademicRecordsPage = () => {
   const { portal, role } = useAuth();
@@ -526,115 +534,349 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
   );
 };
 
-const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection }) => (
-  <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
-    <section className="space-y-6">
-      <div className="rounded-3xl bg-white p-6 shadow-soft">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-slate-400">Student Information</p>
-          <h1 className="mt-1 text-2xl font-semibold text-ink">{records.studentInfo.name}</h1>
+const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection }) => {
+  const defaultGradePoints: Record<string, number> = {
+    A: 4,
+    B: 3,
+    C: 2,
+    D: 1,
+    F: 0,
+  };
+
+  const [scanning, setScanning] = useState(false);
+  const [scanHighlights, setScanHighlights] = useState<Set<string>>(new Set());
+  const [analysisComplete, setAnalysisComplete] = useState(false);
+  const scanTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const progressTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const finalizeRef = useRef(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanStage, setScanStage] = useState(SCORE_SCAN_STAGES[0].label);
+
+  const normalizeGrade = (value: string) => value.replace('+', '').trim().toUpperCase();
+  const resolveScale4 = (gradeEntry: AcademicRecordSection['grades'][number]) => {
+    if (typeof gradeEntry.scale4 === 'number') return gradeEntry.scale4;
+    const normalized = normalizeGrade(gradeEntry.grade);
+    return defaultGradePoints[normalized] ?? 0;
+  };
+
+  const gradeBands: Array<{ min10: number; letter: string; scale4: number }> = [
+    { min10: 9.5, letter: 'A+', scale4: 4.0 },
+    { min10: 8.5, letter: 'A', scale4: 4.0 },
+    { min10: 8.0, letter: 'B+', scale4: 3.5 },
+    { min10: 7.0, letter: 'B', scale4: 3.0 },
+    { min10: 6.5, letter: 'C+', scale4: 2.5 },
+    { min10: 6.0, letter: 'C', scale4: 2.0 },
+    { min10: 5.5, letter: 'D+', scale4: 1.5 },
+    { min10: 5.0, letter: 'D', scale4: 1.0 },
+  ];
+
+  const deriveGradeMetrics = (gradeEntry: AcademicRecordSection['grades'][number]) => {
+    const rawScale4 = resolveScale4(gradeEntry);
+    const rawScale10 = rawScale4 * 2.5;
+    const matchedBand = gradeBands.find((band) => rawScale10 >= band.min10);
+    return {
+      letter: matchedBand?.letter ?? 'F',
+      scale4Display: matchedBand?.scale4 ?? 0,
+      scale10Display: Math.min(10, Math.max(0, rawScale10)),
+    };
+  };
+
+  const updateStageFromProgress = (value: number) => {
+    const stage = SCORE_SCAN_STAGES.find((entry) => value < entry.threshold)?.label ?? 'Polishing insights...';
+    setScanStage(stage);
+  };
+
+  const finalizeScan = () => {
+    if (finalizeRef.current) return;
+    finalizeRef.current = true;
+    if (progressTimer.current) {
+      clearInterval(progressTimer.current);
+      progressTimer.current = null;
+    }
+    if (scanTimer.current) {
+      clearTimeout(scanTimer.current);
+      scanTimer.current = null;
+    }
+
+    const flaggedCourses = records.grades
+      .filter((grade) => {
+        const { scale10Display } = deriveGradeMetrics(grade);
+        return scale10Display < 7;
+      })
+      .map((grade) => grade.course);
+
+    setScanProgress(100);
+    setScanStage(flaggedCourses.length ? 'Risks detected' : 'Insights ready');
+    setScanHighlights(new Set(flaggedCourses));
+    setScanning(false);
+    setAnalysisComplete(true);
+  };
+
+  const handleScoreAnalysis = () => {
+    if (scanning) return;
+    finalizeRef.current = false;
+    setScanning(true);
+    setAnalysisComplete(false);
+    setScanHighlights(new Set());
+    setScanProgress(0);
+    setScanStage(SCORE_SCAN_STAGES[0].label);
+
+    if (progressTimer.current) clearInterval(progressTimer.current);
+    if (scanTimer.current) clearTimeout(scanTimer.current);
+
+    progressTimer.current = setInterval(() => {
+      setScanProgress((prev) => {
+        const increment = Math.random() * 2 + 0.8;
+        const nextValue = Math.min(prev + increment, 98);
+        updateStageFromProgress(nextValue);
+        return nextValue;
+      });
+    }, 120);
+
+    scanTimer.current = setTimeout(finalizeScan, 4200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (scanTimer.current) {
+        clearTimeout(scanTimer.current);
+        scanTimer.current = null;
+      }
+      if (progressTimer.current) {
+        clearInterval(progressTimer.current);
+        progressTimer.current = null;
+      }
+    };
+  }, []);
+
+  const { computedGpa, totalCredits } = useMemo(() => {
+    if (!records.grades.length) {
+      return { computedGpa: '0.0', totalCredits: 0 };
+    }
+
+    const totals = records.grades.reduce(
+      (acc, gradeEntry) => {
+        const { scale4Display } = deriveGradeMetrics(gradeEntry);
+        return {
+          credits: acc.credits + gradeEntry.credits,
+          totalPoints: acc.totalPoints + scale4Display * gradeEntry.credits,
+        };
+      },
+      { credits: 0, totalPoints: 0 },
+    );
+
+    return {
+      computedGpa: totals.credits ? (totals.totalPoints / totals.credits).toFixed(1) : '0.0',
+      totalCredits: totals.credits,
+    };
+  }, [records.grades]);
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+      <section className="space-y-6">
+        <div className="rounded-3xl bg-white p-6 shadow-soft">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-slate-400">Student Information</p>
+            <h1 className="mt-1 text-2xl font-semibold text-ink">{records.studentInfo.name}</h1>
+          </div>
+          <dl className="mt-6 space-y-3 text-sm">
+            {[
+              { label: 'Name', value: records.studentInfo.name },
+              { label: 'Student ID', value: records.studentInfo.studentId },
+              { label: 'Semester', value: records.studentInfo.semester },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
+                <dt className="font-medium text-slate-500">{label}:</dt>
+                <dd className="text-base font-semibold text-ink">{value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-        <dl className="mt-6 space-y-3 text-sm">
-          {[
-            { label: 'Name', value: records.studentInfo.name },
-            { label: 'Student ID', value: records.studentInfo.studentId },
-            { label: 'Semester', value: records.studentInfo.semester },
-          ].map(({ label, value }) => (
-            <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
-              <dt className="font-medium text-slate-500">{label}:</dt>
-              <dd className="text-base font-semibold text-ink">{value}</dd>
+
+        <div className="rounded-3xl bg-primary/5 p-6 text-center shadow-soft">
+          <p className="text-sm font-semibold text-slate-500">Cumulative GPA</p>
+          <p className="mt-4 text-5xl font-bold text-primary">{computedGpa}</p>
+          <p className="mt-2 text-sm text-slate-500">{records.standing}</p>
+          <p className="text-xs uppercase tracking-wide text-slate-400">{totalCredits} CS credits tracked</p>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-soft">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-600">Course Grades</p>
+              <p className="text-xs uppercase tracking-wide text-slate-400">Current semester overview</p>
             </div>
-          ))}
-        </dl>
-      </div>
-
-      <div className="rounded-3xl bg-primary/5 p-6 text-center shadow-soft">
-        <p className="text-sm font-semibold text-slate-500">Cumulative GPA</p>
-        <p className="mt-4 text-5xl font-bold text-primary">{records.gpa}</p>
-        <p className="mt-2 text-sm text-slate-500">{records.standing}</p>
-      </div>
-
-      <div className="rounded-3xl bg-white p-6 shadow-soft">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-slate-600">Course Grades</p>
-            <p className="text-xs uppercase tracking-wide text-slate-400">Current semester overview</p>
+            <button
+              type="button"
+              onClick={handleScoreAnalysis}
+              disabled={scanning}
+              className={`group inline-flex items-center gap-2 rounded-full border border-primary/40 bg-gradient-to-r from-primary/10 via-transparent to-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary transition hover:border-primary hover:from-primary/20 hover:to-primary/20 hover:shadow-[0_0_18px_rgba(79,70,229,0.35)] ${
+                scanning ? 'cursor-not-allowed opacity-70' : ''
+              }`}
+            >
+              <Sparkles
+                className={`h-3.5 w-3.5 text-primary transition group-hover:scale-110 group-hover:text-primary ${
+                  scanning ? 'animate-spin' : ''
+                }`}
+              />
+              {scanning ? 'Scanning...' : 'Score Analysis'}
+            </button>
           </div>
-          <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Credits</span>
+          {scanning && (
+            <div className="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+              <Sparkles className="h-3 w-3 text-primary" />
+              AI is scanning all course scores...
+            </div>
+          )}
+          {!scanning && analysisComplete && (
+            <p
+              className={`mt-3 text-xs font-semibold ${
+                scanHighlights.size ? 'text-rose-500' : 'text-emerald-600'
+              }`}
+            >
+              {scanHighlights.size
+                ? `AI flagged ${scanHighlights.size} course${scanHighlights.size > 1 ? 's' : ''} under 7.0`
+                : 'Great! All courses meet the 7.0 threshold.'}
+            </p>
+          )}
+          <div
+            className={`relative mt-4 overflow-hidden rounded-[28px] border border-slate-100 bg-white shadow-soft transition ${
+              scanning ? 'ring-2 ring-primary/20 shadow-[0_0_35px_rgba(79,70,229,0.25)]' : ''
+            }`}
+          >
+            {scanning && (
+              <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-[28px] bg-slate-900/55 text-white backdrop-blur-md">
+                <div className="ai-scan-grid relative w-[90%] max-w-lg space-y-4 rounded-[32px] border border-primary/40 bg-white/10 p-6 text-center shadow-2xl">
+                  <div className="ai-scan-beam" />
+                  <div className="relative flex items-center justify-between text-[10px] uppercase tracking-[0.5em] text-white">
+                    <span>AI score scan</span>
+                    <span>{Math.round(scanProgress)}%</span>
+                  </div>
+                  <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-primary/50 via-emerald-300 to-primary/80 transition-all duration-200"
+                      style={{ width: `${Math.min(scanProgress, 100)}%` }}
+                    />
+                  </div>
+                  <p className="relative text-sm font-semibold text-white">{scanStage}</p>
+                  <p className="relative text-xs text-white/85">Scanning course grade records for anomalies...</p>
+                </div>
+              </div>
+            )}
+            <div className="grid grid-cols-[1fr,120px,110px,110px,80px] gap-4 rounded-t-2xl bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <p>Course Name</p>
+              <p className="text-center">Grade</p>
+              <p className="text-center">GPA (4.0)</p>
+              <p className="text-center">GPA (10.0)</p>
+              <p className="text-center">Credits</p>
+            </div>
+            <div className="max-h-80 divide-y divide-slate-100 overflow-y-auto">
+              {records.grades.map((grade) => {
+                const { letter, scale4Display, scale10Display } = deriveGradeMetrics(grade);
+                const flagged = scanHighlights.has(grade.course);
+                return (
+                  <div
+                    key={grade.course}
+                    className={`grid grid-cols-[1fr,120px,110px,110px,80px] gap-4 px-4 py-3 text-sm text-slate-600 transition ${
+                      flagged
+                        ? 'border-l-4 border-primary/30 bg-gradient-to-r from-primary/5 via-primary/5 to-transparent text-primary shadow-[inset_0_0_0_1px_rgba(79,70,229,0.12)]'
+                        : 'hover:bg-slate-50/70'
+                    }`}
+                  >
+                    <p className={`font-medium ${flagged ? 'text-primary' : 'text-ink'}`}>{grade.course}</p>
+                    <span
+                      className={`mx-auto inline-flex h-8 w-20 items-center justify-center rounded-full text-sm font-semibold ${
+                        flagged
+                          ? 'bg-primary/10 text-primary ring-1 ring-primary/20'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {letter}
+                    </span>
+                    <div
+                      className={`flex h-full items-center justify-center text-center text-base font-semibold tabular-nums ${
+                        flagged ? 'text-primary' : 'text-ink'
+                      }`}
+                    >
+                      {scale4Display.toFixed(1)}
+                    </div>
+                    <div
+                      className={`flex h-full items-center justify-center text-center text-base font-semibold tabular-nums ${
+                        flagged ? 'text-primary' : 'text-ink'
+                      }`}
+                    >
+                      {scale10Display.toFixed(1)}
+                    </div>
+                    <div
+                      className={`flex h-full items-center justify-center text-center text-base font-semibold ${
+                        flagged ? 'text-primary' : 'text-ink'
+                      }`}
+                    >
+                      {grade.credits}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
-        <div className="mt-4 rounded-2xl border border-slate-100">
-          <div className="grid grid-cols-[1fr,120px,80px] gap-4 rounded-t-2xl bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <p>Course Name</p>
-            <p className="text-center">Grade</p>
-            <p className="text-right">Credits</p>
+      </section>
+
+      <aside className="space-y-6">
+        <div className="rounded-3xl bg-white p-6 shadow-soft">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-emerald-600">
+              <CheckCircle2 className="h-5 w-5" />
+              <h3 className="text-lg font-semibold text-ink">Scholarship Eligibility</h3>
+            </div>
+            <span className="rounded-full bg-emerald-100 px-4 py-1 text-sm font-semibold text-emerald-700">{records.eligibility.status}</span>
           </div>
-          <div>
-            {records.grades.map((grade) => (
-              <div key={grade.course} className="grid grid-cols-[1fr,120px,80px] gap-4 px-4 py-3 text-sm text-slate-600">
-                <p className="font-medium text-ink">{grade.course}</p>
-                <span className="mx-auto w-fit rounded-full bg-slate-100 px-4 py-1 text-center text-sm font-semibold text-slate-600">{grade.grade}</span>
-                <span className="text-right font-semibold text-ink">{grade.credits}</span>
+          <p className="mt-2 text-sm font-semibold text-slate-600">Criteria Assessment</p>
+          <ul className="mt-4 space-y-2 text-sm text-slate-600">
+            {records.eligibility.criteria.map((criterion) => (
+              <li key={criterion} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
+                <span>{criterion}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-soft">
+          <div className="flex items-center gap-2 text-primary">
+            <GraduationCap className="h-5 w-5" />
+            <h3 className="text-lg font-semibold text-ink">Eligible Scholarships</h3>
+          </div>
+          <div className="mt-4 space-y-4">
+            {records.scholarships.map((scholarship) => (
+              <div key={scholarship.title} className="flex items-start justify-between border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
+                <div className="pr-4">
+                  <p className="font-semibold text-ink">{scholarship.title}</p>
+                  <p className="text-sm text-slate-500">{scholarship.description}</p>
+                </div>
+                <p className="text-sm font-semibold text-primary">{scholarship.amount}</p>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
 
-    <aside className="space-y-6">
-      <div className="rounded-3xl bg-white p-6 shadow-soft">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-emerald-600">
-            <CheckCircle2 className="h-5 w-5" />
-            <h3 className="text-lg font-semibold text-ink">Scholarship Eligibility</h3>
+        <div className="rounded-3xl bg-white p-6 shadow-soft">
+          <div className="flex items-center gap-2 text-primary">
+            <UserRound className="h-5 w-5" />
+            <h3 className="text-lg font-semibold text-ink">Tutor Program Lessons</h3>
           </div>
-          <span className="rounded-full bg-emerald-100 px-4 py-1 text-sm font-semibold text-emerald-700">{records.eligibility.status}</span>
+          <ul className="mt-4 space-y-3 text-sm text-slate-600">
+            {records.tutorLessons.map((lesson) => (
+              <li key={lesson.title} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
+                <span className="font-medium text-ink">{lesson.title}</span>
+                <span className="text-primary">{lesson.tutor}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <p className="mt-2 text-sm font-semibold text-slate-600">Criteria Assessment</p>
-        <ul className="mt-4 space-y-2 text-sm text-slate-600">
-          {records.eligibility.criteria.map((criterion) => (
-            <li key={criterion} className="flex items-start gap-2">
-              <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-              <span>{criterion}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="rounded-3xl bg-white p-6 shadow-soft">
-        <div className="flex items-center gap-2 text-primary">
-          <GraduationCap className="h-5 w-5" />
-          <h3 className="text-lg font-semibold text-ink">Eligible Scholarships</h3>
-        </div>
-        <div className="mt-4 space-y-4">
-          {records.scholarships.map((scholarship) => (
-            <div key={scholarship.title} className="flex items-start justify-between border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
-              <div className="pr-4">
-                <p className="font-semibold text-ink">{scholarship.title}</p>
-                <p className="text-sm text-slate-500">{scholarship.description}</p>
-              </div>
-              <p className="text-sm font-semibold text-primary">{scholarship.amount}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="rounded-3xl bg-white p-6 shadow-soft">
-        <div className="flex items-center gap-2 text-primary">
-          <UserRound className="h-5 w-5" />
-          <h3 className="text-lg font-semibold text-ink">Tutor Program Lessons</h3>
-        </div>
-        <ul className="mt-4 space-y-3 text-sm text-slate-600">
-          {records.tutorLessons.map((lesson) => (
-            <li key={lesson.title} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
-              <span className="font-medium text-ink">{lesson.title}</span>
-              <span className="text-primary">{lesson.tutor}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
-  </div>
-);
+      </aside>
+    </div>
+  );
+};
 
 export default AcademicRecordsPage;
