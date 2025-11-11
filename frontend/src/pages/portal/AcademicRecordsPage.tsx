@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, UserRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -13,6 +14,14 @@ type DropdownSection = {
 };
 
 type HistoryTab = 'scholarship' | 'training';
+
+type StaffStudentProfile = StaffRecordsSection['table'][number] & {
+  numericGpa: number;
+  totalCredits: string;
+  semesterCredits: string;
+  overallGpa: string;
+  eligibility: string;
+};
 
 const AcademicRecordsPage = () => {
   const { portal, role } = useAuth();
@@ -42,6 +51,10 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
   const [activeHistoryTab, setActiveHistoryTab] = useState<HistoryTab>('scholarship');
   const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [detailModal, setDetailModal] = useState<{ open: boolean; studentId: string | null }>({
+    open: false,
+    studentId: null,
+  });
 
   const showToast = (message: string) => {
     setToast({ visible: true, message });
@@ -56,7 +69,7 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
     [],
   );
 
-  const baseRows = useMemo(
+  const baseRows = useMemo<StaffStudentProfile[]>(
     () =>
       records.table.map((row, index) => {
         const numericGpa = Number(row.gpa);
@@ -168,9 +181,43 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
     status: index % 2 === 0 ? 'Notified' : 'Pending',
   }));
 
+  const studentProfiles = useMemo(
+    () =>
+      baseRows.reduce<Record<string, StaffStudentProfile>>((acc, entry) => {
+        acc[entry.studentId] = entry;
+        return acc;
+      }, {}),
+    [baseRows],
+  );
+  const selectedStudent = detailModal.studentId ? studentProfiles[detailModal.studentId] : undefined;
+  const portalTarget = typeof document !== 'undefined' ? document.body : null;
+
   const toggleSection = (id: DropdownSection['id']) => {
     setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const handleViewDetails = (studentId: string) => {
+    if (!studentProfiles[studentId]) {
+      showToast('Student record unavailable. Please refresh and try again.');
+      return;
+    }
+    setDetailModal({ open: true, studentId });
+  };
+
+  const closeDetailModal = () => {
+    setDetailModal({ open: false, studentId: null });
+  };
+
+  useEffect(() => {
+    if (!detailModal.open) return;
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeDetailModal();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [detailModal.open]);
 
   return (
     <div className="space-y-8">
@@ -183,6 +230,106 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
           </div>
         ))}
       </section>
+
+      {detailModal.open && selectedStudent && portalTarget &&
+        createPortal(
+          <div className="fixed inset-0 z-50 flex min-h-screen w-screen items-center justify-center bg-slate-900/60 px-4 py-8">
+            <div className="w-full max-w-3xl rounded-[32px] bg-white shadow-2xl">
+              <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-6">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-primary/10 p-3 text-primary">
+                    <UserRound size={28} />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Student profile</p>
+                    <h3 className="text-2xl font-semibold text-ink">{selectedStudent.name}</h3>
+                    <p className="text-sm text-slate-500">{selectedStudent.major}</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeDetailModal}
+                  className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="space-y-6 p-6">
+                <div className="grid gap-4 md:grid-cols-3">
+                  {[
+                    { label: 'Current GPA', value: selectedStudent.gpa },
+                    { label: 'Overall GPA', value: selectedStudent.overallGpa },
+                    { label: 'Scholarship status', value: selectedStudent.eligibility },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-2xl border border-slate-100 p-4">
+                      <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{item.label}</p>
+                      <p className="mt-2 text-xl font-semibold text-ink">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rounded-2xl border border-slate-100 p-4">
+                    <p className="text-sm font-semibold text-ink">Identity & Status</p>
+                    <dl className="mt-3 space-y-2 text-sm text-slate-600">
+                      <div className="flex items-center justify-between">
+                        <dt className="text-slate-400">Student ID</dt>
+                        <dd className="font-semibold text-ink">{selectedStudent.studentId}</dd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-slate-400">Standing</dt>
+                        <dd className="font-semibold text-ink">{selectedStudent.status}</dd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-slate-400">Credits (total)</dt>
+                        <dd className="font-semibold text-ink">{selectedStudent.totalCredits}</dd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-slate-400">Credits (semester)</dt>
+                        <dd className="font-semibold text-ink">{selectedStudent.semesterCredits}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-100 p-4">
+                    <p className="text-sm font-semibold text-ink">Advisor Notes</p>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-600">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        Maintain ≥3.5 GPA to keep current awards.
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        Training credits up to date ({selectedStudent.semesterCredits} hrs this term).
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        Eligible for next round of scholarship review.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-100 p-4">
+                  <p className="text-sm font-semibold text-ink">Upcoming checkpoints</p>
+                  <div className="mt-3 grid gap-3 md:grid-cols-3">
+                    {[
+                      { label: 'Midterm audit', value: 'Mar 18, 2024' },
+                      { label: 'Training refresh', value: 'Apr 05, 2024' },
+                      { label: 'Scholarship meeting', value: 'Apr 22, 2024' },
+                    ].map((item) => (
+                      <div key={item.label} className="rounded-xl bg-slate-50 p-3 text-sm">
+                        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{item.label}</p>
+                        <p className="mt-1 font-semibold text-ink">{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>,
+          portalTarget,
+        )}
 
       <section className="grid gap-6 lg:grid-cols-[3fr,1fr]">
         <div className="space-y-6">
@@ -222,7 +369,7 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                                   <td key={column.key} className="px-3 py-3 text-right">
                                     <button
                                       type="button"
-                                      onClick={() => showToast(`Prepared dossier for ${row.name}`)}
+                                      onClick={() => handleViewDetails(row.studentId)}
                                       className="rounded-full border border-slate-200 px-4 py-1.5 text-xs font-semibold text-ink hover:border-primary/40 hover:text-primary"
                                     >
                                       {value}
