@@ -24,10 +24,11 @@ const StaffRecordsPage = () => {
         </div>
       </header>
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
-        <table className="w-full table-fixed text-left text-sm">
-          <thead className="text-slate-500">
-            <tr>
-              <th className="w-12 px-3 py-2">#</th>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] table-fixed text-left text-sm">
+            <thead className="text-slate-500">
+              <tr>
+                <th className="w-12 px-3 py-2">#</th>
               <th className="px-3 py-2">Student Name</th>
               <th className="px-3 py-2">Student Conduct Score</th>
               <th className="px-3 py-2">Attendance (80%)</th>
@@ -47,7 +48,8 @@ const StaffRecordsPage = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </section>
     </div>
   );

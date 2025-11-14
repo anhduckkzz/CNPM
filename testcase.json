@@ -1,0 +1,106 @@
+{
+    "baseUrl": "http://localhost:8000/api",
+    "tests": [
+      {
+        "request": {
+          "method": "POST",
+          "path": "/auth/login",
+          "body": {
+            "email": "student@hcmut.edu.vn",
+            "password": "12345678"
+          }
+        },
+        "expectedResponse": {
+          "status": 200,
+          "statusText": "OK",
+          "body": {
+            "role": "student",
+            "user": {
+              "email": "student@hcmut.edu.vn",
+              "role": "student"
+            }
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/auth/login",
+          "body": {
+            "email": "intruder@gmail.com",
+            "password": "does-not-matter"
+          }
+        },
+        "expectedResponse": {
+          "status": 400,
+          "statusText": "Bad Request",
+          "body": {
+            "detail": "Please sign in using your @hcmut.edu.vn account."
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/auth/login",
+          "body": {
+            "email": "tutor@hcmut.edu.vn",
+            "password": ""
+          }
+        },
+        "expectedResponse": {
+          "status": 200,
+          "statusText": "OK",
+          "body": {
+            "role": "tutor",
+            "user": {
+              "email": "tutor@hcmut.edu.vn",
+              "role": "tutor"
+            }
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/auth/login",
+          "body": {
+            "email": "financelead@hcmut.edu.vn",
+            "password": "12345678"
+          }
+        },
+        "expectedResponse": {
+          "status": 200,
+          "statusText": "OK",
+          "body": {
+            "role": "staff",
+            "user": {
+              "email": "staff@hcmut.edu.vn",
+              "role": "staff"
+            }
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/auth/login",
+          "body": {
+            "email": "student999@hcmut.edu.vn",
+            "password": "12345678"
+          }
+        },
+        "expectedResponse": {
+          "status": 200,
+          "statusText": "OK",
+          "body": {
+            "role": "student",
+            "user": {
+              "email": "student@hcmut.edu.vn",
+              "role": "student"
+            }
+          }
+        }
+      }
+    ]
+  }

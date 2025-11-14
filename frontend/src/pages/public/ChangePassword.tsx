@@ -38,7 +38,7 @@ const ChangePassword = () => {
   return (
     <>
       <div className="flex min-h-screen flex-col bg-[#1E0E5E] text-white">
-        <div className="mx-auto mt-10 w-full max-w-4xl rounded-[32px] bg-white p-10 text-ink shadow-soft">
+        <div className="mx-auto mt-8 w-full max-w-4xl rounded-[32px] bg-white px-4 py-8 text-ink shadow-soft sm:px-8 lg:p-10">
           <button
             type="button"
             onClick={() => navigate(-1)}

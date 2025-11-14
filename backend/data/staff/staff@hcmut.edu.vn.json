@@ -97,7 +97,10 @@
             "reportName": "Feedback Generation",
             "academicYear": "2024",
             "filters": [
-                {"label": "Session", "value": "CO2021 - Lecture 01 (Data Structures)"}
+                {"label": "Session", "value": "CO2021 - Lecture 01 (Data Structures)"},
+                {"label": "Session", "value": "CS2030 - Lecture 02 (Algorithms & Data Structures)"},
+                {"label": "Session", "value": "EE2010 - Lab 03 (Circuit Design)"},
+                {"label": "Session", "value": "MATH2050 - Tutorial 01 (Linear Algebra)"}
             ],
             "options": ["Generate Student Report", "Generate Tutor Report", "Generate System Report"]
         }

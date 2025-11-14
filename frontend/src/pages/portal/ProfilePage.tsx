@@ -1,111 +1,57 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useAuth } from '../../context/AuthContext';
-
-type ContactCard = {
-  key: string;
-  displayLabel: string;
-  value: string | string[];
-  editable?: boolean;
-};
-
-type AcademicCard = {
-  key: string;
-  displayLabel: string;
-  value: string | string[];
-  type?: 'tags';
-  locked?: boolean;
-};
+import { ProfileModel } from '../../models/profile';
 
 const ProfilePage = () => {
   const { portal, user, updateAvatar } = useAuth();
   const profile = portal?.profile;
-  const [isEditing, setEditing] = useState(false);
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatar ?? '');
-  const [uploadError, setUploadError] = useState<string>();
+  const [profileModel, setProfileModel] = useState<ProfileModel>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (user?.avatar) {
-      setAvatarPreview(user.avatar);
-    }
-  }, [user?.avatar]);
+    if (!profile || !user) return;
+    setProfileModel((prev) => {
+      if (!prev) return ProfileModel.create(profile, user);
+      return prev.refresh(profile, user);
+    });
+  }, [profile, user]);
 
   const handleAvatarSelection = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !profileModel) return;
     if (!file.type.startsWith('image/')) {
-      setUploadError('Please choose an image file.');
+      setProfileModel((prev) => prev?.withUploadError('Please choose an image file.'));
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      setUploadError('Image must be smaller than 2MB.');
+    if (file.size > ProfileModel.MAX_AVATAR_SIZE) {
+      setProfileModel((prev) => prev?.withUploadError('Image must be smaller than 2MB.'));
       return;
     }
-    setUploadError(undefined);
+    setProfileModel((prev) => prev?.clearUploadError());
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      setAvatarPreview(result);
       updateAvatar(result);
+      setProfileModel((prev) => prev?.withAvatarPreview(result).clearUploadError());
     };
     reader.readAsDataURL(file);
   };
 
   const triggerAvatarPicker = () => {
-    if (!isEditing) return;
+    if (!profileModel?.isEditing) return;
     fileInputRef.current?.click();
   };
 
-  if (!profile || !user) {
+  if (!profile || !user || !profileModel) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Profile data unavailable.</div>;
   }
 
-  const platformLinksItem = profile.academics.find((item) => item.label.toLowerCase().includes('platform'));
-  const emailContact = profile.contact.find((item) => item.label.toLowerCase().includes('email'));
-  const personalEmailValue = (emailContact?.value as string) ?? user.email ?? '';
-
-  const contactCards: ContactCard[] = [
-    ...profile.contact.map((item) => ({
-      key: item.label,
-      displayLabel: item.label.toLowerCase().includes('email') ? 'PERSONAL EMAIL ADDRESS' : item.label.toUpperCase(),
-      value: item.value,
-      editable: item.editable,
-    })),
-  ];
-
-  if (platformLinksItem) {
-    contactCards.push({
-      key: 'platform-links',
-      displayLabel: 'PLATFORM LINKS',
-      value: platformLinksItem.value as string[],
-      editable: false,
-    });
-  }
-
-  const academicCards = useMemo(() => {
-    const withoutPlatform = profile.academics
-      .filter((item) => item.label !== platformLinksItem?.label)
-      .map<AcademicCard>((item) => ({
-        key: item.label,
-        displayLabel: item.label.toUpperCase(),
-        value: item.value,
-        type: item.type,
-        locked: item.label.toLowerCase() === 'student id',
-      }));
-
-    const studentIdCard = withoutPlatform.find((card) => card.displayLabel === 'STUDENT ID');
-    const rest = withoutPlatform.filter((card) => card.displayLabel !== 'STUDENT ID');
-
-    const studentEmailCard: AcademicCard = {
-      key: 'student-email-address',
-      displayLabel: 'STUDENT EMAIL ADDRESS',
-      value: user.email ?? personalEmailValue,
-      locked: true,
-    };
-
-    return [...(studentIdCard ? [studentIdCard] : []), studentEmailCard, ...rest];
-  }, [personalEmailValue, platformLinksItem?.label, profile.academics, user.email]);
+  const contactCards = profileModel.contactCards;
+  const academicCards = profileModel.academicCards;
+  const uploadError = profileModel.uploadError;
+  const avatarPreview = profileModel.avatarPreview;
+  const isEditing = profileModel.isEditing;
 
   return (
     <div className="space-y-8">
@@ -138,7 +84,12 @@ const ProfilePage = () => {
           </div>
           <button
             type="button"
-            onClick={() => setEditing((prev) => !prev)}
+            onClick={() =>
+              setProfileModel((prev) => {
+                if (!prev) return prev;
+                return prev.isEditing ? prev.confirm() : prev.edit();
+              })
+            }
             className="rounded-full border border-primary px-6 py-2 text-sm font-semibold text-primary"
           >
             {isEditing ? 'Confirm' : 'Edit'}
@@ -147,7 +98,7 @@ const ProfilePage = () => {
         <textarea
           className="mt-6 w-full rounded-3xl border border-slate-100 bg-slate-50 px-6 py-4 text-lg text-slate-600"
           disabled={!isEditing}
-          defaultValue={profile.header.about}
+          defaultValue={profileModel.headerAbout}
         />
         {uploadError && <p className="mt-3 text-sm text-red-500">{uploadError}</p>}
       </section>

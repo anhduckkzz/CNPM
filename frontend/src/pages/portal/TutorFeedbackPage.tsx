@@ -17,8 +17,8 @@ const TutorFeedbackPage = () => {
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <h1 className="text-3xl font-semibold text-ink">Tutor Feedback and Evaluation</h1>
         <p className="mt-2 text-slate-500">Monitor attendance, capture reflections, and submit system feedback.</p>
-        <div className="mt-6 overflow-hidden rounded-3xl border border-slate-100">
-          <table className="w-full text-left text-sm">
+        <div className="mt-6 overflow-x-auto rounded-3xl border border-slate-100">
+          <table className="w-full min-w-[520px] text-left text-sm">
             <thead className="bg-slate-50 text-slate-500">
               <tr>
                 <th className="px-4 py-3">Student</th>
