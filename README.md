@@ -33,30 +33,28 @@
 
 ## Tech Stack
 
-- **Front-end**  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="32"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" width="30"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="32"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" width="30"/>  
-  <img src="https://cdn.worldvectorlogo.com/logos/tailwindcss.svg" width="32"/>  
-  React 18, TypeScript, Node.js (npm tooling), Vite, Tailwind CSS
+- **Front-end:**  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="28"/> React 18  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" width="26"/> TypeScript  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="28"/> Node.js  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" width="26"/> Vite  
+  <img src="https://cdn.worldvectorlogo.com/logos/tailwindcss.svg" width="28"/> Tailwind CSS
 
-- **Back-end**  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="34"/>  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="34"/>  
-  Python 3.11, FastAPI (current demo uses in-memory repositories)
+- **Back-end:**  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="30"/> Python 3.11  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="30"/> FastAPI
 
-- **Version Control**  
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="30"/>
+- **Version Control:**  
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="28"/> Git + GitHub
 
-- **UX/UI**  
-  <img src="https://www.visily.ai/wp-content/uploads/2021/11/visily-logo.png" width="80"/> – Visily/Figma-based mockups
+- **UX/UI:**  
+  <img src="https://www.visily.ai/wp-content/uploads/2021/11/visily-logo.png" width="80"/> Visily / Figma mockups
 
-- **UML**  
-  <img src="https://w7.pngwing.com/pngs/587/903/png-transparent-draw-io-hd-logo-thumbnail.png" width="36"/> – draw.io
+- **UML:**  
+  <img src="https://w7.pngwing.com/pngs/587/903/png-transparent-draw-io-hd-logo-thumbnail.png" width="32"/> draw.io
 
-- **Authentication Mock**  
-  HCMUT_SSO (visual simulation only)
+- **Authentication Mock:**  
+  HCMUT_SSO
 
 ---
 
@@ -161,7 +159,10 @@ VITE_API_URL=https://your-backend.vercel.app/api
 |Tutor    | `tutor@hcmut.edu.vn`   |
 |Staff    | `staff@hcmut.edu.vn`   |
 
-Passwords are not validated; the login step is purely visual.
+Demo passwords:
+
+- Students & Tutors: `12345678`
+- Staff: `password`
 
 ---
 
