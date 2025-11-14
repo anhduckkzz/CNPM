@@ -174,7 +174,7 @@ const CasLogin = () => {
             <div className="relative flex flex-col items-center gap-3 px-6 py-6 text-center text-slate-700">
               <Coffee className="h-10 w-10 text-primary" />
               <p className="text-lg font-semibold text-ink">Waking up the server...</p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm font-medium text-slate-800">
                 The host is spinning up, please stay on this page and we will sign you in shortly.
               </p>
             </div>
