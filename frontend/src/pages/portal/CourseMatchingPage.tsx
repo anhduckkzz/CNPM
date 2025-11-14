@@ -5,10 +5,35 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { CourseCard } from '../../types/portal';
 import { toCourseSlug } from '../../utils/courseSlug';
+import { useStackedToasts } from '../../hooks/useStackedToasts';
+import CourseArtwork from '../../components/CourseArtwork';
 
-const FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1529074963764-98f45c47344b?auto=format&fit=crop&w=900&q=80';
 const FORMAT_CHOICES = ['In-person', 'Blended', 'Online'];
+const CATEGORY_RULES = [
+  { match: /calculus|math|algebra|statistics|probability/i, label: 'Mathematics' },
+  { match: /programming|systems|data|software|algorithm|computer/i, label: 'Computer Science' },
+  { match: /physics|engineering/i, label: 'Engineering' },
+  { match: /design|creative|communication/i, label: 'Creative Practice' },
+  { match: /business|economics|finance/i, label: 'Business & Management' },
+];
+
+const getCourseCategory = (course: CourseCard) => {
+  const haystack = `${course.title} ${course.code}`.toLowerCase();
+  const rule = CATEGORY_RULES.find((entry) => entry.match.test(haystack));
+  return rule?.label ?? 'Interdisciplinary';
+};
+
+const getCourseStatus = (course: CourseCard) => {
+  if (!course.capacity) return { label: 'Open Seats', capacity: null };
+  const [current, total] = course.capacity.split('/').map((value) => Number(value.replace(/\D/g, '')));
+  if (!Number.isFinite(current) || !Number.isFinite(total) || total === 0) {
+    return { label: 'Open Seats', capacity: null };
+  }
+  const ratio = current / total;
+  if (ratio <= 0.6) return { label: 'Open Seats', capacity: { current, total } };
+  if (ratio <= 0.85) return { label: 'Limited Seats', capacity: { current, total } };
+  return { label: 'Waitlist Risk', capacity: { current, total } };
+};
 
 const CourseMatchingPage = () => {
   const { portal, role } = useAuth();
@@ -16,9 +41,11 @@ const CourseMatchingPage = () => {
   const data = portal?.courseMatching;
   const [searchTerm, setSearchTerm] = useState('');
   const [formatFilter, setFormatFilter] = useState('All Formats');
+  const [categoryFilter, setCategoryFilter] = useState('All Categories');
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [modalCourse, setModalCourse] = useState<CourseCard | null>(null);
   const [courseHistory, setCourseHistory] = useState<CourseCard[]>(data?.history ?? []);
-  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
+  const { toasts, showToast } = useStackedToasts(2400);
   const modalTarget = typeof document !== 'undefined' ? document.body : null;
 
   if (!data) {
@@ -30,15 +57,29 @@ const CourseMatchingPage = () => {
     return ['All Formats', ...unique];
   }, [data.recommended]);
 
+  const categoryOptions = useMemo(() => {
+    const unique = Array.from(new Set((data.recommended ?? []).map((course) => getCourseCategory(course))));
+    return ['All Categories', ...unique];
+  }, [data.recommended]);
+
+  const statusOptions = useMemo(() => {
+    const unique = Array.from(new Set((data.recommended ?? []).map((course) => getCourseStatus(course).label)));
+    return ['All Statuses', ...unique];
+  }, [data.recommended]);
+
   const filteredCourses = useMemo(() => {
     return (data.recommended ?? []).filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.code.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesFormat = formatFilter === 'All Formats' || course.format === formatFilter;
-      return matchesSearch && matchesFormat;
+      const courseCategory = getCourseCategory(course);
+      const matchesCategory = categoryFilter === 'All Categories' || courseCategory === categoryFilter;
+      const courseStatus = getCourseStatus(course);
+      const matchesStatus = statusFilter === 'All Statuses' || courseStatus.label === statusFilter;
+      return matchesSearch && matchesFormat && matchesCategory && matchesStatus;
     });
-  }, [data.recommended, formatFilter, searchTerm]);
+  }, [data.recommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
 
   const handleRegisterClick = (course: CourseCard) => {
     setModalCourse(course);
@@ -54,8 +95,7 @@ const CourseMatchingPage = () => {
       ]);
     }
     setModalCourse(null);
-    setToast({ visible: true, message: `Registered ${modalCourse.title} in ${format}` });
-    setTimeout(() => setToast({ visible: false, message: '' }), 2400);
+    showToast(`Registered ${modalCourse.title} in ${format}`);
   };
 
   const handleManageCourse = (courseId: string) => {
@@ -102,11 +142,27 @@ const CourseMatchingPage = () => {
                 </option>
               ))}
             </select>
-            <select className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-400" disabled>
-              <option>All Categories</option>
+            <select
+              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
+              value={categoryFilter}
+              onChange={(event) => setCategoryFilter(event.target.value)}
+            >
+              {categoryOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
-            <select className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-400" disabled>
-              <option>All Statuses</option>
+            <select
+              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+            >
+              {statusOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -123,29 +179,42 @@ const CourseMatchingPage = () => {
           </span>
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredCourses.map((course) => (
-            <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
-              <img
-                src={course.thumbnail ?? FALLBACK_IMAGE}
-                alt={course.title}
-                className="h-36 w-full rounded-2xl object-cover"
-              />
-              <div className="mt-4 space-y-1">
-                <p className="text-lg font-semibold text-ink">{course.title}</p>
-                <p className="text-sm text-slate-500">
-                  Course ID: {course.code} • Format: {course.format ?? 'Hybrid'}
-                </p>
-                <p className="text-xs text-slate-400">Capacity: {course.capacity ?? 'TBD'}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleRegisterClick(course)}
-                className="mt-auto rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
-              >
-                Register Course
-              </button>
-            </article>
-          ))}
+          {filteredCourses.map((course) => {
+            const courseCategory = getCourseCategory(course);
+            const courseStatus = getCourseStatus(course);
+            const statusAccent =
+              courseStatus.label === 'Open Seats'
+                ? 'bg-emerald-100 text-emerald-700'
+                : courseStatus.label === 'Limited Seats'
+                  ? 'bg-amber-100 text-amber-700'
+                  : 'bg-rose-100 text-rose-700';
+            const capacityLabel = courseStatus.capacity
+              ? `${courseStatus.capacity.current}/${courseStatus.capacity.total} seats`
+              : course.capacity ?? 'TBD';
+            return (
+              <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
+                <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
+                <div className="mt-4 space-y-1">
+                  <p className="text-lg font-semibold text-ink">{course.title}</p>
+                  <p className="text-sm text-slate-500">
+                    Course ID: {course.code} • Format: {course.format ?? 'Hybrid'}
+                  </p>
+                  <p className="text-xs text-slate-400">Capacity: {capacityLabel}</p>
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{courseCategory}</span>
+                    <span className={`rounded-full px-3 py-1 ${statusAccent}`}>{courseStatus.label}</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRegisterClick(course)}
+                  className="mt-auto rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                >
+                  Register Course
+                </button>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -208,11 +277,7 @@ const CourseMatchingPage = () => {
               >
                 <X className="h-4 w-4" />
               </button>
-              <img
-                src={modalCourse.thumbnail ?? FALLBACK_IMAGE}
-                alt={modalCourse.title}
-                className="h-48 w-full rounded-3xl object-cover"
-              />
+              <CourseArtwork identifier={modalCourse.id} title={modalCourse.title} code={modalCourse.code} size="modal" />
               <div className="mt-6 space-y-1">
                 <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{modalCourse.code}</p>
                 <h3 className="text-2xl font-semibold text-ink">{modalCourse.title}</h3>
@@ -236,19 +301,21 @@ const CourseMatchingPage = () => {
           modalTarget,
         )}
 
-      <div
-        aria-live="polite"
-        className={`pointer-events-none fixed bottom-6 right-6 z-40 w-full max-w-sm transform rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-xl transition ${
-          toast.visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-        }`}
-      >
-        <div className="flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5" />
-          <div>
-            <p className="font-semibold">Registration successful</p>
-            <p className="text-xs text-emerald-600">{toast.message || 'You are now assigned to this course.'}</p>
+      <div aria-live="polite" className="pointer-events-none fixed bottom-6 right-6 z-40 flex w-full max-w-sm flex-col gap-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className="pointer-events-auto rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-xl"
+          >
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="h-5 w-5" />
+              <div>
+                <p className="font-semibold">Registration successful</p>
+                <p className="text-xs text-emerald-600">{toast.message || 'You are now assigned to this course.'}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

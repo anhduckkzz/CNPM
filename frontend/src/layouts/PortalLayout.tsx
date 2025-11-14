@@ -44,8 +44,14 @@ const PortalLayout = () => {
 
   if (!portal || !role) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-50 text-lg font-semibold text-primary">
-        Preparing your personalised workspace...
+      <div className="flex h-screen items-center justify-center bg-slate-50 px-6 text-center text-lg font-semibold text-primary">
+        <p>
+          Warming up your portal workspace… If this takes too long, try reloading the main dashboard at{' '}
+          <a href="https://cnpm-frontend.vercel.app/" className="underline">
+            https://cnpm-frontend.vercel.app/
+          </a>{' '}
+          to sign in again.
+        </p>
       </div>
     );
   }
@@ -71,6 +77,21 @@ const PortalLayout = () => {
       };
     }
     return undefined;
+  }, [isMobileSidebarOpen]);
+
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isMobileSidebarOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileSidebarOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isMobileSidebarOpen]);
 
   const renderNavLinks = (expanded: boolean, onNavigate?: () => void) => (
@@ -135,9 +156,10 @@ const PortalLayout = () => {
     <div className="min-h-screen bg-slate-50 text-ink">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-6 lg:py-8">
         {isMobileSidebarOpen && (
-          <div
+          <button
+            type="button"
             className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[1px] lg:hidden"
-            aria-hidden="true"
+            aria-label="Close navigation"
             onClick={() => setMobileSidebarOpen(false)}
           />
         )}
@@ -204,9 +226,9 @@ const PortalLayout = () => {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-600 transition hover:border-primary/30 hover:text-primary lg:hidden"
-                aria-label="Open navigation"
-                onClick={() => setMobileSidebarOpen(true)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-600 transition hover:border-primary/30 hover:text-primary lg:hidden"
+                aria-label="Toggle navigation"
+                onClick={() => setMobileSidebarOpen((prev) => !prev)}
               >
                 <Menu className="h-5 w-5" />
               </button>

@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
+import { X, MapPin, Clock3, NotebookPen } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import type { ScheduleEvent } from '../../types/portal';
 import { toCourseSlug } from '../../utils/courseSlug';
@@ -21,6 +22,45 @@ const eventColorMap: Record<string, { bg: string; text: string }> = {
   busy: { bg: 'bg-rose-200', text: 'text-rose-900' },
   free: { bg: 'bg-emerald-200', text: 'text-emerald-900' },
   default: { bg: 'bg-slate-200', text: 'text-slate-900' },
+};
+
+const DETAIL_TEMPLATES: EventDetail[] = [
+  {
+    facilitator: 'Dr. Linh Pham',
+    preparation: 'Skim the latest lab brief and note blockers.',
+    reminder: 'Update your progress tracker before 9 PM.',
+    description: 'Studio-style working block for {TITLE} with live debugging support and breakout coaching.',
+    resources: ['Slides for {TITLE}', 'Sample dataset v2', 'Forum thread #office-hours'],
+  },
+  {
+    facilitator: 'Assoc. Prof. Nguyen Tran',
+    preparation: 'Review previous quiz feedback and mark unclear concepts.',
+    reminder: 'Bring a charged laptop and stylus for annotation.',
+    description: 'Small group discussion targeting misconception spotting for {TITLE}.',
+    resources: ['Cheat sheet: {TITLE}', 'Discussion prompts', 'Lab sandbox link'],
+  },
+  {
+    facilitator: 'Tutor My Dinh',
+    preparation: 'Complete warm-up exercises 3 & 4 before joining.',
+    reminder: 'Expect a short poll at the 15-minute mark.',
+    description: 'Peer-feedback sprint focused on practical applications of {TITLE}.',
+    resources: ['Practice set - {TITLE}', 'Demo recording', 'Q&A board bookmark'],
+  },
+  {
+    facilitator: 'Coach Hoang Vo',
+    preparation: 'Post one question to the LMS thread ahead of time.',
+    reminder: 'Download the worksheet for annotation.',
+    description: 'Interactive retro to plan the next milestone for {TITLE}.',
+    resources: ['Worksheet template', 'Milestone timeline', 'Reference article on {TITLE}'],
+  },
+];
+
+type EventDetail = {
+  facilitator: string;
+  preparation: string;
+  reminder: string;
+  description: string;
+  resources: string[];
 };
 
 const toMinutes = (time: string) => {
@@ -69,6 +109,27 @@ const SchedulePage = () => {
     return portal?.courses;
   }, [portal?.courses, portal?.courseMatching?.history, role]);
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
+  const [activeEventId, setActiveEventId] = useState<string | null>(null);
+  const eventDetailMap = useMemo(() => {
+    const events = schedule?.events ?? [];
+    return events.reduce<Record<string, EventDetail>>((acc, event, index) => {
+      const template = DETAIL_TEMPLATES[index % DETAIL_TEMPLATES.length];
+      const replaceToken = (text: string) => text.replace(/\{TITLE\}/g, event.title);
+      acc[event.id] = {
+        facilitator: template.facilitator,
+        preparation: template.preparation,
+        reminder: template.reminder,
+        description: replaceToken(template.description),
+        resources: template.resources.map((resource) => replaceToken(resource)),
+      };
+      return acc;
+    }, {});
+  }, [schedule?.events]);
+  const activeEvent = useMemo(
+    () => (activeEventId ? schedule?.events.find((evt) => evt.id === activeEventId) : undefined),
+    [activeEventId, schedule?.events],
+  );
+  const activeDetails = activeEvent ? eventDetailMap[activeEvent.id] : undefined;
 
   const grouped = schedule?.events.reduce<Record<string, ScheduleEvent[]>>((acc, event) => {
     acc[event.day] = acc[event.day] ? [...acc[event.day], event] : [event];
@@ -79,6 +140,16 @@ const SchedulePage = () => {
   const todayAbbrev = today.format('ddd');
   const todaysEvents = grouped[todayAbbrev] ?? [];
   const monthLabel = today.format('MMMM YYYY');
+  const closeDetailSheet = () => setActiveEventId(null);
+
+  useEffect(() => {
+    if (!activeEventId) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [activeEventId]);
 
   if (!schedule) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Schedule data unavailable.</div>;
@@ -165,11 +236,20 @@ const SchedulePage = () => {
                         const blockHeight = Math.max(height, MIN_BLOCK_HEIGHT);
                         const showTime = durationMinutes > 60;
                         const color = eventColorMap[event.type] ?? eventColorMap.default;
+                        const detailAvailable = !!eventDetailMap[event.id];
                         return (
-                          <div
+                          <button
                             key={event.id}
-                            className={`absolute inset-x-0 flex h-auto flex-col gap-0.5 overflow-hidden rounded-2xl p-2 shadow-soft ${color.bg} ${color.text}`}
+                            type="button"
+                            onClick={() => setActiveEventId(event.id)}
+                            className={clsx(
+                              'absolute inset-x-0 flex h-auto flex-col gap-0.5 overflow-hidden rounded-2xl p-2 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
+                              color.bg,
+                              color.text,
+                              detailAvailable ? 'cursor-pointer transition hover:translate-y-px' : 'cursor-default',
+                            )}
                             style={{ top: `${top}%`, height: `${blockHeight}%`, marginLeft: '0.35rem', marginRight: '0.35rem' }}
+                            aria-label={`View details for ${event.title}`}
                           >
                             <p
                               className={`truncate font-semibold leading-tight ${isSidebarOpen ? 'text-[9px]' : 'text-[11px]'}`}
@@ -192,7 +272,7 @@ const SchedulePage = () => {
                                 {event.location}
                               </p>
                             )}
-                          </div>
+                          </button>
                         );
                       })}
                     </div>
@@ -216,9 +296,15 @@ const SchedulePage = () => {
                   todaysEvents.map((event) => {
                     const color = eventColorMap[event.type] ?? eventColorMap.default;
                     return (
-                      <div
+                      <button
                         key={event.id}
-                        className={`flex flex-col gap-1 rounded-2xl border border-slate-100 p-4 shadow-soft ${color.bg} ${color.text}`}
+                        type="button"
+                        onClick={() => setActiveEventId(event.id)}
+                        className={clsx(
+                          'flex flex-col gap-1 rounded-2xl border border-slate-100 p-4 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
+                          color.bg,
+                          color.text,
+                        )}
                       >
                         <div className="flex items-center justify-between gap-4">
                           <p className="text-lg font-semibold">{event.title}</p>
@@ -226,7 +312,7 @@ const SchedulePage = () => {
                         </div>
                         <p className="text-sm font-medium opacity-80">{formatRange(event.start, event.end)}</p>
                         {event.location && <p className="text-sm opacity-80">{event.location}</p>}
-                      </div>
+                      </button>
                     );
                   })
                 ) : (
@@ -284,6 +370,74 @@ const SchedulePage = () => {
           Reschedule
         </button>
       </aside>
+
+      {activeEvent && activeDetails && (
+        <div
+          className="fixed inset-0 z-[70] flex items-end justify-center bg-slate-900/40 px-4 py-6 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeDetailSheet}
+        >
+          <div
+            className="w-full max-w-lg rounded-[32px] bg-white p-6 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-slate-400">{activeEvent.day}</p>
+                <h3 className="text-2xl font-semibold text-ink">{activeEvent.title}</h3>
+                <p className="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-600">
+                  <Clock3 className="h-4 w-4" />
+                  {formatRange(activeEvent.start, activeEvent.end)}
+                </p>
+                {activeEvent.location && (
+                  <p className="mt-1 flex items-center gap-2 text-sm text-slate-500">
+                    <MapPin className="h-4 w-4" />
+                    {activeEvent.location}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={closeDetailSheet}
+                className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-primary/30 hover:text-primary"
+                aria-label="Close schedule detail"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <p className="mt-4 text-sm text-slate-600">{activeDetails.description}</p>
+
+            <dl className="mt-6 space-y-3 text-sm text-slate-600">
+              <div className="flex items-start gap-3 rounded-2xl bg-slate-50 p-3">
+                <NotebookPen className="mt-0.5 h-4 w-4 text-primary" />
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-widest text-slate-500">Facilitator</dt>
+                  <dd className="text-sm text-ink">{activeDetails.facilitator}</dd>
+                </div>
+              </div>
+              <div className="rounded-2xl bg-slate-50 p-3">
+                <dt className="text-xs font-semibold uppercase tracking-widest text-slate-500">Preparation</dt>
+                <dd className="text-sm text-slate-700">{activeDetails.preparation}</dd>
+              </div>
+              <div className="rounded-2xl bg-slate-50 p-3">
+                <dt className="text-xs font-semibold uppercase tracking-widest text-slate-500">Reminder</dt>
+                <dd className="text-sm text-slate-700">{activeDetails.reminder}</dd>
+              </div>
+            </dl>
+
+            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Resources to review</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                {activeDetails.resources.map((resource) => (
+                  <li key={resource}>{resource}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

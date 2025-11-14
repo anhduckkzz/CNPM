@@ -1,7 +1,8 @@
 import { CheckCircle2 } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import type { RescheduleSection } from '../../types/portal';
+import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 type SlotType = 'free' | 'busy' | 'open';
 
@@ -35,21 +36,7 @@ const ReschedulePage = () => {
     labels.push('12:00 AM');
     return labels;
   }, []);
-  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const showToast = (message: string) => {
-    setToast({ visible: true, message });
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
-  };
-
-  useEffect(
-    () => () => {
-      if (toastTimer.current) clearTimeout(toastTimer.current);
-    },
-    [],
-  );
+  const { toasts, showToast } = useStackedToasts();
 
   if (!reschedule) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Reschedule grid unavailable.</div>;
@@ -166,19 +153,21 @@ const ReschedulePage = () => {
       </aside>
     </div>
 
-      <div
-        aria-live="assertive"
-        className={`pointer-events-none fixed left-6 top-6 z-[60] w-full max-w-xs transform rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm shadow-lg transition-all duration-300 ${
-          toast.visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
-        }`}
-      >
-        <div className="pointer-events-auto flex items-start gap-3 text-emerald-700">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
-          <div>
-            <p className="font-semibold">Success</p>
-            <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+      <div aria-live="assertive" className="pointer-events-none fixed left-6 top-6 z-[60] flex w-full max-w-xs flex-col gap-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className="pointer-events-auto rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-lg"
+          >
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Success</p>
+                <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </>
   );

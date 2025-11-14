@@ -1,28 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 const StaffFeedbackGeneratorPage = () => {
   const { portal, role } = useAuth();
   const feedbackReport = portal?.reports?.feedback;
-  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { toasts, showToast } = useStackedToasts();
 
-  const showToast = (message: string) => {
-    setToast({ visible: true, message });
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
-  };
-
-  useEffect(
-    () => () => {
-      if (toastTimer.current) clearTimeout(toastTimer.current);
-    },
-    [],
-  );
-
-  const handleGenerate = (_option: string) => {
-    showToast('Your PDF report has been downloaded successfully!');
+  const handleGenerate = (option: string) => {
+    showToast(`${option} is being prepared. Your PDF report will download shortly.`);
   };
 
   if (role !== 'staff' || !feedbackReport) {
@@ -71,41 +57,23 @@ const StaffFeedbackGeneratorPage = () => {
             </div>
           ))}
         </div>
-        <div className="rounded-[28px] border border-dashed border-primary/30 bg-primary/5 p-8 text-center text-primary">
-          <div className="mt-4 flex flex-wrap justify-center gap-4">
-            <button
-              className="rounded-2xl bg-primary px-5 py-3 font-semibold text-white shadow-soft"
-              type="button"
-              onClick={() => handleGenerate('Open Report')}
-            >
-              Open Report
-            </button>
-            <button
-              className="rounded-2xl border border-primary px-5 py-3 font-semibold text-primary"
-              type="button"
-              onClick={() => handleGenerate('Save As')}
-            >
-              Save As...
-            </button>
-          </div>
-        </div>
       </div>
 
-      <div
-        aria-live="assertive"
-        className={`pointer-events-none fixed left-6 top-6 z-[60] w-full max-w-xs transform rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm shadow-lg transition-all duration-300 ${
-          toast.visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
-        }`}
-      >
-        <div className="pointer-events-auto flex items-start gap-3 text-emerald-700">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
-          <div>
-            <p className="font-semibold">Success</p>
-            <p className="text-xs text-emerald-800/80">
-              {toast.message || 'Your PDF report has been downloaded successfully!'}
-            </p>
+      <div aria-live="polite" className="pointer-events-none fixed left-1/2 top-16 z-[60] flex w-full max-w-md -translate-x-1/2 flex-col gap-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className="pointer-events-auto rounded-3xl border border-primary/20 bg-white/95 p-5 text-sm text-primary shadow-2xl"
+          >
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="h-5 w-5" />
+              <div>
+                <p className="font-semibold text-ink">Report generation queued</p>
+                <p className="text-xs text-slate-600">{toast.message || 'Your PDF report has been downloaded successfully!'}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </>
   );

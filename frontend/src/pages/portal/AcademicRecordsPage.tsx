@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, Sparkles, UserRound } from 'lucide-react';
+import { BellRing, CheckCircle2, ChevronDown, FileText, GraduationCap, Sparkles, UserRound, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { AcademicRecordSection, StaffRecordsSection } from '../../types/portal';
+import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 type DropdownSection = {
   id: 'scholarship' | 'training' | 'academic';
@@ -57,25 +58,11 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
     academic: false,
   });
   const [activeHistoryTab, setActiveHistoryTab] = useState<HistoryTab>('scholarship');
-  const [toast, setToast] = useState<{ visible: boolean; message: string }>({ visible: false, message: '' });
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { toasts, showToast } = useStackedToasts();
   const [detailModal, setDetailModal] = useState<{ open: boolean; studentId: string | null }>({
     open: false,
     studentId: null,
   });
-
-  const showToast = (message: string) => {
-    setToast({ visible: true, message });
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 2200);
-  };
-
-  useEffect(
-    () => () => {
-      if (toastTimer.current) clearTimeout(toastTimer.current);
-    },
-    [],
-  );
 
   const baseRows = useMemo<StaffStudentProfile[]>(
     () =>
@@ -517,18 +504,21 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
         </aside>
       </section>
 
-      <div
-        className={`pointer-events-none fixed left-6 top-6 z-[60] w-full max-w-xs transform rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm shadow-lg transition-all duration-300 ${
-          toast.visible ? 'translate-y-0 opacity-100' : '-translate-y-3 opacity-0'
-        }`}
-      >
-        <div className="pointer-events-auto flex items-start gap-3 text-emerald-700">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
-          <div>
-            <p className="font-semibold">Success</p>
-            <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+      <div aria-live="assertive" className="pointer-events-none fixed left-6 top-6 z-[60] flex w-full max-w-xs flex-col gap-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className="pointer-events-auto rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-lg"
+          >
+            <div className="flex items-start gap-3">
+              <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Success</p>
+                <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -551,6 +541,8 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
   const finalizeRef = useRef(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanStage, setScanStage] = useState(SCORE_SCAN_STAGES[0].label);
+  const [showSyllabus, setShowSyllabus] = useState(false);
+  const portalTarget = typeof document !== 'undefined' ? document.body : null;
 
   const normalizeGrade = (value: string) => value.replace('+', '').trim().toUpperCase();
   const resolveScale4 = (gradeEntry: AcademicRecordSection['grades'][number]) => {
@@ -649,6 +641,15 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
     };
   }, []);
 
+  useEffect(() => {
+    if (!showSyllabus) return;
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowSyllabus(false);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [showSyllabus]);
+
   const { computedGpa, totalCredits } = useMemo(() => {
     if (!records.grades.length) {
       return { computedGpa: '0.0', totalCredits: 0 };
@@ -691,6 +692,17 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
               </div>
             ))}
           </dl>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setShowSyllabus(true)}
+            className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-primary/30 hover:text-primary"
+          >
+            <FileText className="h-4 w-4" />
+            Syllabus
+          </button>
         </div>
 
         <div className="rounded-3xl bg-primary/5 p-6 text-center shadow-soft">
@@ -744,8 +756,8 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
               scanning ? 'ring-2 ring-primary/20 shadow-[0_0_35px_rgba(79,70,229,0.25)]' : ''
             }`}
           >
-            {scanning && (
-              <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-[28px] bg-slate-900/55 text-white backdrop-blur-md">
+      {scanning && (
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-[28px] bg-slate-900/55 text-white backdrop-blur-md">
                 <div className="ai-scan-grid relative w-[90%] max-w-lg space-y-4 rounded-[32px] border border-primary/40 bg-white/10 p-6 text-center shadow-2xl">
                   <div className="ai-scan-beam" />
                   <div className="relative flex items-center justify-between text-[10px] uppercase tracking-[0.5em] text-white">
@@ -762,7 +774,44 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
                   <p className="relative text-xs text-white/85">Scanning course grade records for anomalies...</p>
                 </div>
               </div>
-            )}
+      )}
+
+      {showSyllabus && portalTarget &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-50 flex min-h-screen w-screen items-center justify-center bg-slate-900/50 px-4 py-8"
+            onClick={() => setShowSyllabus(false)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              className="w-full max-w-4xl rounded-[32px] bg-white p-6 shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-slate-400">Course Reference</p>
+                  <h3 className="text-2xl font-semibold text-ink">Syllabus</h3>
+                  <p className="text-sm text-slate-500">Review the complete syllabus document for this academic cycle.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSyllabus(false)}
+                  className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-primary/30 hover:text-primary"
+                  aria-label="Close syllabus"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <iframe
+                title="Course syllabus"
+                src="/syllabus.pdf#toolbar=0&zoom=100"
+                className="mt-6 h-[72vh] w-full rounded-2xl border border-slate-100"
+              />
+            </div>
+          </div>,
+          portalTarget,
+        )}
             <div className="grid grid-cols-[1fr,120px,110px,110px,80px] gap-4 rounded-t-2xl bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
               <p>Course Name</p>
               <p className="text-center">Grade</p>
