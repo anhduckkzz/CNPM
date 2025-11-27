@@ -174,12 +174,13 @@ export class ProfileModel {
   }
 
   private clone(overrides: Partial<ProfileModelState>) {
+    const hasUploadOverride = Object.prototype.hasOwnProperty.call(overrides, 'uploadError');
     return new ProfileModel({
       section: overrides.section ?? this.section,
       user: overrides.user ?? this.user,
       isEditing: overrides.isEditing ?? this.isEditing,
       avatarPreview: overrides.avatarPreview ?? this.avatarPreview,
-      uploadError: overrides.uploadError ?? this.uploadError,
+      uploadError: hasUploadOverride ? overrides.uploadError : this.uploadError,
     });
   }
 }

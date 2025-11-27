@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="30" failures="0" errors="0" time="4.5195305">
+    <testsuite name="src/context/__tests__/AuthProvider.test.tsx" timestamp="2025-11-14T14:20:58.883Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.2825425">
+        <testcase classname="src/context/__tests__/AuthProvider.test.tsx" name="AuthProvider (Login-Logout functionality) &gt; persists login details and clears them on logout" time="0.2807665">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/__tests__/ProtectedRoute.test.tsx" timestamp="2025-11-14T14:20:58.884Z" hostname="DESKTOP-HT1O42S" tests="4" failures="0" errors="0" skipped="0" time="0.060997">
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.tsx" name="ProtectedRoute &gt; renders a loading indicator when auth state is loading" time="0.0394072">
+        </testcase>
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.tsx" name="ProtectedRoute &gt; redirects visitors to the landing page when not authenticated" time="0.0101663">
+        </testcase>
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.tsx" name="ProtectedRoute &gt; renders the nested route when the role is permitted" time="0.0046852">
+        </testcase>
+        <testcase classname="src/components/__tests__/ProtectedRoute.test.tsx" name="ProtectedRoute &gt; redirects unauthorized roles to their default home" time="0.0049328">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/__tests__/useStackedToasts.test.ts" timestamp="2025-11-14T14:20:58.886Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.0229452">
+        <testcase classname="src/hooks/__tests__/useStackedToasts.test.ts" name="useStackedToasts (Feedback &amp; Evaluation functionality) &gt; queues and dismisses toast messages" time="0.021158">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/models/__tests__/ProfileModel.test.ts" timestamp="2025-11-14T14:20:58.886Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.0049057">
+        <testcase classname="src/models/__tests__/ProfileModel.test.ts" name="ProfileModel (Profile Management functionality) &gt; constructs contact and academic cards with editing state" time="0.0030302">
+        </testcase>
+        <testcase classname="src/models/__tests__/ProfileModel.test.ts" name="ProfileModel (Profile Management functionality) &gt; tracks avatar preview updates and clears upload errors" time="0.0005445">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/__tests__/courseMatching.test.ts" timestamp="2025-11-14T14:20:58.888Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.0039206">
+        <testcase classname="src/utils/__tests__/courseMatching.test.ts" name="Course Matching utilities (Tutor-Student Course Matching functionality) &gt; categorizes courses based on keywords" time="0.0019436">
+        </testcase>
+        <testcase classname="src/utils/__tests__/courseMatching.test.ts" name="Course Matching utilities (Tutor-Student Course Matching functionality) &gt; derives capacity labels from seat counts" time="0.0006167">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/__tests__/courseSlug.test.ts" timestamp="2025-11-14T14:20:58.889Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.0030752">
+        <testcase classname="src/utils/__tests__/courseSlug.test.ts" name="courseSlug utilities (Course functionality) &gt; removes and restores the c- prefix consistently" time="0.001734">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/public/__tests__/CasLogin.test.tsx" timestamp="2025-11-14T14:20:58.889Z" hostname="DESKTOP-HT1O42S" tests="5" failures="0" errors="0" skipped="0" time="2.162358">
+        <testcase classname="src/pages/public/__tests__/CasLogin.test.tsx" name="CasLogin page &gt; prefills staff credentials when visiting the administrator link" time="0.0435347">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/CasLogin.test.tsx" name="CasLogin page &gt; rejects non-HCMUT email domains before calling login" time="0.5125704">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/CasLogin.test.tsx" name="CasLogin page &gt; normalizes the email, logs in, and redirects to the role portal" time="0.4502492">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/CasLogin.test.tsx" name="CasLogin page &gt; navigates to the change password page when the shortcut is clicked" time="0.0613901">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/CasLogin.test.tsx" name="CasLogin page &gt; shows the wake notice while waiting for the backend and hides it after success" time="1.0930292">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/public/__tests__/SSOLanding.test.tsx" timestamp="2025-11-14T14:20:58.890Z" hostname="DESKTOP-HT1O42S" tests="3" failures="0" errors="0" skipped="0" time="0.3773686">
+        <testcase classname="src/pages/public/__tests__/SSOLanding.test.tsx" name="SSOLanding page &gt; renders the primary CTA buttons and footer copy" time="0.2016495">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/SSOLanding.test.tsx" name="SSOLanding page &gt; navigates to the CAS login flow when students click the main CTA" time="0.0977855">
+        </testcase>
+        <testcase classname="src/pages/public/__tests__/SSOLanding.test.tsx" name="SSOLanding page &gt; appends the staff role query string when administrators log in" time="0.0765032">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/CourseMatchingPage.test.tsx" timestamp="2025-11-14T14:20:58.891Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.5254937">
+        <testcase classname="src/pages/portal/__tests__/CourseMatchingPage.test.tsx" name="CourseMatchingPage (Tutor-Student Course Matching GUI) &gt; filters courses and registers via the modal" time="0.5239557">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/CoursesPage.test.tsx" timestamp="2025-11-14T14:20:58.891Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.2262445">
+        <testcase classname="src/pages/portal/__tests__/CoursesPage.test.tsx" name="CoursesPage (Course GUI) &gt; shows a placeholder when no courses exist" time="0.0214294">
+        </testcase>
+        <testcase classname="src/pages/portal/__tests__/CoursesPage.test.tsx" name="CoursesPage (Course GUI) &gt; navigates to course details when Access Course is clicked" time="0.2030515">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/FeedbackPage.test.tsx" timestamp="2025-11-14T14:20:58.892Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.3112152">
+        <testcase classname="src/pages/portal/__tests__/FeedbackPage.test.tsx" name="FeedbackPage (Feedback &amp; Evaluation GUI) &gt; submits feedback and triggers a toast notification" time="0.3096554">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/ProfilePage.test.tsx" timestamp="2025-11-14T14:20:58.892Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.2636302">
+        <testcase classname="src/pages/portal/__tests__/ProfilePage.test.tsx" name="ProfilePage (Profile Management GUI) &gt; shows a fallback message when profile data is unavailable" time="0.0244142">
+        </testcase>
+        <testcase classname="src/pages/portal/__tests__/ProfilePage.test.tsx" name="ProfilePage (Profile Management GUI) &gt; enters edit mode when the user clicks Edit" time="0.2373754">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/ReportBuilderPage.test.tsx" timestamp="2025-11-14T14:20:58.892Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.2437725">
+        <testcase classname="src/pages/portal/__tests__/ReportBuilderPage.test.tsx" name="ReportBuilderPage (Academic Record &amp; Scholarship) &gt; blocks non-staff roles from the builder (functionality)" time="0.0256459">
+        </testcase>
+        <testcase classname="src/pages/portal/__tests__/ReportBuilderPage.test.tsx" name="ReportBuilderPage (Academic Record &amp; Scholarship) &gt; allows staff to trigger report actions and emits toasts (GUI)" time="0.2167371">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/SchedulePage.test.tsx" timestamp="2025-11-14T14:20:58.893Z" hostname="DESKTOP-HT1O42S" tests="1" failures="0" errors="0" skipped="0" time="0.0274963">
+        <testcase classname="src/pages/portal/__tests__/SchedulePage.test.tsx" name="SchedulePage (Scheduling GUI) &gt; renders a fallback message when no schedule data exists" time="0.0258113">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/pages/portal/__tests__/ScheduleUtils.test.ts" timestamp="2025-11-14T14:20:58.893Z" hostname="DESKTOP-HT1O42S" tests="2" failures="0" errors="0" skipped="0" time="0.0035653">
+        <testcase classname="src/pages/portal/__tests__/ScheduleUtils.test.ts" name="scheduleTestUtils (Scheduling functionality) &gt; converts HH:mm strings into minutes" time="0.001598">
+        </testcase>
+        <testcase classname="src/pages/portal/__tests__/ScheduleUtils.test.ts" name="scheduleTestUtils (Scheduling functionality) &gt; formats ranges and hour labels for the timeline grid" time="0.0005643">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -443,3 +443,9 @@ const SchedulePage = () => {
 };
 
 export default SchedulePage;
+
+export const scheduleTestUtils = {
+  toMinutes,
+  formatRange,
+  formatHourLabel,
+};
