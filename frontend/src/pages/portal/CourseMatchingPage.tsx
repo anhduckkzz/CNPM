@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, Search, Sparkles, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import type { CourseCard, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
-import { toCourseSlug } from '../../utils/courseSlug';
+import { fetchPortalBundle } from '../../lib/api';
+import type { CourseCard, CourseDetailSection, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
+import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 import CourseArtwork from '../../components/CourseArtwork';
 import { getCourseCategory, getCourseStatus } from '../../utils/courseMatching';
@@ -28,6 +29,8 @@ const CourseMatchingPage = () => {
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
   const [aiStepIndex, setAiStepIndex] = useState(0);
   const [aiBarActive, setAiBarActive] = useState(0);
+  const tutorCoursesRef = useRef<Record<string, CourseDetailSection> | null>(null);
+  const tutorLoadPromise = useRef<Promise<void> | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const { toasts, showToast } = useStackedToasts(2400);
   const modalTarget = typeof document !== 'undefined' ? document.body : null;
@@ -40,6 +43,27 @@ const CourseMatchingPage = () => {
     setCourseHistory(data?.history ?? []);
     setRegisteredCourses(portal?.courses?.courses ?? []);
   }, [data?.history, portal?.courses?.courses]);
+
+  const loadTutorCourses = useCallback(async () => {
+    if (tutorCoursesRef.current) return tutorCoursesRef.current;
+    if (!tutorLoadPromise.current) {
+      tutorLoadPromise.current = fetchPortalBundle('tutor')
+        .then((bundle) => {
+          tutorCoursesRef.current = bundle.courseDetails ?? {};
+        })
+        .catch((error) => {
+          console.error('Failed to load tutor bundle', error);
+          tutorCoursesRef.current = {};
+        })
+        .finally(() => {
+          tutorLoadPromise.current = null;
+        });
+    }
+    if (tutorLoadPromise.current) {
+      await tutorLoadPromise.current;
+    }
+    return tutorCoursesRef.current ?? {};
+  }, []);
 
   const parseCapacity = (capacity?: string) => {
     if (!capacity) return null;
@@ -100,7 +124,12 @@ const CourseMatchingPage = () => {
     });
   }, [data.recommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
 
-  const persistCourses = async (nextHistory: CourseCard[], nextRegistered: RegisteredCourse[]) => {
+  const persistState = async (
+    nextHistory: CourseCard[],
+    nextRegistered: RegisteredCourse[],
+    courseDetailUpserts?: Record<string, CourseDetailSection>,
+    courseDetailRemovals?: string[],
+  ) => {
     if (!updatePortal) return;
     await updatePortal((prev) => {
       const nextCourseMatching = prev.courseMatching
@@ -116,13 +145,37 @@ const CourseMatchingPage = () => {
       const nextCourses = prev.courses
         ? { ...prev.courses, courses: nextRegistered }
         : { title: 'Courses', description: 'Your registered classes', courses: nextRegistered };
+
+      const nextCourseDetails = { ...(prev.courseDetails ?? {}) };
+      if (courseDetailUpserts) {
+        Object.entries(courseDetailUpserts).forEach(([id, detail]) => {
+          nextCourseDetails[id] = detail;
+        });
+      }
+      if (courseDetailRemovals?.length) {
+        courseDetailRemovals.forEach((id) => {
+          delete nextCourseDetails[id];
+        });
+      }
+
       return {
         ...prev,
         courseMatching: nextCourseMatching,
         courses: nextCourses,
+        courseDetails: nextCourseDetails,
       };
     });
   };
+
+  const syncTutorCourseDetail = useCallback(
+    async (courseId: string) => {
+      const tutorCourses = await loadTutorCourses();
+      const normalizedId = courseIdFromSlug(courseId);
+      if (!normalizedId) return undefined;
+      return tutorCourses[normalizedId];
+    },
+    [loadTutorCourses],
+  );
 
   const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string) => {
     const normalizedHistory = [...courseHistory];
@@ -154,9 +207,12 @@ const CourseMatchingPage = () => {
       normalizedRegistered[regIdx] = regEntry;
     }
 
+    const tutorDetail = await syncTutorCourseDetail(course.id);
+    const detailPatch = tutorDetail ? { [tutorDetail.courseId]: tutorDetail } : undefined;
+
     setCourseHistory(normalizedHistory);
     setRegisteredCourses(normalizedRegistered);
-    await persistCourses(normalizedHistory, normalizedRegistered);
+    await persistState(normalizedHistory, normalizedRegistered, detailPatch);
   };
 
   const handleRegisterClick = (course: CourseCard) => {
@@ -183,9 +239,10 @@ const CourseMatchingPage = () => {
     if (!confirmDelete) return;
     const nextHistory = courseHistory.filter((course) => course.id !== courseId);
     const nextRegistered = registeredCourses.filter((course) => course.id !== courseId);
+    const normalizedId = courseIdFromSlug(courseId);
     setCourseHistory(nextHistory);
     setRegisteredCourses(nextRegistered);
-    await persistCourses(nextHistory, nextRegistered);
+    await persistState(nextHistory, nextRegistered, undefined, normalizedId ? [normalizedId] : undefined);
     showToast('Registration cancelled.');
   };
 
@@ -226,7 +283,7 @@ const CourseMatchingPage = () => {
       });
     }, 380);
     timers.current.push(barInterval as unknown as ReturnType<typeof setTimeout>);
-    const finalizeTimer = setTimeout(() => {
+    const finalizeTimer = setTimeout(async () => {
       const slot = pickBestSlot(course);
       const normalizedFormat = slot?.format ?? course.format ?? 'Hybrid';
       const capacityLabel = slot?.capacity ?? course.capacity ?? 'TBD';
@@ -238,7 +295,7 @@ const CourseMatchingPage = () => {
         capacity: capacityLabel,
         badge: 'AI matched',
       };
-      upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor);
+      await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor);
       const sectionLabel = slot?.section ?? `${course.code} - best available section`;
       showToast(`AI matched you to ${sectionLabel}`);
       setAiAnalyzing(false);
