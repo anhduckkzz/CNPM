@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -39,6 +40,10 @@ BACKEND_DIR = Path(__file__).resolve().parents[1]
 IMAGES_DIR = BACKEND_DIR / 'static' / 'images'
 MATERIALS_DIR = BACKEND_DIR / 'static' / 'materials'
 PDF_DIR = BACKEND_DIR / 'static' / 'pdfs'
+
+# Ensure static directories exist before mounting/serving.
+MATERIALS_DIR.mkdir(parents=True, exist_ok=True)
+PDF_DIR.mkdir(parents=True, exist_ok=True)
 
 if IMAGES_DIR.exists():
     app.mount('/images', StaticFiles(directory=IMAGES_DIR), name='images')
@@ -80,6 +85,26 @@ def update_portal_bundle(role: str, bundle: Dict):
         raise HTTPException(status_code=404, detail='Role not supported')
     portal_service.update_bundle_for(role, bundle)
     return {'status': 'success', 'message': f'Bundle for {role} updated successfully.'}
+
+@app.post('/api/materials/upload')
+async def upload_material(file: UploadFile = File(...)):
+    if not file.filename:
+        raise HTTPException(status_code=400, detail='A file is required')
+
+    extension = Path(file.filename).suffix
+    safe_name = f'{uuid4().hex}{extension or ""}'
+    target_path = MATERIALS_DIR / safe_name
+
+    content = await file.read()
+    target_path.write_bytes(content)
+
+    return {
+        'status': 'success',
+        'filename': file.filename,
+        'stored_as': safe_name,
+        'url': f'/materials/{safe_name}',
+        'message': 'Material uploaded successfully.',
+    }
 
 @app.get('/pdfs/{file_path:path}')
 def serve_pdf(file_path: str):

@@ -12,18 +12,18 @@
                         "label": "Dashboard",
                         "path": "/portal/tutor/home"
                     },
-                {
-                    "label": "Course Registration",
-                    "path": "/portal/tutor/course-matching"
-                },
-                {
-                    "label": "Courses",
-                    "path": "/portal/tutor/courses"
-                },
-                {
-                    "label": "My Schedule",
-                    "path": "/portal/tutor/schedule"
-                },
+                    {
+                        "label": "Course Registration",
+                        "path": "/portal/tutor/course-matching"
+                    },
+                    {
+                        "label": "Courses",
+                        "path": "/portal/tutor/courses"
+                    },
+                    {
+                        "label": "My Schedule",
+                        "path": "/portal/tutor/schedule"
+                    },
                     {
                         "label": "Session Feedback",
                         "path": "/portal/tutor/tutor-feedback"
@@ -459,6 +459,16 @@
                     "title": "Advanced Calculus: Instructor Notes (TXT)",
                     "type": "sheet",
                     "url": "/materials/note.txt"
+                },
+                {
+                    "title": "Sample of Project Report.pdf",
+                    "type": "pdf",
+                    "url": "/materials/25623ca6333746f79b7bd9edd75b4b77.pdf"
+                },
+                {
+                    "title": "Project_03.pdf",
+                    "type": "pdf",
+                    "url": "/materials/aa7a65781f1c4578a071c70c64e02d77.pdf"
                 }
             ],
             "quizzes": [
@@ -474,13 +484,6 @@
                     "title": "Vector calculus warmup",
                     "category": "Advanced Calculus Module",
                     "date": "October 20, 2025 - 08:00 AM",
-                    "status": "Attempt Quiz"
-                },
-                {
-                    "id": "calc-quiz-3",
-                    "title": "Laplace transform sprint",
-                    "category": "Advanced Calculus Module",
-                    "date": "October 27, 2025 - 08:00 AM",
                     "status": "Attempt Quiz"
                 }
             ]
@@ -1174,7 +1177,7 @@
                 "course": "Cybersecurity Principles",
                 "grade": "D+",
                 "credits": 2,
-                "scale4": 2.0
+                "scale4": 2
             },
             {
                 "course": "Distributed Systems",

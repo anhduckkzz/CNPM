@@ -20,13 +20,18 @@ const JoinSessionPage = () => {
     return `https://zoom.us/j/${numeric}`;
   }, [session]);
 
+  const meetingUrl = useMemo(() => {
+    if (session?.link) return session.link;
+    return mockZoomUrl;
+  }, [mockZoomUrl, session?.link]);
+
   if (!course || !session || !role) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Session details unavailable.</div>;
   }
 
   const handleLaunch = () => {
     showToast('Launching Zoom meeting...');
-    window.open(mockZoomUrl, '_blank', 'noopener,noreferrer');
+    window.open(meetingUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleBack = () => {
@@ -70,7 +75,7 @@ const JoinSessionPage = () => {
               type="button"
               onClick={() => {
                 navigator.clipboard
-                  .writeText(mockZoomUrl)
+                  .writeText(meetingUrl)
                   .then(() => showToast('Copied meeting URL'))
                   .catch(() => showToast('Unable to copy link'));
               }}

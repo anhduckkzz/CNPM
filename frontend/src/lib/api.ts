@@ -30,3 +30,20 @@ export const updatePortalBundle = async (role: Role, bundle: PortalBundle) => {
   const { data } = await api.put(`/portal/${role}/bundle`, bundle);
   return data;
 };
+
+export interface MaterialUploadResponse {
+  status: string;
+  filename: string;
+  stored_as: string;
+  url: string;
+  message?: string;
+}
+
+export const uploadMaterialFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const { data } = await api.post<MaterialUploadResponse>('/materials/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return data;
+};

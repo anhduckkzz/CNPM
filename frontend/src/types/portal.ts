@@ -85,6 +85,8 @@ export interface CourseDetailSection {
     date: string;
     time: string;
     cta: string;
+    link?: string;
+    description?: string;
   }>;
   materials: Array<{
     title: string;
@@ -97,6 +99,15 @@ export interface CourseDetailSection {
     category: string;
     date: string;
     status: string;
+    startDate?: string;
+    endDate?: string;
+    duration?: string;
+    questions?: Array<{
+      id: string;
+      prompt: string;
+      choices: string[];
+      correctAnswer: number;
+    }>;
   }>;
 }
 

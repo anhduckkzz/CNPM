@@ -50,7 +50,8 @@ class PortalRepository:
         self.save_bundle(role)
 
     def save_bundle(self, role: Role) -> None:
-        data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+        data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
+        os.makedirs(os.path.join(data_dir, role), exist_ok=True)
         json_path = os.path.join(data_dir, role, f'{role}@hcmut.edu.vn.json')
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(self._bundles[role], f, indent=4, ensure_ascii=False)

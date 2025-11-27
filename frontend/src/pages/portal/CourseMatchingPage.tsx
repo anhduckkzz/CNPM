@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { CheckCircle2, Search, Sparkles, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import type { CourseCard, CourseMatchingSection } from '../../types/portal';
+import type { CourseCard, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
 import { toCourseSlug } from '../../utils/courseSlug';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 import CourseArtwork from '../../components/CourseArtwork';
@@ -14,7 +14,7 @@ const AI_STEPS = ['Scanning availability & capacity', 'Matching preferred format
 const AI_BAR_COUNT = 6;
 
 const CourseMatchingPage = () => {
-  const { portal, role } = useAuth();
+  const { portal, role, updatePortal } = useAuth();
   const navigate = useNavigate();
   const data = portal?.courseMatching;
   const isStudentView = role === 'student';
@@ -24,6 +24,7 @@ const CourseMatchingPage = () => {
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [modalCourse, setModalCourse] = useState<CourseCard | null>(null);
   const [courseHistory, setCourseHistory] = useState<CourseCard[]>(data?.history ?? []);
+  const [registeredCourses, setRegisteredCourses] = useState<RegisteredCourse[]>(portal?.courses?.courses ?? []);
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
   const [aiStepIndex, setAiStepIndex] = useState(0);
   const [aiBarActive, setAiBarActive] = useState(0);
@@ -34,6 +35,11 @@ const CourseMatchingPage = () => {
   if (!data) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Course matching data unavailable.</div>;
   }
+
+  useEffect(() => {
+    setCourseHistory(data?.history ?? []);
+    setRegisteredCourses(portal?.courses?.courses ?? []);
+  }, [data?.history, portal?.courses?.courses]);
 
   const parseCapacity = (capacity?: string) => {
     if (!capacity) return null;
@@ -94,19 +100,72 @@ const CourseMatchingPage = () => {
     });
   }, [data.recommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
 
+  const persistCourses = async (nextHistory: CourseCard[], nextRegistered: RegisteredCourse[]) => {
+    if (!updatePortal) return;
+    await updatePortal((prev) => {
+      const nextCourseMatching = prev.courseMatching
+        ? { ...prev.courseMatching, history: nextHistory }
+        : {
+            title: 'Course Matching',
+            description: 'Registered and available courses',
+            filters: [],
+            recommended: [],
+            history: nextHistory,
+            modal: { focusCourseId: '', slots: [] },
+          };
+      const nextCourses = prev.courses
+        ? { ...prev.courses, courses: nextRegistered }
+        : { title: 'Courses', description: 'Your registered classes', courses: nextRegistered };
+      return {
+        ...prev,
+        courseMatching: nextCourseMatching,
+        courses: nextCourses,
+      };
+    });
+  };
+
+  const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string) => {
+    const normalizedHistory = [...courseHistory];
+    const idx = normalizedHistory.findIndex((item) => item.id === course.id);
+    const historyEntry: CourseCard = {
+      ...course,
+      actionLabel: isStudentView ? 'Go To Your Course' : 'Manage Your Course',
+      tutor: tutor ?? (isStudentView ? 'Assigned soon' : 'You'),
+      format,
+      badge: badge ?? course.badge,
+    };
+    if (idx === -1) {
+      normalizedHistory.push(historyEntry);
+    } else {
+      normalizedHistory[idx] = { ...normalizedHistory[idx], ...historyEntry };
+    }
+
+    const normalizedRegistered = [...registeredCourses];
+    const regIdx = normalizedRegistered.findIndex((item) => item.id === course.id);
+    const regEntry: RegisteredCourse = {
+      id: course.id,
+      title: course.title,
+      code: course.code,
+      thumbnail: course.thumbnail ?? '',
+    };
+    if (regIdx === -1) {
+      normalizedRegistered.push(regEntry);
+    } else {
+      normalizedRegistered[regIdx] = regEntry;
+    }
+
+    setCourseHistory(normalizedHistory);
+    setRegisteredCourses(normalizedRegistered);
+    await persistCourses(normalizedHistory, normalizedRegistered);
+  };
+
   const handleRegisterClick = (course: CourseCard) => {
     setModalCourse(course);
   };
 
-  const handleFormatChoice = (format: string) => {
+  const handleFormatChoice = async (format: string) => {
     if (!modalCourse) return;
-    const alreadyRegistered = courseHistory.some((entry) => entry.id === modalCourse.id);
-    if (!alreadyRegistered) {
-      setCourseHistory((prev) => [
-        ...prev,
-        { ...modalCourse, actionLabel: 'Manage Your Course', tutor: 'You', format },
-      ]);
-    }
+    await upsertRegistration(modalCourse, format);
     setModalCourse(null);
     showToast(`Registered ${modalCourse.title} in ${format}`);
   };
@@ -119,8 +178,23 @@ const CourseMatchingPage = () => {
     navigate(targetPath);
   };
 
-  const handleCancelCourse = (courseId: string) => {
-    setCourseHistory((prev) => prev.filter((course) => course.id !== courseId));
+  const handleCancelCourse = async (courseId: string) => {
+    const confirmDelete = window.confirm('Remove this registration?');
+    if (!confirmDelete) return;
+    const nextHistory = courseHistory.filter((course) => course.id !== courseId);
+    const nextRegistered = registeredCourses.filter((course) => course.id !== courseId);
+    setCourseHistory(nextHistory);
+    setRegisteredCourses(nextRegistered);
+    await persistCourses(nextHistory, nextRegistered);
+    showToast('Registration cancelled.');
+  };
+
+  const handleEditCourse = async (course: CourseCard) => {
+    const currentFormat = course.format ?? 'Hybrid';
+    const newFormat = window.prompt('Update format (e.g., In-person, Blended, Online)', currentFormat);
+    if (!newFormat) return;
+    await upsertRegistration({ ...course, format: newFormat }, newFormat, course.badge, course.tutor);
+    showToast('Registration updated.');
   };
 
   const clearTimers = () => {
@@ -164,15 +238,7 @@ const CourseMatchingPage = () => {
         capacity: capacityLabel,
         badge: 'AI matched',
       };
-      setCourseHistory((prev) => {
-        const existingIndex = prev.findIndex((entry) => entry.id === course.id);
-        if (existingIndex !== -1) {
-          const copy = [...prev];
-          copy[existingIndex] = { ...copy[existingIndex], ...updatedEntry };
-          return copy;
-        }
-        return [...prev, updatedEntry];
-      });
+      upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor);
       const sectionLabel = slot?.section ?? `${course.code} - best available section`;
       showToast(`AI matched you to ${sectionLabel}`);
       setAiAnalyzing(false);
@@ -338,6 +404,13 @@ const CourseMatchingPage = () => {
                     className="rounded-full border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
                   >
                     Cancel Course
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleEditCourse(course)}
+                    className="rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-primary/40 hover:text-primary"
+                  >
+                    Edit
                   </button>
                 </div>
               </article>
