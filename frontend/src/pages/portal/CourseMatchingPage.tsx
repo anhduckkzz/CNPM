@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, Search, Sparkles, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { fetchPortalBundle } from '../../lib/api';
 import type { CourseCard, CourseDetailSection, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
-import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
+import { courseIdFromSlug } from '../../utils/courseSlug';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 import CourseArtwork from '../../components/CourseArtwork';
 import { getCourseCategory, getCourseStatus } from '../../utils/courseMatching';
@@ -16,7 +15,6 @@ const AI_BAR_COUNT = 6;
 
 const CourseMatchingPage = () => {
   const { portal, role, updatePortal } = useAuth();
-  const navigate = useNavigate();
   const data = portal?.courseMatching;
   const isStudentView = role === 'student';
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,6 +41,11 @@ const CourseMatchingPage = () => {
     setCourseHistory(data?.history ?? []);
     setRegisteredCourses(portal?.courses?.courses ?? []);
   }, [data?.history, portal?.courses?.courses]);
+
+  const availableRecommended = useMemo(() => {
+    const registeredIds = new Set(registeredCourses.map((course) => course.id));
+    return (data.recommended ?? []).filter((course) => !registeredIds.has(course.id));
+  }, [data.recommended, registeredCourses]);
 
   const loadTutorCourses = useCallback(async () => {
     if (tutorCoursesRef.current) return tutorCoursesRef.current;
@@ -96,22 +99,22 @@ const CourseMatchingPage = () => {
   };
 
   const formatOptions = useMemo(() => {
-    const unique = Array.from(new Set((data.recommended ?? []).map((course) => course.format ?? 'Hybrid')));
+    const unique = Array.from(new Set(availableRecommended.map((course) => course.format ?? 'Hybrid')));
     return ['All Formats', ...unique];
-  }, [data.recommended]);
+  }, [availableRecommended]);
 
   const categoryOptions = useMemo(() => {
-    const unique = Array.from(new Set((data.recommended ?? []).map((course) => getCourseCategory(course))));
+    const unique = Array.from(new Set(availableRecommended.map((course) => getCourseCategory(course))));
     return ['All Categories', ...unique];
-  }, [data.recommended]);
+  }, [availableRecommended]);
 
   const statusOptions = useMemo(() => {
-    const unique = Array.from(new Set((data.recommended ?? []).map((course) => getCourseStatus(course).label)));
+    const unique = Array.from(new Set(availableRecommended.map((course) => getCourseStatus(course).label)));
     return ['All Statuses', ...unique];
-  }, [data.recommended]);
+  }, [availableRecommended]);
 
   const filteredCourses = useMemo(() => {
-    return (data.recommended ?? []).filter((course) => {
+    return availableRecommended.filter((course) => {
       const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.code.toLowerCase().includes(searchTerm.toLowerCase());
@@ -122,7 +125,7 @@ const CourseMatchingPage = () => {
       const matchesStatus = statusFilter === 'All Statuses' || courseStatus.label === statusFilter;
       return matchesSearch && matchesFormat && matchesCategory && matchesStatus;
     });
-  }, [data.recommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
+  }, [availableRecommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
 
   const persistState = async (
     nextHistory: CourseCard[],
@@ -224,34 +227,6 @@ const CourseMatchingPage = () => {
     await upsertRegistration(modalCourse, format);
     setModalCourse(null);
     showToast(`Registered ${modalCourse.title} in ${format}`);
-  };
-
-  const handleManageCourse = (courseId: string) => {
-    if (!role) return;
-    const slug = toCourseSlug(courseId) ?? courseId;
-    const targetPath =
-      role === 'student' ? `/portal/${role}/course-detail/${slug}` : `/portal/${role}/course-admin/${slug}`;
-    navigate(targetPath);
-  };
-
-  const handleCancelCourse = async (courseId: string) => {
-    const confirmDelete = window.confirm('Remove this registration?');
-    if (!confirmDelete) return;
-    const nextHistory = courseHistory.filter((course) => course.id !== courseId);
-    const nextRegistered = registeredCourses.filter((course) => course.id !== courseId);
-    const normalizedId = courseIdFromSlug(courseId);
-    setCourseHistory(nextHistory);
-    setRegisteredCourses(nextRegistered);
-    await persistState(nextHistory, nextRegistered, undefined, normalizedId ? [normalizedId] : undefined);
-    showToast('Registration cancelled.');
-  };
-
-  const handleEditCourse = async (course: CourseCard) => {
-    const currentFormat = course.format ?? 'Hybrid';
-    const newFormat = window.prompt('Update format (e.g., In-person, Blended, Online)', currentFormat);
-    if (!newFormat) return;
-    await upsertRegistration({ ...course, format: newFormat }, newFormat, course.badge, course.tutor);
-    showToast('Registration updated.');
   };
 
   const clearTimers = () => {
@@ -419,67 +394,6 @@ const CourseMatchingPage = () => {
             );
           })}
         </div>
-      </section>
-
-      <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Courses History</p>
-            <h2 className="text-xl font-semibold text-ink">Manage the classes you already support</h2>
-          </div>
-          <span className="rounded-full bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            {courseHistory.length} active
-          </span>
-        </div>
-        {courseHistory.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {courseHistory.map((course) => (
-              <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
-                <div className="flex flex-col gap-1">
-                  {course.badge && (
-                    <span className="self-start rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
-                      {course.badge}
-                    </span>
-                  )}
-                  <p className="text-lg font-semibold text-ink">{course.title}</p>
-                  <p className="text-sm text-slate-500">
-                    Format: {course.format ?? 'Hybrid'} | Capacity: {course.capacity ?? 'TBD'}
-                  </p>
-                  <p className="text-xs text-slate-400">Tutor: {course.tutor ?? (isStudentView ? 'Assigned soon' : 'You')}</p>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={() => handleManageCourse(course.id)}
-                    className="flex-1 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
-                  >
-                    {course.actionLabel ?? (isStudentView ? 'Go To Your Course' : 'Manage Your Course')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCancelCourse(course.id)}
-                    className="rounded-full border border-rose-200 px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
-                  >
-                    Cancel Course
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleEditCourse(course)}
-                    className="rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-primary/40 hover:text-primary"
-                  >
-                    Edit
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-3xl border border-dashed border-slate-200 p-10 text-center text-slate-500">
-            {isStudentView
-              ? 'You have not registered for any courses yet. Use Register or AI Auto-match to secure a section.'
-              : 'You haven\'t registered to tutor any courses yet. Once you confirm a teaching format, they will appear here.'}
-          </div>
-        )}
       </section>
 
       {modalCourse &&
