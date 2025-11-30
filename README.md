@@ -72,41 +72,50 @@ api/       # Thin adapter so the FastAPI app can run as a Vercel Python function
 ```
 
 ### Folder Structure
-
 ```
 CNPM/
-|-- README.md
-|-- api/
-|   `-- index.py                # Re-exports backend FastAPI app for Vercel
-|-- backend/
-|   |-- requirements.txt
-|   `-- app/
-|       |-- main.py             # FastAPI bootstrap + routers
-|       |-- models/             # Pydantic schemas
-|       |-- repositories/       # In-memory data providers
-|       `-- services/           # Domain logic (auth, bundles, etc.)
-|-- frontend/
-|   |-- package.json
-|   |-- public/                 # Static assets (logos, syllabus, etc.)
-|   `-- src/
-|       |-- assets/
-|       |-- components/
-|       |-- context/
-|       |-- hooks/
-|       |-- layouts/
-|       |-- lib/
-|       |-- pages/
-|       |   |-- portal/         # Student/Tutor/Staff pages
-|       |   `-- public/         # SSO landing, CAS login, etc.
-|       `-- types/
-|-- Staff View/                 # PNG exports for staff mockups
-|-- Student View/               # PNG exports for student mockups
-`-- Tutor View/                 # PNG exports for tutor mockups
+├── README.md                  # Project overview and documentation
+├── stress_test.js             # k6 script for performance/load testing
+├── testcase.json              # Data-driven test cases (likely for API testing)
+|
+├── api/                       # Serverless functions for Vercel deployment
+│   └── index.py               # Entry point for backend API on Vercel
+|
+├── backend/                   # Python FastAPI Backend Application
+│   ├── app/                   # Main FastAPI application source code
+│   │   ├── main.py            # FastAPI application entry point, defines routes and middleware
+│   │   ├── models/            # Pydantic models for data structures
+│   │   ├── repositories/      # Data access layer
+│   │   └── services/          # Business logic layer
+│   ├── data/                  # Mock data for different user roles
+│   └── static/                # Static files served by the backend
+│       ├── images/            # Project images
+│       ├── materials/         # Uploaded course materials
+│       └── pdfs/              # Pre-defined PDF documents
+|
+├── frontend/                  # React.js Frontend Application
+│   ├── public/                # Static assets served directly
+│   └── src/                   # React source code
+│       ├── App.tsx            # Main React application component
+│       ├── main.tsx           # Entry point for React app
+│       ├── components/        # Reusable UI components
+│       ├── context/           # React Context for global state management
+│       ├── hooks/             # Custom React hooks
+│       ├── layouts/           # Page layouts
+│       ├── lib/               # Utility functions, API client setup
+│       ├── models/            # Frontend data models/interfaces
+│       ├── pages/             # Page-level components, grouped by sections
+│       │   ├── portal/
+│       │   └── public/
+│       ├── types/             # TypeScript type definitions
+│       └── utils/             # General utility functions
+|
+├── Staff View/                # Screenshots/documentation for Staff View
+├── Student View/              # Screenshots/documentation for Student View
+└── Tutor View/                # Screenshots/documentation for Tutor View
 ```
-
 The Visily exports in `Staff View`, `Student View`, and `Tutor View` guided the UI build; each screen in `frontend/src/pages/portal` maps directly to those mockups.
 
----
 
 ## Prerequisites
 

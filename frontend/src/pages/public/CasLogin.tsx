@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { Role } from '../../types/portal';
 import { Coffee } from 'lucide-react';
-import wakeBackground from '../../assets/server-wake.svg';
 
 const CasLogin = () => {
   const { login } = useAuth();
@@ -165,18 +164,51 @@ const CasLogin = () => {
         Ac {new Date().getFullYear()} Ho Chi Minh University of Technology. All rights reserved.
       </footer>
       {showWakeNotice && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl shadow-xl">
-            <div
-              className="absolute inset-0 opacity-90"
-              style={{ backgroundImage: `url(${wakeBackground})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-            />
-            <div className="relative flex flex-col items-center gap-3 px-6 py-6 text-center text-slate-700">
-              <Coffee className="h-10 w-10 text-primary" />
-              <p className="text-lg font-semibold text-ink">Waking up the server...</p>
-              <p className="text-sm font-medium text-slate-800">
-                The host is spinning up, please stay on this page and we will sign you in shortly.
-              </p>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-sm mx-4 overflow-hidden rounded-2xl bg-white shadow-2xl">
+            {/* Header with friendly gradient */}
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
+              <div className="flex items-center justify-center gap-2">
+                <div className="relative">
+                  <Coffee className="h-8 w-8 text-white" />
+                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-400"></span>
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold text-white">Almost there!</h2>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="px-6 py-5">
+              <div className="flex flex-col items-center gap-4">
+                {/* Animated loader */}
+                <div className="flex items-center gap-1">
+                  <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+                
+                <div className="text-center">
+                  <p className="text-lg font-semibold text-gray-800 mb-2">
+                    Waking up the server ☕
+                  </p>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Our server is starting up after a rest. This usually takes just a few seconds.
+                  </p>
+                </div>
+                
+                {/* Reassurance message */}
+                <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 w-full">
+                  <svg className="h-5 w-5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-xs text-blue-700">
+                    Don't worry! Please stay on this page — you'll be signed in automatically.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
