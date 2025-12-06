@@ -157,6 +157,26 @@ const CasLogin = () => {
               <p>Email: support@hcmut.edu.vn</p>
               <p>Tel: (84-8) 38647256 - 7204</p>
             </section>
+            <section className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
+              <p className="font-semibold text-emerald-700 mb-2">Demo Login Credentials</p>
+              <div className="space-y-2 text-slate-700">
+                <div>
+                  <p className="font-medium text-emerald-600">Student:</p>
+                  <p className="ml-2">Email: student@hcmut.edu.vn</p>
+                  <p className="ml-2">Password: 12345678</p>
+                </div>
+                <div>
+                  <p className="font-medium text-emerald-600">Tutor:</p>
+                  <p className="ml-2">Email: tutor@hcmut.edu.vn</p>
+                  <p className="ml-2">Password: (any password)</p>
+                </div>
+                <div>
+                  <p className="font-medium text-emerald-600">Staff:</p>
+                  <p className="ml-2">Email: staff@hcmut.edu.vn</p>
+                  <p className="ml-2">Password: (any password)</p>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
