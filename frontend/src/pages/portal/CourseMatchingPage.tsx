@@ -620,28 +620,14 @@ const CourseMatchingPage = () => {
                 : courseStatus.label === 'Limited Seats'
                   ? 'bg-amber-100 text-amber-700'
                   : 'bg-rose-100 text-rose-700';
-            const capacityLabel = courseStatus.capacity
-              ? `${courseStatus.capacity.current}/${courseStatus.capacity.total} seats`
-              : course.capacity ?? 'TBD';
             return (
               <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
                 <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
                 <div className="mt-4 flex-1 space-y-1">
                   <p className="text-lg font-semibold text-ink leading-snug">{course.title}</p>
                   <p className="text-sm text-slate-500">
-                    Course ID: {course.code} | Format: {course.format ?? 'Hybrid'}
+                    Course ID: {course.code}
                   </p>
-                  {course.instructor && (
-                    <p className="text-sm text-slate-600">
-                      <span className="font-medium">Instructor:</span> {course.instructor}
-                    </p>
-                  )}
-                  {course.schedule && (
-                    <p className="text-xs text-slate-500">
-                      <span className="font-medium">Schedule:</span> {course.schedule}
-                    </p>
-                  )}
-                  <p className="text-xs text-slate-400">Capacity: {capacityLabel}</p>
                   <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
                     <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{courseCategory}</span>
                     <span className={`rounded-full px-3 py-1 ${statusAccent}`}>{courseStatus.label}</span>

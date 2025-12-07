@@ -118,7 +118,34 @@ const PortalLayout = () => {
         title: 'Courses',
         description: 'Your registered classes for this semester.',
         courses: defaultCourses as any
-      }
+      },
+      courseMatching: {
+        ...(prev.courseMatching || {}),
+        recommended: role === 'student' ? [
+          {
+            id: 'c-digital-signal',
+            title: 'Digital Signal Processing',
+            code: 'CO3002',
+            format: 'Blended',
+            capacity: '47/70',
+            thumbnail: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+            actionLabel: 'Register Course',
+            instructor: 'Dr. Võ Văn I',
+            schedule: 'Tue, Thu 10:00-12:00'
+          },
+          {
+            id: 'c-machine-learning',
+            title: 'Machine Learning Fundamentals',
+            code: 'CS4001',
+            format: 'Online',
+            capacity: '55/80',
+            thumbnail: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80',
+            actionLabel: 'Register Course',
+            instructor: 'Dr. Trần Văn J',
+            schedule: 'Mon, Wed 14:00-16:00'
+          }
+        ] : (prev.courseMatching?.recommended || [])
+      } as any
     }));
 
     window.location.reload();

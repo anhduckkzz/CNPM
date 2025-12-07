@@ -141,17 +141,6 @@
                 "schedule": "Mon 15:00-17:00"
             },
             {
-                "id": "c-digital-signal",
-                "title": "Digital Signal Processing",
-                "code": "CO3002",
-                "format": "Blended",
-                "capacity": "47/70",
-                "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Course",
-                "instructor": "Dr. Võ Văn I",
-                "schedule": "Tue, Thu 10:00-12:00"
-            },
-            {
                 "id": "c-cellular-biology",
                 "title": "Cellular Biology",
                 "code": "BI3002",
@@ -236,13 +225,13 @@
                 "id": "c-digital-signal",
                 "title": "Digital Signal Processing",
                 "code": "CO3002",
-                "format": "Online",
-                "capacity": "47/70",
+                "format": "In-person",
+                "capacity": "0/100",
                 "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Go To Your Course",
-                "tutor": "Nguyễn Văn Bình",
-                "instructor": "Dr. Võ Văn I",
-                "schedule": "Tue, Thu 10:00-12:00"
+                "tutor": "Nguyễn Văn Dũng",
+                "instructor": "Nguyễn Văn Cường",
+                "schedule": "Thu 12:00-14:00"
             },
             {
                 "id": "c-web-development",
@@ -282,7 +271,7 @@
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "format": "In-person",
                 "capacity": "38/100",
-                "tutor": "Nguyễn Văn Cường",
+                "tutor": "Nguyễn Văn Dũng",
                 "tags": [
                     "CLOUD"
                 ],
@@ -406,6 +395,17 @@
                 "instructor": "Prof. Vũ Thị F",
                 "format": "In-person",
                 "schedule": "Mon, Wed 13:00-15:00"
+            },
+            {
+                "id": "c-devops-kubernetes",
+                "title": "DevOps & Kubernetes",
+                "code": "CS4010",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-07",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "schedule": "Fri 14:00-16:00"
             }
         ]
     },

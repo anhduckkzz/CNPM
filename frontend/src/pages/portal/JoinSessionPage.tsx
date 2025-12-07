@@ -99,7 +99,6 @@ const JoinSessionPage = () => {
             <li>Ensure your Zoom desktop or mobile client is signed in before joining.</li>
             <li>Use a headset and enable a quiet environment for clearer participation.</li>
             <li>Keep the chat monitored for attendance prompts from your tutor.</li>
-            <li>This mock integration forwards you to Zoom; no real API calls are made.</li>
           </ul>
         </section>
       </div>
