@@ -60,12 +60,25 @@ export interface CourseCard {
   schedule?: string;
 }
 
+export interface StudentHistory {
+  id: string;
+  studentId: string;
+  studentName: string;
+  email: string;
+  courseTitle: string;
+  courseCode: string;
+  registeredDate: string;
+  status: 'active' | 'completed' | 'dropped';
+  gpa: string;
+}
+
 export interface CourseMatchingSection {
   title: string;
   description: string;
   filters: string[];
   recommended: CourseCard[];
   history: CourseCard[];
+  studentHistory?: StudentHistory[];
   registrationResults?: Array<{
     id: string;
     title: string;

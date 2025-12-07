@@ -101,11 +101,6 @@ const CourseMatchingPage = () => {
   const { portal, role, updatePortal } = useAuth();
   const data = portal?.courseMatching;
   const isStudentView = role === 'student';
-  const [searchTerm, setSearchTerm] = useState('');
-  const [formatFilter, setFormatFilter] = useState('All Formats');
-  const [categoryFilter, setCategoryFilter] = useState('All Categories');
-  const [statusFilter, setStatusFilter] = useState('All Statuses');
-  const [tagFilter, setTagFilter] = useState('All Tags');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarSearch, setSidebarSearch] = useState('');
   const [modalCourse, setModalCourse] = useState<CourseCard | null>(null);
@@ -132,13 +127,26 @@ const CourseMatchingPage = () => {
     setRegisteredCourses(coursesWithStatus);
   }, [data?.history, portal?.courses?.courses]);
 
-  // Load all available courses from tutor bundle
+  // Load all available courses from courseRegistry (all 16 courses for sidebar)
   useEffect(() => {
     const loadAllCourses = async () => {
       try {
-        const bundle = await fetchPortalBundle('tutor');
-        const tutorCourses = bundle.courses?.courses ?? [];
-        setAllAvailableCourses(tutorCourses as CourseCard[]);
+        const response = await fetch('/data/courseRegistry.json');
+        const data = await response.json();
+        const allCourses = data.courseRegistry?.map((course: any) => ({
+          id: course.id,
+          title: course.title,
+          code: course.code,
+          thumbnail: course.thumbnail,
+          format: course.format || 'Hybrid',
+          capacity: `${course.capacity || 0}/100`,
+          tutor: course.tutor,
+          tags: course.tags,
+          actionLabel: 'Register',
+          badge: '',
+          accent: '',
+        })) ?? [];
+        setAllAvailableCourses(allCourses);
       } catch (error) {
         console.error('Failed to load all courses', error);
       }
@@ -207,48 +215,6 @@ const CourseMatchingPage = () => {
     })[0];
   };
 
-  const formatOptions = useMemo(() => {
-    const unique = Array.from(new Set(availableRecommended.map((course) => course.format ?? 'Hybrid')));
-    return ['All Formats', ...unique];
-  }, [availableRecommended]);
-
-  const categoryOptions = useMemo(() => {
-    const unique = Array.from(new Set(availableRecommended.map((course) => getCourseCategory(course))));
-    return ['All Categories', ...unique];
-  }, [availableRecommended]);
-
-  const statusOptions = useMemo(() => {
-    const unique = Array.from(new Set(availableRecommended.map((course) => getCourseStatus(course).label)));
-    return ['All Statuses', ...unique];
-  }, [availableRecommended]);
-
-  const tagOptions = useMemo(() => {
-    const allTags = new Set<string>();
-    availableRecommended.forEach((course) => {
-      if (course.tags && Array.isArray(course.tags)) {
-        course.tags.forEach((tag) => allTags.add(tag));
-      }
-    });
-    return ['All Tags', ...Array.from(allTags).sort()];
-  }, [availableRecommended]);
-
-  const filteredCourses = useMemo(() => {
-    return availableRecommended.filter((course) => {
-      const matchesSearch =
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.code.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFormat = formatFilter === 'All Formats' || course.format === formatFilter;
-      const courseCategory = getCourseCategory(course);
-      const matchesCategory = categoryFilter === 'All Categories' || courseCategory === categoryFilter;
-      const courseStatus = getCourseStatus(course);
-      const matchesStatus = statusFilter === 'All Statuses' || courseStatus.label === statusFilter;
-      const matchesTag = 
-        tagFilter === 'All Tags' || 
-        (course.tags && Array.isArray(course.tags) && course.tags.includes(tagFilter));
-      return matchesSearch && matchesFormat && matchesCategory && matchesStatus && matchesTag;
-    });
-  }, [availableRecommended, formatFilter, categoryFilter, statusFilter, tagFilter, searchTerm]);
-
   const sidebarFilteredCourses = useMemo(() => {
     return allAvailableCourses.filter((course) => {
       const matchesSearch =
@@ -269,7 +235,7 @@ const CourseMatchingPage = () => {
       const nextCourseMatching = prev.courseMatching
         ? { ...prev.courseMatching, history: nextHistory }
         : {
-            title: 'Course Matching',
+            title: 'Course Registration',
             description: 'Registered and available courses',
             filters: [],
             recommended: [],
@@ -466,62 +432,6 @@ const CourseMatchingPage = () => {
               </p>
             )}
           </div>
-          <div className="grid gap-4 md:grid-cols-5">
-            <label className="relative flex items-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500">
-              <Search className="mr-2 h-4 w-4 text-slate-400" />
-              <input
-                type="search"
-                placeholder="Search for courses..."
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="w-full bg-transparent text-sm focus:outline-none"
-              />
-            </label>
-            <select
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
-              value={formatFilter}
-              onChange={(event) => setFormatFilter(event.target.value)}
-            >
-              {formatOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <select
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
-              value={categoryFilter}
-              onChange={(event) => setCategoryFilter(event.target.value)}
-            >
-              {categoryOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <select
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
-              value={statusFilter}
-              onChange={(event) => setStatusFilter(event.target.value)}
-            >
-              {statusOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <select
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
-              value={tagFilter}
-              onChange={(event) => setTagFilter(event.target.value)}
-            >
-              {tagOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       </header>
 
@@ -535,11 +445,11 @@ const CourseMatchingPage = () => {
             </h2>
           </div>
           <span className="rounded-full bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-            {filteredCourses.length} courses
+            {availableRecommended.length} courses
           </span>
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredCourses.map((course) => {
+          {availableRecommended.map((course) => {
             const courseCategory = getCourseCategory(course);
             const courseStatus = getCourseStatus(course);
             const statusAccent =
@@ -660,6 +570,82 @@ const CourseMatchingPage = () => {
                       )}
                       <td className="py-4">
                         <p className="text-sm text-slate-600">{course.registeredDate || 'N/A'}</p>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {!isStudentView && data?.studentHistory && data.studentHistory.length > 0 && (
+        <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Student Management</p>
+            <h2 className="text-xl font-semibold text-ink">
+              Student Registration History
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Track all students registered in your courses with their academic performance
+            </p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Student Name</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Student ID</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Email</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Course</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Status</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">GPA</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.studentHistory.map((student, index) => {
+                  const statusConfigs: Record<string, { label: string; class: string }> = {
+                    'active': { label: 'Active', class: 'bg-blue-50 text-blue-700' },
+                    'completed': { label: 'Completed', class: 'bg-emerald-50 text-emerald-700' },
+                    'dropped': { label: 'Dropped', class: 'bg-red-50 text-red-700' },
+                  };
+                  const config = statusConfigs[student.status] || { label: student.status, class: 'bg-slate-50 text-slate-700' };
+                  
+                  return (
+                    <tr
+                      key={student.id}
+                      className={`border-b border-slate-50 transition hover:bg-slate-50 ${
+                        index === data.studentHistory!.length - 1 ? 'border-b-0' : ''
+                      }`}
+                    >
+                      <td className="py-4">
+                        <p className="font-medium text-ink">{student.studentName}</p>
+                      </td>
+                      <td className="py-4">
+                        <p className="text-sm text-slate-600">{student.studentId}</p>
+                      </td>
+                      <td className="py-4">
+                        <p className="text-sm text-slate-600">{student.email}</p>
+                      </td>
+                      <td className="py-4">
+                        <div>
+                          <p className="font-medium text-ink">{student.courseTitle}</p>
+                          <p className="text-xs text-slate-500">{student.courseCode}</p>
+                        </div>
+                      </td>
+                      <td className="py-4">
+                        <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.class}`}>
+                          {config.label}
+                        </span>
+                      </td>
+                      <td className="py-4">
+                        <p className="text-sm font-semibold text-ink">{student.gpa}</p>
+                      </td>
+                      <td className="py-4">
+                        <p className="text-sm text-slate-600">{student.registeredDate}</p>
                       </td>
                     </tr>
                   );

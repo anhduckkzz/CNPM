@@ -226,7 +226,97 @@
                     "cta": "Register Course"
                 }
             ]
-        }
+        },
+        "studentHistory": [
+            {
+                "id": "stu-001",
+                "studentId": "2110001",
+                "studentName": "Trần Thị Anh",
+                "email": "anh.tran@student.hcmut.edu.vn",
+                "courseTitle": "Introduction to Programming",
+                "courseCode": "CO1002",
+                "registeredDate": "2025-12-02",
+                "status": "active",
+                "gpa": "3.8"
+            },
+            {
+                "id": "stu-002",
+                "studentId": "2110045",
+                "studentName": "Phạm Minh Đức",
+                "email": "duc.pham@student.hcmut.edu.vn",
+                "courseTitle": "Introduction to Programming",
+                "courseCode": "CO1002",
+                "registeredDate": "2025-12-02",
+                "status": "active",
+                "gpa": "3.5"
+            },
+            {
+                "id": "stu-003",
+                "studentId": "2110089",
+                "studentName": "Lê Hoàng Vân",
+                "email": "van.le@student.hcmut.edu.vn",
+                "courseTitle": "Advanced Calculus",
+                "courseCode": "M1T003",
+                "registeredDate": "2025-12-03",
+                "status": "active",
+                "gpa": "3.9"
+            },
+            {
+                "id": "stu-004",
+                "studentId": "2110120",
+                "studentName": "Nguyễn Quốc Huy",
+                "email": "huy.nguyen@student.hcmut.edu.vn",
+                "courseTitle": "Advanced Calculus",
+                "courseCode": "M1T003",
+                "registeredDate": "2025-12-03",
+                "status": "active",
+                "gpa": "3.7"
+            },
+            {
+                "id": "stu-005",
+                "studentId": "2110156",
+                "studentName": "Võ Thị Lệ Quyên",
+                "email": "quyen.vo@student.hcmut.edu.vn",
+                "courseTitle": "Data Structures and Algorithms",
+                "courseCode": "CO2002",
+                "registeredDate": "2025-12-06",
+                "status": "active",
+                "gpa": "3.6"
+            },
+            {
+                "id": "stu-006",
+                "studentId": "2110201",
+                "studentName": "Bùi Khánh Linh",
+                "email": "linh.bui@student.hcmut.edu.vn",
+                "courseTitle": "Data Structures and Algorithms",
+                "courseCode": "CO2002",
+                "registeredDate": "2025-12-06",
+                "status": "active",
+                "gpa": "3.4"
+            },
+            {
+                "id": "stu-007",
+                "studentId": "2110267",
+                "studentName": "Đinh Phong Nhi",
+                "email": "nhi.dinh@student.hcmut.edu.vn",
+                "courseTitle": "Web Development Advanced Topics",
+                "courseCode": "CS3050",
+                "registeredDate": "2025-12-08",
+                "status": "completed",
+                "gpa": "3.9"
+            },
+            {
+                "id": "stu-008",
+                "studentId": "2110312",
+                "studentName": "Hoàng Duy Tân",
+                "email": "tan.hoang@student.hcmut.edu.vn",
+                "courseTitle": "Web Development Advanced Topics",
+                "courseCode": "CS3050",
+                "registeredDate": "2025-12-08",
+                "status": "completed",
+                "gpa": "3.7"
+            }
+        ]
     },
     "courses": {
         "title": "Courses",

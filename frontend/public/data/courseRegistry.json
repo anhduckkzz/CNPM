@@ -9,10 +9,10 @@
       "capacity": 50,
       "tags": ["CS"],
       "upcomingSessions": [
-        {"id": "intro-1", "title": "Variables & Data Types", "date": "Tuesday, Sep 30", "time": "9:00 AM - 11:00 AM", "cta": "Join Session"},
-        {"id": "intro-2", "title": "Control Flow & Loops", "date": "Thursday, Oct 2", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "intro-1", "title": "Variables & Data Types", "date": "Tuesday, Sep 30", "time": "8:00 AM - 10:00 AM", "cta": "Join Session"},
+        {"id": "intro-2", "title": "Control Flow & Loops", "date": "Thursday, Oct 2", "time": "12:00 PM - 2:00 PM", "cta": "Join Session"},
         {"id": "intro-3", "title": "Functions & Debugging", "date": "Saturday, Oct 4", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
-        {"id": "intro-4", "title": "Practice Problem Solving", "date": "Monday, Oct 6", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"}
+        {"id": "intro-4", "title": "Practice Problem Solving", "date": "Monday, Oct 6", "time": "8:00 AM - 10:00 AM", "cta": "Join Session"}
       ],
       "materials": [
         {"title": "Programming: Getting Started", "type": "pdf", "url": "/pdfs/material1.pdf"},
@@ -40,8 +40,8 @@
       "capacity": 40,
       "tags": ["MATH"],
       "upcomingSessions": [
-        {"id": "calc-1", "title": "Series & Convergence", "date": "Wednesday, Oct 1", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
-        {"id": "calc-2", "title": "Laplace Transforms", "date": "Friday, Oct 3", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "calc-1", "title": "Series & Convergence", "date": "Wednesday, Oct 1", "time": "8:00 AM - 10:00 AM", "cta": "Join Session"},
+        {"id": "calc-2", "title": "Laplace Transforms", "date": "Thursday, Oct 2", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
         {"id": "calc-3", "title": "Derivative Applications", "date": "Sunday, Oct 5", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"}
       ],
       "materials": [
@@ -70,9 +70,9 @@
       "capacity": 45,
       "tags": ["PHYSICS"],
       "upcomingSessions": [
-        {"id": "qp-1", "title": "Wave Functions & Superposition", "date": "Monday, Sep 29", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
-        {"id": "qp-2", "title": "Quantum Mechanics Principles", "date": "Wednesday, Oct 1", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
-        {"id": "qp-3", "title": "Real-World Applications", "date": "Friday, Oct 3", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"}
+        {"id": "qp-1", "title": "Wave Functions & Superposition", "date": "Monday, Sep 29", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "qp-2", "title": "Quantum Mechanics Principles", "date": "Wednesday, Oct 1", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "qp-3", "title": "Real-World Applications", "date": "Friday, Oct 3", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"}
       ],
       "materials": [
         {"title": "Physics: Quantum Mechanics Intro", "type": "pdf", "url": "/pdfs/material3.pdf"},
@@ -100,8 +100,8 @@
       "capacity": 35,
       "tags": ["LITERATURE"],
       "upcomingSessions": [
-        {"id": "lit-1", "title": "Poetry Interpretation", "date": "Tuesday, Oct 7", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
-        {"id": "lit-2", "title": "Close Reading Techniques", "date": "Thursday, Oct 9", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "lit-1", "title": "Poetry Interpretation", "date": "Tuesday, Oct 7", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "lit-2", "title": "Close Reading Techniques", "date": "Thursday, Oct 9", "time": "8:00 AM - 10:00 AM", "cta": "Join Session"},
         {"id": "lit-3", "title": "Narrative Structure Analysis", "date": "Saturday, Oct 11", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"}
       ],
       "materials": [
@@ -130,10 +130,10 @@
       "capacity": 48,
       "tags": ["CS"],
       "upcomingSessions": [
-        {"id": "ds-1", "title": "Sorting Algorithms", "date": "Wednesday, Oct 1", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
-        {"id": "ds-2", "title": "Graph Algorithms", "date": "Friday, Oct 3", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "ds-1", "title": "Sorting Algorithms", "date": "Wednesday, Oct 1", "time": "12:00 PM - 2:00 PM", "cta": "Join Session"},
+        {"id": "ds-2", "title": "Graph Algorithms", "date": "Friday, Oct 3", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
         {"id": "ds-3", "title": "Linked Lists & Trees", "date": "Sunday, Oct 5", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
-        {"id": "ds-4", "title": "Complexity Analysis & Optimization", "date": "Tuesday, Oct 7", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
+        {"id": "ds-4", "title": "Complexity Analysis & Optimization", "date": "Tuesday, Oct 7", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"}
       ],
       "materials": [
         {"title": "DSA: Sorting & Searching", "type": "pdf", "url": "/pdfs/material2.pdf"},
@@ -162,8 +162,8 @@
       "tags": ["BIOLOGY"],
       "upcomingSessions": [
         {"id": "cb-1", "title": "Cell Structure & Organelles", "date": "Monday, Sep 29", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
-        {"id": "cb-2", "title": "DNA & Gene Expression", "date": "Wednesday, Oct 1", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
-        {"id": "cb-3", "title": "Cell Division & Reproduction", "date": "Friday, Oct 3", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "cb-2", "title": "DNA & Gene Expression", "date": "Wednesday, Oct 1", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "cb-3", "title": "Cell Division & Reproduction", "date": "Friday, Oct 3", "time": "8:00 AM - 10:00 AM", "cta": "Join Session"},
         {"id": "cb-4", "title": "Metabolic Pathways", "date": "Sunday, Oct 5", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"}
       ],
       "materials": [
@@ -192,8 +192,8 @@
       "capacity": 50,
       "tags": ["CS"],
       "upcomingSessions": [
-        {"id": "web-1", "title": "React Optimization Techniques", "date": "Tuesday, Oct 7", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
-        {"id": "web-2", "title": "GraphQL & State Management", "date": "Thursday, Oct 9", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "web-1", "title": "React Optimization Techniques", "date": "Tuesday, Oct 7", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "web-2", "title": "GraphQL & State Management", "date": "Thursday, Oct 9", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
         {"id": "web-3", "title": "Testing & Performance", "date": "Saturday, Oct 11", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
       ],
       "materials": [
@@ -223,8 +223,8 @@
       "tags": ["CS"],
       "upcomingSessions": [
         {"id": "py-1", "title": "Decorators & Functional Programming", "date": "Monday, Sep 29", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
-        {"id": "py-2", "title": "Async Programming & Concurrency", "date": "Wednesday, Oct 1", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
-        {"id": "py-3", "title": "Performance Tuning & Profiling", "date": "Friday, Oct 3", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "py-2", "title": "Async Programming & Concurrency", "date": "Wednesday, Oct 1", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "py-3", "title": "Performance Tuning & Profiling", "date": "Friday, Oct 3", "time": "9:00 AM - 11:00 AM", "cta": "Join Session"},
         {"id": "py-4", "title": "Testing & Debugging Strategies", "date": "Sunday, Oct 5", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"}
       ],
       "materials": [
