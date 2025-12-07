@@ -85,11 +85,14 @@ const formatRange = (start: string, end: string) => {
 };
 
 const SchedulePage = () => {
-  const { portal } = useAuth();
+  const { portal, updatePortal } = useAuth();
   const navigate = useNavigate();
   const { role } = useParams();
   const { isSidebarOpen } = useOutletContext<PortalOutletContext>();
   const schedule = portal?.schedule;
+  const [scheduleScheme, setScheduleScheme] = useState<'none' | 'tight' | 'light'>(
+    (portal as any)?.scheduleScheme || 'none'
+  );
   const registered = useMemo(() => {
     if (portal?.courses?.courses?.length) {
       return portal.courses;
@@ -369,6 +372,35 @@ const SchedulePage = () => {
         >
           Reschedule
         </button>
+        
+        <div className="mt-4 rounded-2xl border border-slate-100 p-4">
+          <label className="block text-sm font-semibold text-slate-600 mb-2">
+            Schedule Scheme
+          </label>
+          <select
+            value={scheduleScheme}
+            onChange={(e) => {
+              const newScheme = e.target.value as 'none' | 'tight' | 'light';
+              setScheduleScheme(newScheme);
+              if (updatePortal && portal) {
+                updatePortal({
+                  ...portal,
+                  scheduleScheme: newScheme
+                } as any);
+              }
+            }}
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          >
+            <option value="none">None - Any available slot</option>
+            <option value="tight">Tight - Compress into fewer days</option>
+            <option value="light">Light - Spread across the week</option>
+          </select>
+          <p className="mt-2 text-xs text-slate-500">
+            {scheduleScheme === 'none' && 'Choose any available slot without preference.'}
+            {scheduleScheme === 'tight' && 'Pack sessions into fewer distinct weekdays.'}
+            {scheduleScheme === 'light' && 'Spread sessions across the week with rest days.'}
+          </p>
+        </div>
       </aside>
 
       {activeEvent && activeDetails && (

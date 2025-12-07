@@ -56,7 +56,21 @@ const timeSlotsOverlap = (slot1: { day: string; start: number; end: number }, sl
 };
 
 // Determine schedule conflict status
-const getScheduleConflictStatus = (slotTime: string | undefined, registeredCourses: any[]): 'blocked' | 'partial' | 'free' => {
+type ConflictStatus = 'blocked' | 'busy' | 'open' | 'free' | 'preferred-tight' | 'preferred-light';
+
+// Helper to extract days from schedule or slot
+const extractDaysFromSlot = (slot: CourseMatchingSection['modal']['slots'][number]): string[] => {
+  if (!slot.days) return [];
+  // days might be "Mon, Wed" or "Monday, Wednesday"
+  return slot.days.split(',').map(d => d.trim().toLowerCase());
+};
+
+const getScheduleConflictStatus = (
+  slot: CourseMatchingSection['modal']['slots'][number], 
+  registeredCourses: any[],
+  scheduleScheme: 'none' | 'tight' | 'light'
+): ConflictStatus => {
+  const slotTime = slot.time;
   if (!slotTime) return 'free';
   
   const slotSchedule = parseScheduleTime(slotTime);
@@ -70,10 +84,10 @@ const getScheduleConflictStatus = (slotTime: string | undefined, registeredCours
       const courseSchedule = parseScheduleTime(course.schedule);
       
       courseSchedule.forEach(courseSlot => {
-        slotSchedule.forEach(slot => {
-          if (timeSlotsOverlap(courseSlot, slot)) {
+        slotSchedule.forEach(slotItem => {
+          if (timeSlotsOverlap(courseSlot, slotItem)) {
             // Check if it's a full conflict (same time) or partial (overlapping)
-            if (courseSlot.start === slot.start && courseSlot.end === slot.end) {
+            if (courseSlot.start === slotItem.start && courseSlot.end === slotItem.end) {
               hasConflict = true;
             } else {
               hasPartialConflict = true;
@@ -85,7 +99,36 @@ const getScheduleConflictStatus = (slotTime: string | undefined, registeredCours
   });
   
   if (hasConflict) return 'blocked';
-  if (hasPartialConflict) return 'partial';
+  if (hasPartialConflict) return 'busy';
+  
+  // If scheme is not 'none', analyze day preference
+  if (scheduleScheme !== 'none') {
+    const slotDays = extractDaysFromSlot(slot);
+    const occupiedDays = new Set<string>();
+    
+    registeredCourses.forEach((course) => {
+      if (course.status === 'in-progress' && course.schedule) {
+        const schedule = course.schedule;
+        const dayPart = schedule.split(/\d/)[0];
+        const days = dayPart.split(',').map((d: string) => d.trim().toLowerCase());
+        days.forEach((day: string) => {
+          const normalized = day.replace(/day$/, '').substring(0, 3);
+          if (normalized) occupiedDays.add(normalized);
+        });
+      }
+    });
+    
+    const slotOnOccupiedDay = slotDays.some(d => occupiedDays.has(d.substring(0, 3)));
+    
+    if (scheduleScheme === 'tight') {
+      // Tight: prefer days that already have classes
+      return slotOnOccupiedDay ? 'preferred-tight' : 'open';
+    } else if (scheduleScheme === 'light') {
+      // Light: prefer days with no classes
+      return slotOnOccupiedDay ? 'open' : 'preferred-light';
+    }
+  }
+  
   return 'free';
 };
 
@@ -192,9 +235,61 @@ const CourseMatchingPage = () => {
     return { current, total, remaining: Math.max(total - current, 0) };
   };
 
+  // Helper to extract days from schedule or slot
+  const extractDays = (slot: CourseMatchingSection['modal']['slots'][number]): string[] => {
+    if (!slot.days) return [];
+    // days might be "Mon, Wed" or "Monday, Wednesday"
+    return slot.days.split(',').map(d => d.trim().toLowerCase());
+  };
+
+  // Helper to parse time string like "8:00-10:00" or "14:00"
+  const parseTime = (timeStr?: string): number => {
+    if (!timeStr) return 0;
+    const match = timeStr.match(/(\d+):(\d+)/);
+    if (!match) return 0;
+    return parseInt(match[1]) * 60 + parseInt(match[2]);
+  };
+
+  // Get all days student currently has classes on
+  const getOccupiedDays = (): Set<string> => {
+    const occupiedDays = new Set<string>();
+    registeredCourses.forEach((course) => {
+      const schedule = (course as any).schedule;
+      if (schedule) {
+        // Parse schedule like "Mon, Wed 8:00-10:00"
+        const dayPart = schedule.split(/\d/)[0]; // Get part before first digit
+        const days = dayPart.split(',').map((d: string) => d.trim().toLowerCase());
+        days.forEach((day: string) => {
+          const normalized = day.replace(/day$/, '').substring(0, 3); // "monday" -> "mon"
+          if (normalized) occupiedDays.add(normalized);
+        });
+      }
+    });
+    return occupiedDays;
+  };
+
+  // Get all class times on a specific day
+  const getClassTimesOnDay = (day: string): number[] => {
+    const times: number[] = [];
+    registeredCourses.forEach((course) => {
+      const schedule = (course as any).schedule;
+      if (schedule) {
+        const scheduleLower = schedule.toLowerCase();
+        if (scheduleLower.includes(day.toLowerCase())) {
+          const timeMatch = schedule.match(/(\d+):(\d+)/);
+          if (timeMatch) {
+            times.push(parseTime(timeMatch[0]));
+          }
+        }
+      }
+    });
+    return times;
+  };
+
   const pickBestSlot = (course: CourseCard): CourseMatchingSection['modal']['slots'][number] | null => {
     const slots = data.modal?.slots ?? [];
     if (!slots.length) return null;
+    
     const normalizedCode = course.code?.toLowerCase();
     const normalizedTitle = course.title.toLowerCase();
     const matching = slots.filter((slot) => {
@@ -202,15 +297,61 @@ const CourseMatchingPage = () => {
       return (normalizedCode && section.includes(normalizedCode)) || section.includes(normalizedTitle);
     });
     const pool = matching.length ? matching : slots;
+    
+    // Get schedule scheme preference
+    const scheduleScheme = (portal as any)?.scheduleScheme || 'none';
+    const occupiedDays = getOccupiedDays();
+    
     return [...pool].sort((a, b) => {
+      // Hard constraints first
       const aCapacity = parseCapacity(a.capacity);
       const bCapacity = parseCapacity(b.capacity);
       const aRemaining = aCapacity?.remaining ?? -1;
       const bRemaining = bCapacity?.remaining ?? -1;
       if (aRemaining !== bRemaining) return bRemaining - aRemaining;
+      
       const aFormatMatch = a.format && course.format && a.format === course.format ? 1 : 0;
       const bFormatMatch = b.format && course.format && b.format === course.format ? 1 : 0;
       if (aFormatMatch !== bFormatMatch) return bFormatMatch - aFormatMatch;
+      
+      // Apply schedule scheme (soft preference)
+      if (scheduleScheme !== 'none') {
+        const aDays = extractDays(a);
+        const bDays = extractDays(b);
+        
+        if (scheduleScheme === 'tight') {
+          // Prefer days already occupied
+          const aOnOccupied = aDays.some(d => occupiedDays.has(d.substring(0, 3)));
+          const bOnOccupied = bDays.some(d => occupiedDays.has(d.substring(0, 3)));
+          
+          if (aOnOccupied && !bOnOccupied) return -1;
+          if (!aOnOccupied && bOnOccupied) return 1;
+          
+          // If both on same day preference, prefer closer time gaps
+          if (aOnOccupied && bOnOccupied) {
+            const aTime = parseTime(a.time);
+            const bTime = parseTime(b.time);
+            const aDay = aDays[0]?.substring(0, 3) || '';
+            const bDay = bDays[0]?.substring(0, 3) || '';
+            
+            if (aDay === bDay && occupiedDays.has(aDay)) {
+              const dayTimes = getClassTimesOnDay(aDay);
+              const aMinGap = Math.min(...dayTimes.map(t => Math.abs(t - aTime)));
+              const bMinGap = Math.min(...dayTimes.map(t => Math.abs(t - bTime)));
+              if (aMinGap !== bMinGap) return aMinGap - bMinGap;
+            }
+          }
+        } else if (scheduleScheme === 'light') {
+          // Prefer days NOT occupied
+          const aOnEmpty = aDays.some(d => !occupiedDays.has(d.substring(0, 3)));
+          const bOnEmpty = bDays.some(d => !occupiedDays.has(d.substring(0, 3)));
+          
+          if (aOnEmpty && !bOnEmpty) return -1;
+          if (!aOnEmpty && bOnEmpty) return 1;
+        }
+      }
+      
+      // Fallback to section name
       return a.section.localeCompare(b.section);
     })[0];
   };
@@ -348,7 +489,7 @@ const CourseMatchingPage = () => {
     showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
   };
 
-  const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number], conflictStatus: 'blocked' | 'partial' | 'free') => {
+  const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number], conflictStatus: ConflictStatus) => {
     if (!course || conflictStatus === 'blocked') return;
     
     // Close modal immediately
@@ -755,22 +896,34 @@ const CourseMatchingPage = () => {
                   <p className="mt-8 text-sm font-semibold text-slate-500">Or manually select a section</p>
                   <div className="mt-4 space-y-3">
                     {(data.modal?.slots ?? []).map((slot) => {
-                      const conflictStatus = getScheduleConflictStatus(slot.time, registeredCourses);
+                      const scheduleScheme = (portal as any)?.scheduleScheme || 'none';
+                      const conflictStatus = getScheduleConflictStatus(slot, registeredCourses, scheduleScheme);
                       const isBlocked = conflictStatus === 'blocked';
-                      const isPartial = conflictStatus === 'partial';
+                      const isBusy = conflictStatus === 'busy';
+                      const isOpen = conflictStatus === 'open';
                       const isFree = conflictStatus === 'free';
+                      const isPreferredTight = conflictStatus === 'preferred-tight';
+                      const isPreferredLight = conflictStatus === 'preferred-light';
                       
                       // Border colors based on conflict status
                       const borderColor = isBlocked 
                         ? 'border-red-500 border-2' 
-                        : isPartial 
-                        ? 'border-yellow-500 border-2' 
+                        : isBusy
+                        ? 'border-orange-400 border-2'
+                        : isPreferredTight || isPreferredLight
+                        ? 'border-blue-500 border-2'
+                        : isOpen
+                        ? 'border-amber-400 border-2'
                         : 'border-green-500 border-2';
                       
                       const bgColor = isBlocked 
                         ? 'bg-red-50/50' 
-                        : isPartial 
-                        ? 'bg-yellow-50/50' 
+                        : isBusy
+                        ? 'bg-orange-50/50'
+                        : isPreferredTight || isPreferredLight
+                        ? 'bg-blue-50/50'
+                        : isOpen
+                        ? 'bg-amber-50/50'
                         : 'bg-green-50/50';
                       
                       const hoverEffect = isBlocked 
@@ -786,21 +939,36 @@ const CourseMatchingPage = () => {
                           onClick={() => !isBlocked && handleManualRegister(modalCourse, slot, conflictStatus)}
                         >
                           <div className="flex-1 space-y-1">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
                               <p className="font-semibold text-ink">{slot.section}</p>
                               {isBlocked && (
                                 <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
-                                  Conflict
+                                  Blocked
                                 </span>
                               )}
-                              {isPartial && (
-                                <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-semibold text-yellow-700">
-                                  Open Time
+                              {isBusy && (
+                                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-semibold text-orange-700">
+                                  Busy
+                                </span>
+                              )}
+                              {isOpen && (
+                                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                                  Open
                                 </span>
                               )}
                               {isFree && (
                                 <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">
                                   Free
+                                </span>
+                              )}
+                              {isPreferredTight && (
+                                <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                                  ⭐ Tight Preferred
+                                </span>
+                              )}
+                              {isPreferredLight && (
+                                <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                                  ⭐ Light Preferred
                                 </span>
                               )}
                             </div>
@@ -815,7 +983,32 @@ const CourseMatchingPage = () => {
                             )}
                             {isBlocked && (
                               <p className="text-xs text-red-600 font-medium">
-                                ⚠️ This time conflicts with your busy schedule
+                                ⚠️ This time conflicts with your existing schedule
+                              </p>
+                            )}
+                            {isBusy && (
+                              <p className="text-xs text-orange-600 font-medium">
+                                ⚠️ Partial overlap with your schedule
+                              </p>
+                            )}
+                            {isPreferredTight && scheduleScheme === 'tight' && (
+                              <p className="text-xs text-blue-600 font-medium">
+                                ✨ Fits your TIGHT schedule preference (same day as existing classes)
+                              </p>
+                            )}
+                            {isPreferredLight && scheduleScheme === 'light' && (
+                              <p className="text-xs text-blue-600 font-medium">
+                                ✨ Fits your LIGHT schedule preference (free day with rest)
+                              </p>
+                            )}
+                            {isOpen && scheduleScheme === 'tight' && (
+                              <p className="text-xs text-amber-600 font-medium">
+                                ℹ️ New day (not aligned with TIGHT preference)
+                              </p>
+                            )}
+                            {isOpen && scheduleScheme === 'light' && (
+                              <p className="text-xs text-amber-600 font-medium">
+                                ℹ️ Same day as existing class (not aligned with LIGHT preference)
                               </p>
                             )}
                           </div>
@@ -829,6 +1022,8 @@ const CourseMatchingPage = () => {
                             className={`rounded-full px-4 py-2 text-sm font-semibold text-white shadow-soft transition ${
                               isBlocked 
                                 ? 'bg-slate-400 cursor-not-allowed' 
+                                : isPreferredTight || isPreferredLight
+                                ? 'bg-blue-600 hover:bg-blue-700'
                                 : 'bg-primary hover:bg-primary-dark'
                             }`}
                           >

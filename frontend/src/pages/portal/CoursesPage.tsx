@@ -142,6 +142,16 @@ const CoursesPage = () => {
                 >
                   {normalizeStatus((course as any).status) === 'cancelled' ? 'Unavailable' : 'Access Course'}
                 </button>
+                {role === 'student' && (
+                  <button
+                    type="button"
+                    className="rounded-full border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:border-red-400 hover:bg-red-50"
+                    onClick={() => setDeleteCourseId(course.id)}
+                  >
+                    <Trash2 className="h-4 w-4 inline mr-1" />
+                    Drop
+                  </button>
+                )}
                 {role === 'tutor' && (
                   <>
                     <button
@@ -192,18 +202,22 @@ const CoursesPage = () => {
             >
               <X className="h-4 w-4" />
             </button>
-            <h2 className="text-2xl font-semibold text-ink">Course Cancellation Request</h2>
+            <h2 className="text-2xl font-semibold text-ink">{role === 'student' ? 'Course Drop Request' : 'Course Cancellation Request'}</h2>
             <p className="mt-2 text-sm text-slate-600">
-              We understand that circumstances change. Please provide the following information to help us process your cancellation request professionally.
+              {role === 'student' 
+                ? 'We understand that circumstances change. Please provide the following information to help us process your drop request.'
+                : 'We understand that circumstances change. Please provide the following information to help us process your cancellation request professionally.'}
             </p>
             <div className="mt-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Detailed Reason for Cancellation <span className="text-red-500">*</span>
+                  Detailed Reason for {role === 'student' ? 'Drop' : 'Cancellation'} <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   className="w-full h-32 rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="Please provide a detailed explanation for the cancellation. This will help us improve our services and inform students appropriately."
+                  placeholder={role === 'student' 
+                    ? 'Please provide a detailed explanation for dropping this course. This will help us improve our services.'
+                    : 'Please provide a detailed explanation for the cancellation. This will help us improve our services and inform students appropriately.'}
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
                 />
@@ -242,7 +256,9 @@ const CoursesPage = () => {
                     className="mt-1 h-4 w-4 rounded border-amber-300 text-primary focus:ring-primary"
                   />
                   <span className="text-sm text-slate-700">
-                    I understand that cancelling this course may affect enrolled students and I will be available for follow-up communications if needed. <span className="text-red-500">*</span>
+                    {role === 'student'
+                      ? 'I understand that dropping this course may affect my academic schedule and I will be available for follow-up communications if needed.'
+                      : 'I understand that cancelling this course may affect enrolled students and I will be available for follow-up communications if needed.'} <span className="text-red-500">*</span>
                   </span>
                 </label>
               </div>
@@ -271,7 +287,7 @@ const CoursesPage = () => {
                   !cancelPhone.trim() || 
                   !cancelAcknowledge
                 }
-                onClick={() => {
+                onClick={async () => {
                   // Find the course being deleted
                   const courseToDelete = registered.courses.find(c => c.id === deleteCourseId);
                   
@@ -309,7 +325,7 @@ const CoursesPage = () => {
                     });
                     
                     // Show notification
-                    showToast(`${courseToDelete.title} cancellation pending confirmation`);
+                    showToast(`${courseToDelete.title} ${role === 'student' ? 'drop' : 'cancellation'} pending confirmation`);
                   }
                   
                   // Close modal and reset form
@@ -320,7 +336,7 @@ const CoursesPage = () => {
                   setCancelAcknowledge(false);
                 }}
               >
-                Submit Cancellation
+                Submit {role === 'student' ? 'Drop Request' : 'Cancellation'}
               </button>
             </div>
           </div>
