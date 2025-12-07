@@ -1,6 +1,138 @@
 {
   "rewrites": [
     {
+      "source": "/pdfs/data-structures-survival-kit.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/differential-equations-workbook.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/calculus-quick-reference.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/systems-design-blueprint.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/react-patterns.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/typescript-guide.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/api-design.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/concurrency-models.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/profiling-guide.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/design-patterns.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/mobile-frameworks.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/ios-essentials.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/android-guide.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/docker-practices.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/iac-guide.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/llm-fundamentals.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/nlp-preprocessing.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/attention-mechanisms.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/advanced-sql.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/indexing-strategies.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/acid-transactions.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/osi-model.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/vpn-encryption.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/dns-resolution.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/bitcoin-architecture.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/smart-contracts.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/cryptography.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/cnn-networks.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/opencv-tutorial.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/dl-images.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
+      "source": "/pdfs/aws-framework.pdf",
+      "destination": "/pdfs/material1.pdf"
+    },
+    {
+      "source": "/pdfs/cloud-costs.pdf",
+      "destination": "/pdfs/material2.pdf"
+    },
+    {
+      "source": "/pdfs/dr-planning.pdf",
+      "destination": "/pdfs/material3.pdf"
+    },
+    {
       "source": "/((?!pdfs|materials|images|api).*)",
       "destination": "/"
     }

@@ -1185,6 +1185,15 @@
                                                                    "status":  "Attempt Quiz",
                                                                    "questions":  9,
                                                                    "timeLimit":  "40 minutes"
+                                                               },
+                                                               {
+                                                                   "id":  "bc-quiz-3",
+                                                                   "title":  "DeFi \u0026 Financial Applications",
+                                                                   "category":  "Advanced Topics",
+                                                                   "date":  "October 20, 2025 - 10:00 AM",
+                                                                   "status":  "Attempt Quiz",
+                                                                   "questions":  8,
+                                                                   "timeLimit":  "45 minutes"
                                                                }
                                                            ]
                                            },

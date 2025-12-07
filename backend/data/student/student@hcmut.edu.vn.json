@@ -427,22 +427,22 @@
                 {
                     "title": "Introduction to Programming: Learning Path Overview",
                     "type": "pdf",
-                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                    "url": "/pdfs/react-patterns.pdf"
                 },
                 {
                     "title": "Introduction to Programming: Differential Equations Workbook",
                     "type": "pdf",
-                    "url": "/pdfs/differential-equations-workbook.pdf"
+                    "url": "/pdfs/typescript-guide.pdf"
                 },
                 {
                     "title": "Introduction to Programming: Quick Reference Cards",
                     "type": "pdf",
-                    "url": "/pdfs/calculus-quick-reference.pdf"
+                    "url": "/pdfs/api-design.pdf"
                 },
                 {
                     "title": "Introduction to Programming: Systems Design Blueprint",
                     "type": "pdf",
-                    "url": "/pdfs/systems-design-blueprint.pdf"
+                    "url": "/pdfs/concurrency-models.pdf"
                 },
                 {
                     "title": "Introduction to Programming: Instructor Notes (TXT)",
@@ -504,22 +504,22 @@
                 {
                     "title": "Advanced Calculus: Learning Path Overview",
                     "type": "pdf",
-                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                    "url": "/pdfs/profiling-guide.pdf"
                 },
                 {
                     "title": "Advanced Calculus: Differential Equations Workbook",
                     "type": "pdf",
-                    "url": "/pdfs/differential-equations-workbook.pdf"
+                    "url": "/pdfs/design-patterns.pdf"
                 },
                 {
                     "title": "Advanced Calculus: Quick Reference Cards",
                     "type": "pdf",
-                    "url": "/pdfs/calculus-quick-reference.pdf"
+                    "url": "/pdfs/mobile-frameworks.pdf"
                 },
                 {
                     "title": "Advanced Calculus: Systems Design Blueprint",
                     "type": "pdf",
-                    "url": "/pdfs/systems-design-blueprint.pdf"
+                    "url": "/pdfs/ios-essentials.pdf"
                 },
                 {
                     "title": "Advanced Calculus: Instructor Notes (TXT)",
@@ -581,22 +581,22 @@
                 {
                     "title": "Quantum Physics: Learning Path Overview",
                     "type": "pdf",
-                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                    "url": "/pdfs/android-guide.pdf"
                 },
                 {
                     "title": "Quantum Physics: Differential Equations Workbook",
                     "type": "pdf",
-                    "url": "/pdfs/differential-equations-workbook.pdf"
+                    "url": "/pdfs/docker-practices.pdf"
                 },
                 {
                     "title": "Quantum Physics: Quick Reference Cards",
                     "type": "pdf",
-                    "url": "/pdfs/calculus-quick-reference.pdf"
+                    "url": "/pdfs/iac-guide.pdf"
                 },
                 {
                     "title": "Quantum Physics: Systems Design Blueprint",
                     "type": "pdf",
-                    "url": "/pdfs/systems-design-blueprint.pdf"
+                    "url": "/pdfs/llm-fundamentals.pdf"
                 },
                 {
                     "title": "Quantum Physics: Instructor Notes (TXT)",
@@ -658,22 +658,22 @@
                 {
                     "title": "Literary Analysis: Learning Path Overview",
                     "type": "pdf",
-                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                    "url": "/pdfs/nlp-preprocessing.pdf"
                 },
                 {
                     "title": "Literary Analysis: Differential Equations Workbook",
                     "type": "pdf",
-                    "url": "/pdfs/differential-equations-workbook.pdf"
+                    "url": "/pdfs/attention-mechanisms.pdf"
                 },
                 {
                     "title": "Literary Analysis: Quick Reference Cards",
                     "type": "pdf",
-                    "url": "/pdfs/calculus-quick-reference.pdf"
+                    "url": "/pdfs/advanced-sql.pdf"
                 },
                 {
                     "title": "Literary Analysis: Systems Design Blueprint",
                     "type": "pdf",
-                    "url": "/pdfs/systems-design-blueprint.pdf"
+                    "url": "/pdfs/indexing-strategies.pdf"
                 },
                 {
                     "title": "Literary Analysis: Instructor Notes (TXT)",
@@ -735,22 +735,22 @@
                 {
                     "title": "Cellular Biology: Learning Path Overview",
                     "type": "pdf",
-                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                    "url": "/pdfs/acid-transactions.pdf"
                 },
                 {
                     "title": "Cellular Biology: Differential Equations Workbook",
                     "type": "pdf",
-                    "url": "/pdfs/differential-equations-workbook.pdf"
+                    "url": "/pdfs/osi-model.pdf"
                 },
                 {
                     "title": "Cellular Biology: Quick Reference Cards",
                     "type": "pdf",
-                    "url": "/pdfs/calculus-quick-reference.pdf"
+                    "url": "/pdfs/vpn-encryption.pdf"
                 },
                 {
                     "title": "Cellular Biology: Systems Design Blueprint",
                     "type": "pdf",
-                    "url": "/pdfs/systems-design-blueprint.pdf"
+                    "url": "/pdfs/dns-resolution.pdf"
                 },
                 {
                     "title": "Cellular Biology: Instructor Notes (TXT)",
@@ -812,17 +812,17 @@
                 {
                     "title": "Web Development: React Patterns & Best Practices",
                     "type": "pdf",
-                    "url": "/pdfs/react-patterns.pdf"
+                    "url": "/pdfs/bitcoin-architecture.pdf"
                 },
                 {
                     "title": "Web Development: TypeScript Guide",
                     "type": "pdf",
-                    "url": "/pdfs/typescript-guide.pdf"
+                    "url": "/pdfs/smart-contracts.pdf"
                 },
                 {
                     "title": "Web Development: API Design Principles",
                     "type": "pdf",
-                    "url": "/pdfs/api-design.pdf"
+                    "url": "/pdfs/cryptography.pdf"
                 },
                 {
                     "title": "Web Development: Deployment Checklist",
@@ -897,17 +897,17 @@
                 {
                     "title": "Python Advanced: Concurrency Models",
                     "type": "pdf",
-                    "url": "/pdfs/concurrency-models.pdf"
+                    "url": "/pdfs/cnn-networks.pdf"
                 },
                 {
                     "title": "Python Advanced: Performance Profiling",
                     "type": "pdf",
-                    "url": "/pdfs/profiling-guide.pdf"
+                    "url": "/pdfs/opencv-tutorial.pdf"
                 },
                 {
                     "title": "Python Advanced: Design Patterns",
                     "type": "pdf",
-                    "url": "/pdfs/design-patterns.pdf"
+                    "url": "/pdfs/dl-images.pdf"
                 },
                 {
                     "title": "Python Advanced: Code Examples Repository",
@@ -975,17 +975,17 @@
                 {
                     "title": "Mobile: Flutter vs React Native Comparison",
                     "type": "pdf",
-                    "url": "/pdfs/mobile-frameworks.pdf"
+                    "url": "/pdfs/aws-framework.pdf"
                 },
                 {
                     "title": "Mobile: iOS Development Essentials",
                     "type": "pdf",
-                    "url": "/pdfs/ios-essentials.pdf"
+                    "url": "/pdfs/cloud-costs.pdf"
                 },
                 {
                     "title": "Mobile: Android Development Guide",
                     "type": "pdf",
-                    "url": "/pdfs/android-guide.pdf"
+                    "url": "/pdfs/dr-planning.pdf"
                 },
                 {
                     "title": "Mobile: App Store Guidelines",
@@ -1065,12 +1065,12 @@
                 {
                     "title": "DevOps: Docker Best Practices",
                     "type": "pdf",
-                    "url": "/pdfs/docker-practices.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "DevOps: Infrastructure as Code",
                     "type": "pdf",
-                    "url": "/pdfs/iac-guide.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "DevOps: Helm Charts Reference",
@@ -1138,17 +1138,17 @@
                 {
                     "title": "AI: Large Language Models Fundamentals",
                     "type": "pdf",
-                    "url": "/pdfs/llm-fundamentals.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "AI: NLP Preprocessing Techniques",
                     "type": "pdf",
-                    "url": "/pdfs/nlp-preprocessing.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "AI: Attention Mechanisms Explained",
                     "type": "pdf",
-                    "url": "/pdfs/attention-mechanisms.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "AI: HuggingFace Library Tutorial",
@@ -1216,17 +1216,17 @@
                 {
                     "title": "Databases: Advanced SQL Queries",
                     "type": "pdf",
-                    "url": "/pdfs/advanced-sql.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Databases: Indexing Strategies",
                     "type": "pdf",
-                    "url": "/pdfs/indexing-strategies.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Databases: ACID Transactions",
                     "type": "pdf",
-                    "url": "/pdfs/acid-transactions.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Databases: Schema Design Patterns",
@@ -1294,17 +1294,17 @@
                 {
                     "title": "Networks: OSI Model Explained",
                     "type": "pdf",
-                    "url": "/pdfs/osi-model.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Networks: VPN & Encryption",
                     "type": "pdf",
-                    "url": "/pdfs/vpn-encryption.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Networks: DNS Resolution",
                     "type": "pdf",
-                    "url": "/pdfs/dns-resolution.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Networks: Wireshark Packet Analysis",
@@ -1372,17 +1372,17 @@
                 {
                     "title": "Blockchain: Bitcoin Architecture",
                     "type": "pdf",
-                    "url": "/pdfs/bitcoin-architecture.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Blockchain: Ethereum Smart Contracts",
                     "type": "pdf",
-                    "url": "/pdfs/smart-contracts.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Blockchain: Cryptography Basics",
                     "type": "pdf",
-                    "url": "/pdfs/cryptography.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Blockchain: Solidity Programming",
@@ -1441,17 +1441,17 @@
                 {
                     "title": "Vision: Convolutional Networks",
                     "type": "pdf",
-                    "url": "/pdfs/cnn-networks.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Vision: OpenCV Tutorial",
                     "type": "pdf",
-                    "url": "/pdfs/opencv-tutorial.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Vision: Deep Learning for Images",
                     "type": "pdf",
-                    "url": "/pdfs/dl-images.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Vision: PyTorch Image Models",
@@ -1526,17 +1526,17 @@
                 {
                     "title": "Cloud: AWS Well-Architected Framework",
                     "type": "pdf",
-                    "url": "/pdfs/aws-framework.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Cloud: Cost Optimization",
                     "type": "pdf",
-                    "url": "/pdfs/cloud-costs.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Cloud: Disaster Recovery Planning",
                     "type": "pdf",
-                    "url": "/pdfs/dr-planning.pdf"
+                    "url": "/pdfs/"
                 },
                 {
                     "title": "Cloud: Cloud Architecture Patterns",
@@ -2105,3 +2105,7 @@
         "student@hcmut.edu.vn": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80"
     }
 }
+
+
+
+

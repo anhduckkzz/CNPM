@@ -417,7 +417,8 @@
       ],
       "quizzes": [
         {"id": "bc-quiz-1", "title": "Consensus & Mining Quiz", "category": "Fundamentals", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"},
-        {"id": "bc-quiz-2", "title": "Smart Contracts Challenge", "category": "Development", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"}
+        {"id": "bc-quiz-2", "title": "Smart Contracts Challenge", "category": "Development", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "bc-quiz-3", "title": "DeFi & Financial Applications", "category": "Advanced Topics", "date": "October 20, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "45 minutes"}
       ],
       "enrollment": {
         "student": null,
