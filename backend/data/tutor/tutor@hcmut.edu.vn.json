@@ -177,7 +177,7 @@
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Tue & Sat 10:00-12:00",
                 "studentCount": 29,
-                "registeredDate": "2024-09-10",
+                "registeredDate": "2025-12-01",
                 "tutor": "You",
                 "tags": [
                     "AI"
@@ -239,9 +239,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Mon & Wed 14:00-16:00",
                 "studentCount": 38,
-                "registeredDate": "2024-08-15",
+                "registeredDate": "2025-12-02",
                 "status": "in-progress",
                 "tutor": "You",
+                "instructor": "Dr. Trần Văn A",
+                "format": "Blended",
+                "schedule": "Mon, Wed 14:00-16:00",
                 "tags": [
                     "CS"
                 ]
@@ -253,9 +256,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Tue & Thu 09:00-11:00",
                 "studentCount": 52,
-                "registeredDate": "2024-08-20",
+                "registeredDate": "2025-12-03",
                 "status": "in-progress",
                 "tutor": "You",
+                "instructor": "Prof. Lê Hoàng B",
+                "format": "In-person",
+                "schedule": "Tue, Thu 09:00-11:00",
                 "tags": [
                     "MATH"
                 ]
@@ -267,9 +273,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Wed & Fri 10:00-12:00",
                 "studentCount": 28,
-                "registeredDate": "2024-08-22",
+                "registeredDate": "2025-12-04",
                 "status": "in-progress",
                 "tutor": "You",
+                "instructor": "Dr. Phạm Quốc C",
+                "format": "Blended",
+                "schedule": "Wed, Fri 10:00-12:00",
                 "tags": [
                     "PHYSICS"
                 ]
@@ -281,9 +290,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1455885666463-1b2ac11fca08?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Mon & Thu 13:00-15:00",
                 "studentCount": 32,
-                "registeredDate": "2024-08-25",
+                "registeredDate": "2025-12-05",
                 "status": "cancelled",
                 "tutor": "You",
+                "instructor": "Dr. Võ Thị D",
+                "format": "In-person",
+                "schedule": "Mon, Thu 13:00-15:00",
                 "tags": [
                     "LITERATURE"
                 ]
@@ -295,9 +307,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Tue & Fri 11:00-13:00",
                 "studentCount": 45,
-                "registeredDate": "2024-08-18",
+                "registeredDate": "2025-12-06",
                 "status": "in-progress",
                 "tutor": "You",
+                "instructor": "Prof. Đinh Văn E",
+                "format": "Online",
+                "schedule": "Tue, Fri 11:00-13:00",
                 "tags": [
                     "CS"
                 ]
@@ -309,9 +324,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Wed & Sat 09:00-11:00",
                 "studentCount": 35,
-                "registeredDate": "2024-08-28",
+                "registeredDate": "2025-12-07",
                 "status": "waiting",
                 "tutor": "You",
+                "instructor": "Dr. Ngô Xuân F",
+                "format": "Blended",
+                "schedule": "Wed, Sat 09:00-11:00",
                 "tags": [
                     "BIOLOGY"
                 ]
@@ -323,9 +341,12 @@
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "timeStudy": "Tue & Thu 10:00-12:00",
                 "studentCount": 44,
-                "registeredDate": "2024-08-30",
+                "registeredDate": "2025-12-08",
                 "status": "completed",
                 "tutor": "You",
+                "instructor": "Prof. Bùi Minh G",
+                "format": "In-person",
+                "schedule": "Tue, Thu 10:00-12:00",
                 "tags": [
                     "CS"
                 ]
@@ -334,7 +355,18 @@
                 "id": "c-computer-vision",
                 "title": "Computer Vision & Image Processing",
                 "code": "CS3090",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "timeStudy": "Mon & Wed 15:00-17:00",
+                "studentCount": 40,
+                "registeredDate": "2025-12-09",
+                "status": "in-progress",
+                "tutor": "You",
+                "instructor": "Dr. Hồ Sỹ H",
+                "format": "Blended",
+                "schedule": "Mon, Wed 15:00-17:00",
+                "tags": [
+                    "CS"
+                ]
             }
         ]
     },

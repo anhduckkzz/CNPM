@@ -83,15 +83,25 @@ const CoursesPage = () => {
               return (
             <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
               <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 flex-1 space-y-2">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-lg font-semibold text-ink">{course.title}</p>
+                  <p className="text-lg font-semibold text-ink leading-snug">{course.title}</p>
                   {(course as any).status && getStatusBadge((course as any).status)}
                 </div>
                 <p className="text-sm text-slate-500">Course ID: {course.code}</p>
                 {(course as any).instructor && (
                   <p className="text-sm text-slate-600">
                     <span className="font-medium">Instructor:</span> {(course as any).instructor}
+                  </p>
+                )}
+                {(course as any).format && (
+                  <p className="text-xs text-slate-500">
+                    <span className="font-medium">Format:</span> {(course as any).format}
+                  </p>
+                )}
+                {(course as any).schedule && (
+                  <p className="text-xs text-slate-500">
+                    <span className="font-medium">Schedule:</span> {(course as any).schedule}
                   </p>
                 )}
                 {role === 'tutor' && (

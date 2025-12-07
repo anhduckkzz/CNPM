@@ -339,7 +339,9 @@ const CourseMatchingPage = () => {
       status: 'in-progress',
       registeredDate: currentDate,
       format: format,
-      ...(role === 'tutor' && { studentCount: 0, timeStudy: 'TBD' })
+      instructor: (course as any).instructor,
+      schedule: (course as any).schedule,
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: (course as any).schedule || 'TBD' })
     };
     if (regIdx === -1) {
       normalizedRegistered.push(regEntry);
@@ -368,19 +370,6 @@ const CourseMatchingPage = () => {
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // Create the course with in-progress status and current date
-    const currentDate = new Date().toISOString().split('T')[0];
-    const courseToRegister: RegisteredCourse = {
-      id: modalCourse.id,
-      title: modalCourse.title,
-      code: modalCourse.code,
-      thumbnail: modalCourse.thumbnail ?? '',
-      status: 'in-progress',
-      registeredDate: currentDate,
-      format: format,
-      ...(role === 'tutor' && { studentCount: 0, timeStudy: 'TBD' })
-    };
-    
     await upsertRegistration(modalCourse, format);
     setModalCourse(null);
     
@@ -399,20 +388,6 @@ const CourseMatchingPage = () => {
     
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Create the course with in-progress status and current date
-    const currentDate = new Date().toISOString().split('T')[0];
-    const courseToRegister: RegisteredCourse = {
-      id: course.id,
-      title: course.title,
-      code: course.code,
-      thumbnail: course.thumbnail ?? '',
-      status: 'in-progress',
-      registeredDate: currentDate,
-      format: slot.format,
-      schedule: slot.time,
-      ...(role === 'tutor' && { studentCount: 0, timeStudy: slot.time || 'TBD' })
-    };
     
     await upsertRegistration(course, slot.format);
     
@@ -477,17 +452,19 @@ const CourseMatchingPage = () => {
       <header className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex flex-col gap-6">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
-              {isStudentView ? 'Course Registration' : 'Tutor-Student Course Matching'}
-            </p>
+            {!isStudentView && (
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
+                Tutor-Student Course Matching
+              </p>
+            )}
             <h1 className="mt-2 text-3xl font-semibold text-ink">
-              {isStudentView ? 'Pick a course and lock your section' : 'Discover and manage tutoring assignments'}
+              {isStudentView ? 'Course Registration' : 'Discover and manage tutoring assignments'}
             </h1>
-            <p className="mt-3 max-w-3xl text-slate-500">
-              {isStudentView
-                ? 'Browse openings and confirm your seat. An AI shortcut is available inside the registration flow.'
-                : 'Explore open courses that align with your expertise. Register for a teaching format and keep track of the cohorts you\'re already coaching.'}
-            </p>
+            {!isStudentView && (
+              <p className="mt-3 max-w-3xl text-slate-500">
+                Explore open courses that align with your expertise. Register for a teaching format and keep track of the cohorts you're already coaching.
+              </p>
+            )}
           </div>
           <div className="grid gap-4 md:grid-cols-5">
             <label className="relative flex items-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500">
@@ -577,11 +554,21 @@ const CourseMatchingPage = () => {
             return (
               <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
                 <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
-                <div className="mt-4 space-y-1">
-                  <p className="text-lg font-semibold text-ink">{course.title}</p>
+                <div className="mt-4 flex-1 space-y-1">
+                  <p className="text-lg font-semibold text-ink leading-snug">{course.title}</p>
                   <p className="text-sm text-slate-500">
                     Course ID: {course.code} | Format: {course.format ?? 'Hybrid'}
                   </p>
+                  {course.instructor && (
+                    <p className="text-sm text-slate-600">
+                      <span className="font-medium">Instructor:</span> {course.instructor}
+                    </p>
+                  )}
+                  {course.schedule && (
+                    <p className="text-xs text-slate-500">
+                      <span className="font-medium">Schedule:</span> {course.schedule}
+                    </p>
+                  )}
                   <p className="text-xs text-slate-400">Capacity: {capacityLabel}</p>
                   <div className="mt-2 flex flex-wrap gap-2 text-xs font-semibold">
                     <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{courseCategory}</span>
@@ -591,7 +578,7 @@ const CourseMatchingPage = () => {
                 <button
                   type="button"
                   onClick={() => handleRegisterClick(course)}
-                  className="mt-auto rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                  className="mt-4 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
                 >
                   Register Course
                 </button>

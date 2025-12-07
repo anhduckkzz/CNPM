@@ -56,6 +56,8 @@ export interface CourseCard {
   accent?: string;
   tags?: string[];
   status?: string;
+  instructor?: string;
+  schedule?: string;
 }
 
 export interface CourseMatchingSection {
@@ -83,6 +85,7 @@ export interface CourseMatchingSection {
       format: string;
       capacity: string;
       days: string;
+      time?: string;
       cta: string;
     }>;
   };
@@ -133,6 +136,9 @@ export interface RegisteredCourse {
   timeStudy?: string;
   registeredDate?: string;
   tutor?: string;
+  instructor?: string;
+  schedule?: string;
+  format?: string;
   tags?: string[];
 }
 
