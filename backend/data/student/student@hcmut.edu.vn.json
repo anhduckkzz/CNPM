@@ -213,12 +213,15 @@
                 "studentCount": 42,
                 "registeredDate": "2024-09-06",
                 "status": "In progress",
-                "tutor": "Assigned soon",
+                "tutor": "Nguyễn Văn Dũng",
                 "tags": [
                     "AI"
                 ],
                 "actionLabel": "Go To Your Course",
-                "format": "Blended"
+                "format": "In-person",
+                "capacity": "56/100",
+                "badge": "AI matched",
+                "accent": ""
             },
             {
                 "id": "c-computer-vision",
@@ -233,11 +236,13 @@
                 "id": "c-digital-signal",
                 "title": "Digital Signal Processing",
                 "code": "CO3002",
-                "format": "Blended",
+                "format": "In-person",
                 "capacity": "47/70",
                 "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Go To Your Course",
-                "tutor": "Assigned soon"
+                "tutor": "Assigned soon",
+                "instructor": "Dr. Võ Văn I",
+                "schedule": "Tue, Thu 10:00-12:00"
             },
             {
                 "id": "c-web-development",
@@ -254,6 +259,36 @@
                 ],
                 "actionLabel": "Go To Your Course",
                 "format": "In-person"
+            },
+            {
+                "id": "c-python-advanced",
+                "title": "Advanced Python Programming",
+                "code": "CS2055",
+                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "56/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CS"
+                ],
+                "actionLabel": "Go To Your Course",
+                "badge": "AI matched",
+                "accent": ""
+            },
+            {
+                "id": "c-devops-kubernetes",
+                "title": "DevOps & Kubernetes",
+                "code": "CS4010",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "38/100",
+                "tutor": "Nguyễn Văn Cường",
+                "tags": [
+                    "CLOUD"
+                ],
+                "actionLabel": "Go To Your Course",
+                "badge": "",
+                "accent": ""
             }
         ],
         "modal": {
@@ -371,39 +406,6 @@
                 "instructor": "Prof. Vũ Thị F",
                 "format": "In-person",
                 "schedule": "Mon, Wed 13:00-15:00"
-            },
-            {
-                "id": "c-ai-nlp",
-                "title": "AI & Natural Language Processing",
-                "code": "CS3085",
-                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-07",
-                "instructor": "Dr. Đỗ Văn G",
-                "format": "Blended",
-                "schedule": "Fri 14:00-17:00"
-            },
-            {
-                "id": "c-computer-vision",
-                "title": "Computer Vision & Image Processing",
-                "code": "CS3090",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-07",
-                "instructor": "Prof. Bùi Thị H",
-                "format": "In-person",
-                "schedule": "Mon, Wed 9:00-11:00"
-            },
-            {
-                "id": "c-web-development",
-                "title": "Web Development Advanced Topics",
-                "code": "CS3050",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-07",
-                "instructor": "Prof. Bùi Minh G",
-                "format": "In-person",
-                "schedule": "Tue, Thu 10:00-12:00"
             }
         ]
     },

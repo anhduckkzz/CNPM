@@ -184,6 +184,21 @@
                 ],
                 "actionLabel": "Manage Your Course",
                 "format": "Blended"
+            },
+            {
+                "id": "c-devops-kubernetes",
+                "title": "DevOps & Kubernetes",
+                "code": "CS4010",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "38/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CLOUD"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
             }
         ],
         "modal": {
@@ -442,21 +457,16 @@
                 ]
             },
             {
-                "id": "c-computer-vision",
-                "title": "Computer Vision & Image Processing",
-                "code": "CS3090",
+                "id": "c-devops-kubernetes",
+                "title": "DevOps & Kubernetes",
+                "code": "CS4010",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "timeStudy": "Mon & Wed 15:00-17:00",
-                "studentCount": 40,
-                "registeredDate": "2025-12-09",
                 "status": "in-progress",
-                "tutor": "You",
-                "instructor": "Dr. Hồ Sỹ H",
-                "format": "Blended",
-                "schedule": "Mon, Wed 15:00-17:00",
-                "tags": [
-                    "CS"
-                ]
+                "registeredDate": "2025-12-07",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "TBD"
             }
         ]
     },
@@ -1542,4 +1552,3 @@
         "tutor@hcmut.edu.vn": "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80"
     }
 }
-

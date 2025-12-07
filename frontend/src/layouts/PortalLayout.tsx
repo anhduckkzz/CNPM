@@ -9,12 +9,120 @@ import { courseIdFromSlug } from '../utils/courseSlug';
 const hcmutLogoUrl = '/images/HCMUT-BachKhoa-Logo.png';
 
 const PortalLayout = () => {
-  const { portal, user, logout } = useAuth();
+  const { portal, user, logout, updatePortal } = useAuth();
   const { role } = useParams();
   const location = useLocation();
   const [isSidebarHovered, setSidebarHovered] = useState(false);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const isSidebarOpen = isSidebarHovered;
+
+  const handleResetToDefault = async () => {
+    if (!updatePortal || !role) return;
+    
+    const defaultCourses = [
+      {
+        id: role === 'student' ? 'c-intro-programming' : 'c-intro-programming',
+        title: 'Introduction to Programming',
+        code: 'CO1002',
+        thumbnail: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80',
+        status: 'in-progress',
+        registeredDate: '2025-12-01',
+        instructor: 'Dr. Nguyễn Văn A',
+        format: 'Blended',
+        schedule: 'Mon, Wed 8:00-10:00',
+        ...(role === 'tutor' && { timeStudy: 'Mon & Wed 14:00-16:00', studentCount: 38, tutor: 'You', tags: ['CS'] })
+      },
+      {
+        id: 'c-advanced-calculus',
+        title: 'Advanced Calculus',
+        code: 'M1T003',
+        thumbnail: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80',
+        status: 'completed',
+        registeredDate: '2025-12-02',
+        instructor: role === 'student' ? 'Prof. Trần Thị B' : 'Prof. Lê Hoàng B',
+        format: 'In-person',
+        schedule: role === 'student' ? 'Tue, Thu 14:00-16:00' : 'Tue, Thu 09:00-11:00',
+        ...(role === 'tutor' && { timeStudy: 'Tue & Thu 09:00-11:00', studentCount: 52, tutor: 'You', tags: ['MATH'] })
+      },
+      {
+        id: 'c-quantum-physics',
+        title: 'Quantum Physics',
+        code: 'PH4021',
+        thumbnail: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
+        status: 'in-progress',
+        registeredDate: '2025-12-03',
+        instructor: role === 'student' ? 'Dr. Lê Văn C' : 'Dr. Phạm Quốc C',
+        format: 'In-person',
+        schedule: 'Wed, Fri 10:00-12:00',
+        ...(role === 'tutor' && { timeStudy: 'Wed & Fri 10:00-12:00', studentCount: 28, tutor: 'You', tags: ['PHYSICS'] })
+      },
+      {
+        id: 'c-literary-analysis',
+        title: 'Literary Analysis',
+        code: 'EN1004',
+        thumbnail: role === 'student' ? 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80' : 'https://images.unsplash.com/photo-1455885666463-1b2ac11fca08?auto=format&fit=crop&w=900&q=80',
+        status: 'cancelled',
+        registeredDate: role === 'student' ? '2025-12-04' : '2025-12-05',
+        instructor: 'Dr. Phạm Thị D',
+        format: role === 'student' ? 'Blended' : 'In-person',
+        schedule: role === 'student' ? 'Mon 15:00-17:00' : 'Mon, Thu 13:00-15:00',
+        ...(role === 'tutor' && { timeStudy: 'Mon & Thu 13:00-15:00', studentCount: 32, tutor: 'You', tags: ['LITERATURE'] })
+      },
+      {
+        id: 'c-data-structures',
+        title: 'Data Structures and Algorithms',
+        code: 'CO2002',
+        thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80',
+        status: 'in-progress',
+        registeredDate: role === 'student' ? '2025-12-05' : '2025-12-06',
+        instructor: role === 'student' ? 'Dr. Hoàng Văn E' : 'Prof. Đinh Văn E',
+        format: role === 'student' ? 'Blended' : 'Online',
+        schedule: role === 'student' ? 'Tue, Thu 8:00-10:00' : 'Tue, Fri 11:00-13:00',
+        ...(role === 'tutor' && { timeStudy: 'Tue & Fri 11:00-13:00', studentCount: 45, tutor: 'You', tags: ['CS'] })
+      },
+      {
+        id: 'c-cellular-biology',
+        title: 'Cellular Biology',
+        code: 'BI3002',
+        thumbnail: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+        status: 'waiting',
+        registeredDate: role === 'student' ? '2025-12-06' : '2025-12-07',
+        instructor: role === 'student' ? 'Prof. Vũ Thị F' : 'Dr. Ngô Xuân F',
+        format: role === 'student' ? 'In-person' : 'Blended',
+        schedule: role === 'student' ? 'Mon, Wed 13:00-15:00' : 'Wed, Sat 09:00-11:00',
+        ...(role === 'tutor' && { timeStudy: 'Wed & Sat 09:00-11:00', studentCount: 35, tutor: 'You', tags: ['BIOLOGY'] })
+      },
+    ];
+
+    if (role === 'tutor') {
+      defaultCourses.push({
+        id: 'c-web-development',
+        title: 'Web Development Advanced Topics',
+        code: 'CS3050',
+        thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80',
+        status: 'completed',
+        registeredDate: '2025-12-08',
+        instructor: 'Prof. Bùi Minh G',
+        format: 'In-person',
+        schedule: 'Tue, Thu 10:00-12:00',
+        timeStudy: 'Tue & Thu 10:00-12:00',
+        studentCount: 44,
+        tutor: 'You',
+        tags: ['CS']
+      });
+    }
+
+    await updatePortal((prev) => ({
+      ...prev,
+      courses: {
+        title: 'Courses',
+        description: 'Your registered classes for this semester.',
+        courses: defaultCourses as any
+      }
+    }));
+
+    window.location.reload();
+  };
 
   const sidebarLinks = useMemo(() => portal?.navigation.sidebar ?? [], [portal]);
   const derivedTitle =
@@ -256,7 +364,12 @@ const PortalLayout = () => {
           </section>
 
           <footer className="rounded-3xl bg-white px-6 py-4 text-sm text-slate-400 shadow-soft">
-            &copy; {new Date().getFullYear()} HCMUT Tutor Support System.
+            <span 
+              onClick={handleResetToDefault}
+              style={{ cursor: 'pointer' }}
+            >
+              &copy; {new Date().getFullYear()} HCMUT Tutor Support System.
+            </span>
           </footer>
         </main>
       </div>

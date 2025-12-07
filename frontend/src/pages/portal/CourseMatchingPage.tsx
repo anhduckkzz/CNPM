@@ -277,7 +277,7 @@ const CourseMatchingPage = () => {
     [loadTutorCourses],
   );
 
-  const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string) => {
+  const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string, scheduleTime?: string) => {
     const currentDate = new Date().toISOString().split('T')[0];
     
     const normalizedHistory = [...courseHistory];
@@ -305,9 +305,9 @@ const CourseMatchingPage = () => {
       status: 'in-progress',
       registeredDate: currentDate,
       format: format,
-      instructor: (course as any).instructor,
-      schedule: (course as any).schedule,
-      ...(role === 'tutor' && { studentCount: 0, timeStudy: (course as any).schedule || 'TBD' })
+      instructor: tutor || (course as any).instructor,
+      schedule: scheduleTime || (course as any).schedule,
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: scheduleTime || (course as any).schedule || 'TBD' })
     };
     if (regIdx === -1) {
       normalizedRegistered.push(regEntry);
@@ -330,14 +330,19 @@ const CourseMatchingPage = () => {
   const handleFormatChoice = async (format: string) => {
     if (!modalCourse) return;
     
+    // Try to pick a slot matching the chosen format
+    const slot = pickBestSlot(modalCourse);
+    
+    // Close modal immediately
+    setModalCourse(null);
+    
     // Show pending notification
     showToast(`⏳ Processing registration for ${modalCourse.title}...`, 'warning');
     
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    await upsertRegistration(modalCourse, format);
-    setModalCourse(null);
+    await upsertRegistration(modalCourse, format, undefined, slot?.tutor, slot?.time);
     
     // Show success notification
     showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
@@ -355,7 +360,7 @@ const CourseMatchingPage = () => {
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    await upsertRegistration(course, slot.format);
+    await upsertRegistration(course, slot.format, undefined, slot.tutor, slot.time);
     
     // Show success notification
     showToast(`✅ Successfully registered ${course.title} - ${slot.section}!`, 'success');
@@ -370,6 +375,10 @@ const CourseMatchingPage = () => {
 
   const handleAutoMatch = (course: CourseCard | null) => {
     if (!course || !isStudentView) return;
+    
+    // Show pending notification immediately
+    showToast(`⏳ AI is matching the best section for ${course.title}...`, 'warning');
+    
     setAiAnalyzing(true);
     setAiStepIndex(0);
     setAiBarActive(0);
@@ -402,9 +411,11 @@ const CourseMatchingPage = () => {
         capacity: capacityLabel,
         badge: 'AI matched',
       };
-      await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor);
+      await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor, slot?.time);
       const sectionLabel = slot?.section ?? `${course.code} - best available section`;
-      showToast(`AI matched you to ${sectionLabel}`);
+      
+      // Show success notification
+      showToast(`✅ Successfully AI matched to ${sectionLabel}!`, 'success');
       setAiAnalyzing(false);
       setModalCourse(null);
     }, 2800);
