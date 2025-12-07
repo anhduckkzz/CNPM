@@ -259,37 +259,43 @@
                 "id": "c-intro-programming",
                 "title": "Introduction to Programming",
                 "code": "CO1002",
-                "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress"
             },
             {
                 "id": "c-advanced-calculus",
                 "title": "Advanced Calculus",
                 "code": "M1T003",
-                "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80",
+                "status": "completed"
             },
             {
                 "id": "c-quantum-physics",
                 "title": "Quantum Physics",
                 "code": "PH4021",
-                "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress"
             },
             {
                 "id": "c-literary-analysis",
                 "title": "Literary Analysis",
                 "code": "EN1004",
-                "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
+                "status": "cancelled"
             },
             {
                 "id": "c-data-structures",
                 "title": "Data Structures and Algorithms",
                 "code": "CO2002",
-                "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress"
             },
             {
                 "id": "c-cellular-biology",
                 "title": "Cellular Biology",
                 "code": "BI3002",
-                "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+                "status": "waiting"
             },
             {
                 "id": "c-blockchain",
@@ -301,7 +307,8 @@
                 "id": "c-ai-nlp",
                 "title": "AI & Natural Language Processing",
                 "code": "CS3085",
-                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80"
+                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress"
             }
         ]
     },
@@ -1951,7 +1958,7 @@
     },
     "academicRecords": {
         "studentInfo": {
-            "name": "Lê Minh Khoa",
+            "name": "Nguyễn Văn An",
             "studentId": "2310456",
             "semester": "Fall 2023"
         },

@@ -6,6 +6,14 @@ import CourseArtwork from '../../components/CourseArtwork';
 import { CheckCircle2, XCircle, Clock, Trash2, X, AlertCircle } from 'lucide-react';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 
+// Normalize status to handle both 'in-progress' and 'In progress' formats
+const normalizeStatus = (status?: string): string => {
+  if (!status) return 'in-progress';
+  const lower = status.toLowerCase().trim();
+  if (lower === 'in progress' || lower === 'in-progress') return 'in-progress';
+  return lower;
+};
+
 const CoursesPage = () => {
   const { portal, role, updatePortal } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +30,8 @@ const CoursesPage = () => {
   }
 
   const getStatusBadge = (status?: string) => {
-    switch (status) {
+    const normalized = normalizeStatus(status);
+    switch (normalized) {
       case 'completed':
         return (
           <div className="flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
@@ -37,7 +46,14 @@ const CoursesPage = () => {
             Cancelled
           </div>
         );
-      case 'learning':
+      case 'waiting':
+        return (
+          <div className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+            <AlertCircle className="h-3.5 w-3.5" />
+            Waiting
+          </div>
+        );
+      case 'in-progress':
       default:
         return (
           <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
@@ -48,10 +64,11 @@ const CoursesPage = () => {
     }
   };
 
-  // Filter out cancelled and failed courses
+  // Filter to show only in-progress courses that have a status tag
   const visibleCourses = registered.courses.filter((course) => {
     const status = (course as any).status;
-    return status !== 'cancelled' && status !== 'failed';
+    // Only show courses that have a status AND it's 'in-progress'
+    return status && normalizeStatus(status) === 'in-progress';
   });
 
   return (
@@ -59,7 +76,11 @@ const CoursesPage = () => {
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {visibleCourses.length > 0 ? (
-            visibleCourses.map((course) => (
+            visibleCourses.map((course) => {
+              // Override studentCount to 0 for cancelled courses
+              const displayStudentCount = normalizeStatus((course as any).status) === 'cancelled' ? 0 : (course as any).studentCount;
+              
+              return (
             <article key={course.id} className="flex flex-col rounded-[28px] border border-slate-100 p-5 shadow-soft">
               <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
               <div className="mt-4 space-y-2">
@@ -75,9 +96,9 @@ const CoursesPage = () => {
                         <span className="font-medium">Time:</span> {(course as any).timeStudy}
                       </p>
                     )}
-                    {(course as any).studentCount !== undefined && (
+                    {displayStudentCount !== undefined && (
                       <p className="text-sm text-slate-600">
-                        <span className="font-medium">Students:</span> {(course as any).studentCount} registered
+                        <span className="font-medium">Students:</span> {displayStudentCount} registered
                       </p>
                     )}
                     {(course as any).registeredDate && (
@@ -97,14 +118,14 @@ const CoursesPage = () => {
                 <button
                   type="button"
                   className="flex-1 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={(course as any).status === 'cancelled'}
+                  disabled={normalizeStatus((course as any).status) === 'cancelled'}
                   onClick={() => {
                     if (!role) return;
                     const slug = toCourseSlug(course.id) ?? course.id;
                     navigate(`/portal/${role}/course-detail/${slug}`);
                   }}
                 >
-                  {(course as any).status === 'cancelled' ? 'Unavailable' : 'Access Course'}
+                  {normalizeStatus((course as any).status) === 'cancelled' ? 'Unavailable' : 'Access Course'}
                 </button>
                 {role === 'tutor' && (
                   <>
@@ -130,7 +151,8 @@ const CoursesPage = () => {
                 )}
               </div>
             </article>
-            ))
+              );
+            })
           ) : (
             <div className="col-span-full rounded-[28px] border border-slate-100 p-8 text-center">
               <p className="text-slate-600">No active courses at this moment. Register for a course to get started.</p>

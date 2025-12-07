@@ -1,1 +1,8 @@
-{"rewrites":[{"source":"/(.*)","destination":"/"}]}
+{
+  "rewrites": [
+    {
+      "source": "/((?!pdfs|materials|images|api).*)",
+      "destination": "/"
+    }
+  ]
+}

@@ -55,6 +55,7 @@ export interface CourseCard {
   actionLabel: string;
   accent?: string;
   tags?: string[];
+  status?: string;
 }
 
 export interface CourseMatchingSection {
@@ -127,6 +128,12 @@ export interface RegisteredCourse {
   title: string;
   code: string;
   thumbnail: string;
+  status?: string;
+  studentCount?: number;
+  timeStudy?: string;
+  registeredDate?: string;
+  tutor?: string;
+  tags?: string[];
 }
 
 export interface RegisteredCoursesSection {

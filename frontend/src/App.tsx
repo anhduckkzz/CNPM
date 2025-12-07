@@ -24,6 +24,7 @@ import ReportBuilderPage from './pages/portal/ReportBuilderPage';
 import StaffFeedbackGeneratorPage from './pages/portal/StaffFeedbackGeneratorPage';
 import JoinSessionPage from './pages/portal/JoinSessionPage';
 import CourseAdminPage from './pages/portal/CourseAdminPage';
+import RegisterHistoryPage from './pages/portal/RegisterHistoryPage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="home" element={<AnnouncementsPage />} />
             <Route path="course-matching" element={<CourseMatchingPage />} />
             <Route path="courses" element={<CoursesPage />} />
+            <Route path="register-history" element={<RegisterHistoryPage />} />
             <Route path="course-detail/:courseId" element={<CourseDetailPage />} />
             <Route path="course-detail/:courseId/quiz/:quizId" element={<CourseQuizPage />} />
             <Route path="course-detail/:courseId/session/:sessionId" element={<JoinSessionPage />} />

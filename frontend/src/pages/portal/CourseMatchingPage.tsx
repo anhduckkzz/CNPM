@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CheckCircle2, Search, Sparkles, X, XCircle, AlertCircle, ChevronRight } from 'lucide-react';
+import { CheckCircle2, Search, Sparkles, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchPortalBundle } from '../../lib/api';
 import type { CourseCard, CourseDetailSection, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
@@ -12,6 +12,14 @@ import { getCourseCategory, getCourseStatus } from '../../utils/courseMatching';
 const FORMAT_CHOICES = ['In-person', 'Blended', 'Online'];
 const AI_STEPS = ['Scanning availability & capacity', 'Matching preferred formats', 'Locking the best section'];
 const AI_BAR_COUNT = 6;
+
+// Normalize status to handle both 'in-progress' and 'In progress' formats
+const normalizeStatus = (status?: string): string => {
+  if (!status) return 'in-progress';
+  const lower = status.toLowerCase().trim();
+  if (lower === 'in progress' || lower === 'in-progress') return 'in-progress';
+  return lower;
+};
 
 const CourseMatchingPage = () => {
   const { portal, role, updatePortal } = useAuth();
@@ -43,7 +51,9 @@ const CourseMatchingPage = () => {
 
   useEffect(() => {
     setCourseHistory(data?.history ?? []);
-    setRegisteredCourses(portal?.courses?.courses ?? []);
+    // Filter to only show courses with status tags
+    const coursesWithStatus = (portal?.courses?.courses ?? []).filter(course => course.status);
+    setRegisteredCourses(coursesWithStatus);
   }, [data?.history, portal?.courses?.courses]);
 
   // Load all available courses from tutor bundle
@@ -62,8 +72,13 @@ const CourseMatchingPage = () => {
 
   const availableRecommended = useMemo(() => {
     const registeredIds = new Set(registeredCourses.map((course) => course.id));
-    return (data.recommended ?? []).filter((course) => !registeredIds.has(course.id));
-  }, [data.recommended, registeredCourses]);
+    let filtered = (data.recommended ?? []).filter((course) => !registeredIds.has(course.id));
+    // For tutors, show only "in-progress" courses
+    if (!isStudentView) {
+      filtered = filtered.filter((course) => normalizeStatus(course.status) === 'in-progress');
+    }
+    return filtered;
+  }, [data.recommended, registeredCourses, isStudentView]);
 
   const loadTutorCourses = useCallback(async () => {
     if (tutorCoursesRef.current) return tutorCoursesRef.current;
@@ -404,6 +419,7 @@ const CourseMatchingPage = () => {
         </div>
       </header>
 
+      {isStudentView && (
       <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -455,67 +471,190 @@ const CourseMatchingPage = () => {
           })}
         </div>
       </section>
+      )}
 
-      {!isStudentView && data.registrationResults && data.registrationResults.length > 0 && (
+      {registeredCourses.length > 0 && (
         <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Registration Results</p>
-            <h2 className="text-xl font-semibold text-ink">Course Registration Status</h2>
+            <h2 className="text-xl font-semibold text-ink">
+              {isStudentView ? 'Your Registered Courses' : 'Your Teaching Assignments'}
+            </h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {data.registrationResults.map((result: any) => {
-              const getStatusBadge = (status: string) => {
-                switch (status) {
-                  case 'processing':
-                    return (
-                      <div className="flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-                        <CheckCircle2 className="h-4 w-4" />
-                        Active
+          
+          {isStudentView ? (
+            // Student View: Show courses grouped by status (excluding cancelled)
+            <div className="space-y-6">
+              {['In progress', 'Completed'].map((status) => {
+                const coursesByStatus = registeredCourses.filter((c) => c.status === status && c.status !== 'Cancelled');
+                if (coursesByStatus.length === 0) return null;
+                
+                const statusConfig = {
+                  'In progress': { badge: 'bg-blue-100 text-blue-700', icon: '📚' },
+                  'Completed': { badge: 'bg-emerald-100 text-emerald-700', icon: '✅' },
+                  'Cancelled': { badge: 'bg-slate-100 text-slate-700', icon: '❌' },
+                };
+                
+                const config = statusConfig[status as keyof typeof statusConfig] || { badge: 'bg-slate-100 text-slate-700', icon: '📋' };
+                
+                return (
+                  <div key={status}>
+                    <div className="mb-4 flex items-center gap-3">
+                      <span className="text-xl">{config.icon}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-slate-600">{status}</p>
+                        <p className="text-xs text-slate-500">{coursesByStatus.length} course{coursesByStatus.length !== 1 ? 's' : ''}</p>
                       </div>
-                    );
-                  case 'cancelled':
-                    return (
-                      <div className="flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
-                        <XCircle className="h-4 w-4" />
-                        Cancelled
-                      </div>
-                    );
-                  case 'failed':
-                    return (
-                      <div className="flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-700">
-                        <AlertCircle className="h-4 w-4" />
-                        Failed
-                      </div>
-                    );
-                  default:
-                    return null;
-                }
-              };
-
-              return (
-                <article key={result.id} className="flex flex-col rounded-[28px] border border-slate-200 bg-slate-50 p-5 shadow-soft">
-                  <CourseArtwork identifier={result.id} title={result.title} code={result.code} />
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-lg font-semibold text-ink">{result.title}</p>
-                      {getStatusBadge(result.status)}
                     </div>
-                    <p className="text-sm text-slate-500">
-                      Course ID: {result.code} | Format: {result.format}
-                    </p>
-                    {result.registeredDate && (
-                      <p className="text-xs text-slate-400">Registered: {result.registeredDate}</p>
-                    )}
-                    {result.reason && result.status !== 'processing' && (
-                      <div className="mt-3 rounded-2xl bg-white p-3 text-sm text-slate-600">
-                        <p className="font-semibold text-slate-700 mb-1">Reason:</p>
-                        <p>{result.reason}</p>
-                      </div>
-                    )}
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {coursesByStatus.map((course) => (
+                        <article key={course.id} className="flex flex-col rounded-[24px] border border-slate-100 p-4 shadow-soft">
+                          <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
+                          <div className="mt-3 space-y-1">
+                            <p className="text-base font-semibold text-ink">{course.title}</p>
+                            <p className="text-xs text-slate-500">Course ID: {course.code}</p>
+                            <div className="mt-2">
+                              <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}>
+                                {status}
+                              </span>
+                            </div>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
                   </div>
-                </article>
-              );
-            })}
+                );
+              })}
+            </div>
+          ) : (
+            // Tutor View: Show all enrolled courses (In progress, Completed, Failed, Cancelled)
+            <div className="space-y-6">
+              {['In progress', 'Completed', 'Failed', 'Cancelled'].map((status) => {
+                const coursesByStatus = registeredCourses.filter((c) => c.status === status);
+                if (coursesByStatus.length === 0) return null;
+                
+                const statusConfig = {
+                  'In progress': { badge: 'bg-blue-100 text-blue-700', icon: '🎓', description: 'Currently tutoring' },
+                  'Completed': { badge: 'bg-emerald-100 text-emerald-700', icon: '✅', description: 'Completed tutoring' },
+                  'Cancelled': { badge: 'bg-slate-100 text-slate-700', icon: '❌', description: 'Tutor cancelled' },
+                  'Failed': { badge: 'bg-amber-100 text-amber-700', icon: '⚠️', description: 'No students enrolled' },
+                };
+                
+                const config = statusConfig[status as keyof typeof statusConfig] || { badge: 'bg-slate-100 text-slate-700', icon: '📋', description: 'Unknown' };
+                
+                return (
+                  <div key={status}>
+                    <div className="mb-4 flex items-center gap-3">
+                      <span className="text-xl">{config.icon}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-slate-600">{status}</p>
+                        <p className="text-xs text-slate-500">{config.description} • {coursesByStatus.length} course{coursesByStatus.length !== 1 ? 's' : ''}</p>
+                      </div>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {coursesByStatus.map((course) => (
+                        <article key={course.id} className="flex flex-col rounded-[24px] border border-slate-100 p-4 shadow-soft">
+                          <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
+                          <div className="mt-3 space-y-1">
+                            <p className="text-base font-semibold text-ink">{course.title}</p>
+                            <p className="text-xs text-slate-500">Course ID: {course.code}</p>
+                            {course.studentCount && <p className="text-xs text-slate-400">Students: {course.studentCount}</p>}
+                            <div className="mt-2">
+                              <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}>
+                                {status}
+                              </span>
+                            </div>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Course History Section - Both Student and Tutor Views */}
+      {registeredCourses.length > 0 && (
+        <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Course History</p>
+            <h2 className="text-xl font-semibold text-ink">Your Registered Courses</h2>
+            <p className="mt-1 text-sm text-slate-500">View all your course registrations and their current status</p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Course</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Code</th>
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Status</th>
+                  {!isStudentView && (
+                    <>
+                      <th className="pb-4 text-left text-sm font-semibold text-slate-700">Time</th>
+                      <th className="pb-4 text-left text-sm font-semibold text-slate-700">Students</th>
+                    </>
+                  )}
+                  {!isStudentView && <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {registeredCourses.map((course, index) => {
+                  const displayStudentCount = normalizeStatus(course.status) === 'cancelled' ? 0 : (course.studentCount || 0);
+                  
+                  return (
+                    <tr
+                      key={course.id}
+                      className={`border-b border-slate-50 transition hover:bg-slate-50 ${
+                        index === registeredCourses.length - 1 ? 'border-b-0' : ''
+                      }`}
+                    >
+                      <td className="py-4">
+                        <p className="font-medium text-ink">{course.title}</p>
+                      </td>
+                      <td className="py-4">
+                        <p className="text-sm text-slate-600">{course.code}</p>
+                      </td>
+                      <td className="py-4">
+                        {(() => {
+                          const normalized = normalizeStatus(course.status);
+                          const statusConfigs = {
+                            'in-progress': { label: 'In Progress', class: 'bg-blue-50 text-blue-700' },
+                            'completed': { label: 'Completed', class: 'bg-emerald-50 text-emerald-700' },
+                            'cancelled': { label: 'Cancelled', class: 'bg-red-50 text-red-700' },
+                            'waiting': { label: 'Waiting', class: 'bg-amber-50 text-amber-700' },
+                          };
+                          const config = statusConfigs[normalized as keyof typeof statusConfigs] || { label: normalized, class: 'bg-slate-50 text-slate-700' };
+                          return (
+                            <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.class}`}>
+                              {config.label}
+                            </span>
+                          );
+                        })()}
+                      </td>
+                      {!isStudentView && (
+                        <>
+                          <td className="py-4">
+                            <p className="text-sm text-slate-600">{(course as any).timeStudy || 'N/A'}</p>
+                          </td>
+                          <td className="py-4">
+                            <p className="text-sm text-slate-600">{displayStudentCount} students</p>
+                          </td>
+                        </>
+                      )}
+                      {!isStudentView && (
+                        <td className="py-4">
+                          <p className="text-sm text-slate-600">{course.registeredDate || 'N/A'}</p>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </section>
       )}

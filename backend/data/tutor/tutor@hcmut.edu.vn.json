@@ -136,6 +136,15 @@
                 "capacity": "49/60",
                 "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Register Tutor"
+            },
+            {
+                "id": "c-python-advanced",
+                "title": "Advanced Python Programming",
+                "code": "CS2055",
+                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
+                "format": "Blended",
+                "capacity": "0/100",
+                "actionLabel": "Register Tutor"
             }
         ],
         "history": [
@@ -216,9 +225,11 @@
                 "timeStudy": "Mon & Wed 14:00-16:00",
                 "studentCount": 38,
                 "registeredDate": "2024-08-15",
-                "status": "In progress",
+                "status": "in-progress",
                 "tutor": "You",
-                "tags": ["CS"]
+                "tags": [
+                    "CS"
+                ]
             },
             {
                 "id": "c-advanced-calculus",
@@ -228,9 +239,11 @@
                 "timeStudy": "Tue & Thu 09:00-11:00",
                 "studentCount": 52,
                 "registeredDate": "2024-08-20",
-                "status": "In progress",
+                "status": "in-progress",
                 "tutor": "You",
-                "tags": ["MATH"]
+                "tags": [
+                    "MATH"
+                ]
             },
             {
                 "id": "c-quantum-physics",
@@ -240,9 +253,11 @@
                 "timeStudy": "Wed & Fri 10:00-12:00",
                 "studentCount": 28,
                 "registeredDate": "2024-08-22",
-                "status": "In progress",
+                "status": "in-progress",
                 "tutor": "You",
-                "tags": ["PHYSICS"]
+                "tags": [
+                    "PHYSICS"
+                ]
             },
             {
                 "id": "c-literary-analysis",
@@ -252,9 +267,11 @@
                 "timeStudy": "Mon & Thu 13:00-15:00",
                 "studentCount": 32,
                 "registeredDate": "2024-08-25",
-                "status": "In progress",
+                "status": "cancelled",
                 "tutor": "You",
-                "tags": ["LITERATURE"]
+                "tags": [
+                    "LITERATURE"
+                ]
             },
             {
                 "id": "c-data-structures",
@@ -264,9 +281,11 @@
                 "timeStudy": "Tue & Fri 11:00-13:00",
                 "studentCount": 45,
                 "registeredDate": "2024-08-18",
-                "status": "In progress",
+                "status": "in-progress",
                 "tutor": "You",
-                "tags": ["CS"]
+                "tags": [
+                    "CS"
+                ]
             },
             {
                 "id": "c-cellular-biology",
@@ -276,9 +295,11 @@
                 "timeStudy": "Wed & Sat 09:00-11:00",
                 "studentCount": 35,
                 "registeredDate": "2024-08-28",
-                "status": "In progress",
+                "status": "waiting",
                 "tutor": "You",
-                "tags": ["BIOLOGY"]
+                "tags": [
+                    "BIOLOGY"
+                ]
             },
             {
                 "id": "c-web-development",
@@ -288,21 +309,11 @@
                 "timeStudy": "Tue & Thu 10:00-12:00",
                 "studentCount": 44,
                 "registeredDate": "2024-08-30",
-                "status": "In progress",
+                "status": "completed",
                 "tutor": "You",
-                "tags": ["CS"]
-            },
-            {
-                "id": "c-python-advanced",
-                "title": "Advanced Python Programming",
-                "code": "CS2055",
-                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
-                "timeStudy": "Wed & Fri 13:00-15:00",
-                "studentCount": 36,
-                "registeredDate": "2024-09-03",
-                "status": "In progress",
-                "tutor": "You",
-                "tags": ["CS"]
+                "tags": [
+                    "CS"
+                ]
             },
             {
                 "id": "c-mobile-development",
@@ -312,9 +323,10 @@
                 "timeStudy": "Mon & Tue 10:00-12:00",
                 "studentCount": 33,
                 "registeredDate": "2024-09-04",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["CS"]
+                "tags": [
+                    "CS"
+                ]
             },
             {
                 "id": "c-devops-kubernetes",
@@ -324,9 +336,10 @@
                 "timeStudy": "Thu & Fri 14:00-16:00",
                 "studentCount": 28,
                 "registeredDate": "2024-09-05",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["CLOUD"]
+                "tags": [
+                    "CLOUD"
+                ]
             },
             {
                 "id": "c-ai-nlp",
@@ -336,9 +349,10 @@
                 "timeStudy": "Tue & Wed 11:00-13:00",
                 "studentCount": 42,
                 "registeredDate": "2024-09-06",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["AI"]
+                "tags": [
+                    "AI"
+                ]
             },
             {
                 "id": "c-database-design",
@@ -348,9 +362,10 @@
                 "timeStudy": "Mon & Wed 09:00-11:00",
                 "studentCount": 40,
                 "registeredDate": "2024-09-07",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["CS"]
+                "tags": [
+                    "CS"
+                ]
             },
             {
                 "id": "c-network-protocols",
@@ -360,9 +375,10 @@
                 "timeStudy": "Wed & Fri 15:00-17:00",
                 "studentCount": 31,
                 "registeredDate": "2024-09-08",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["CYBER"]
+                "tags": [
+                    "CYBER"
+                ]
             },
             {
                 "id": "c-blockchain",
@@ -372,9 +388,10 @@
                 "timeStudy": "Mon & Thu 16:00-18:00",
                 "studentCount": 26,
                 "registeredDate": "2024-09-09",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["BLOCKCHAIN"]
+                "tags": [
+                    "BLOCKCHAIN"
+                ]
             },
             {
                 "id": "c-computer-vision",
@@ -384,9 +401,10 @@
                 "timeStudy": "Tue & Sat 10:00-12:00",
                 "studentCount": 29,
                 "registeredDate": "2024-09-10",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["AI"]
+                "tags": [
+                    "AI"
+                ]
             },
             {
                 "id": "c-cloud-computing",
@@ -396,9 +414,10 @@
                 "timeStudy": "Wed & Fri 10:00-12:00",
                 "studentCount": 41,
                 "registeredDate": "2024-09-01",
-                "status": "In progress",
                 "tutor": "You",
-                "tags": ["CLOUD"]
+                "tags": [
+                    "CLOUD"
+                ]
             }
         ]
     },
@@ -1479,5 +1498,8 @@
                 "summary": "Could improve navigation speed."
             }
         ]
+    },
+    "avatars": {
+        "tutor@hcmut.edu.vn": "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80"
     }
 }

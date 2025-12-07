@@ -1,0 +1,489 @@
+{
+  "courseRegistry": [
+    {
+      "id": "c-intro-programming",
+      "title": "Introduction to Programming",
+      "code": "CO1002",
+      "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 50,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "intro-1", "title": "Variables & Data Types", "date": "Tuesday, Sep 30", "time": "9:00 AM - 11:00 AM", "cta": "Join Session"},
+        {"id": "intro-2", "title": "Control Flow & Loops", "date": "Thursday, Oct 2", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "intro-3", "title": "Functions & Debugging", "date": "Saturday, Oct 4", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "intro-4", "title": "Practice Problem Solving", "date": "Monday, Oct 6", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Programming: Getting Started", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Programming: Syntax Fundamentals", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Programming: Control Structures", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Programming: Functions & Scope", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Programming: Coding Best Practices", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "intro-quiz-1", "title": "Variables & Data Types Quiz", "category": "Fundamentals", "date": "October 7, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 12, "timeLimit": "30 minutes"},
+        {"id": "intro-quiz-2", "title": "Control Flow Challenge", "category": "Logic", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "25 minutes"},
+        {"id": "intro-quiz-3", "title": "Functions & Debugging", "category": "Advanced Basics", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "35 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "in-progress", "registeredDate": "2024-08-15"},
+        "tutor": {"status": "in-progress", "studentCount": 38, "registeredDate": "2024-08-15"}
+      }
+    },
+    {
+      "id": "c-advanced-calculus",
+      "title": "Advanced Calculus",
+      "code": "M1T003",
+      "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80",
+      "format": "In-person",
+      "capacity": 40,
+      "tags": ["MATH"],
+      "upcomingSessions": [
+        {"id": "calc-1", "title": "Series & Convergence", "date": "Wednesday, Oct 1", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "calc-2", "title": "Laplace Transforms", "date": "Friday, Oct 3", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "calc-3", "title": "Derivative Applications", "date": "Sunday, Oct 5", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Calculus: Series Theory", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Calculus: Transform Methods", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Calculus: Multivariable Calculus", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Calculus: Problem Solving Techniques", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Calculus: Formula Reference", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "calc-quiz-1", "title": "Series & Convergence Quiz", "category": "Sequences", "date": "October 8, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "40 minutes"},
+        {"id": "calc-quiz-2", "title": "Transform & Integration Quiz", "category": "Calculus", "date": "October 15, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "45 minutes"},
+        {"id": "calc-quiz-3", "title": "Applications & Optimization", "category": "Real-World Calculus", "date": "October 22, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "35 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "completed", "registeredDate": "2024-08-20"},
+        "tutor": {"status": "in-progress", "studentCount": 52, "registeredDate": "2024-08-20"}
+      }
+    },
+    {
+      "id": "c-quantum-physics",
+      "title": "Quantum Physics",
+      "code": "PH4021",
+      "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
+      "format": "Online",
+      "capacity": 45,
+      "tags": ["PHYSICS"],
+      "upcomingSessions": [
+        {"id": "qp-1", "title": "Wave Functions & Superposition", "date": "Monday, Sep 29", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "qp-2", "title": "Quantum Mechanics Principles", "date": "Wednesday, Oct 1", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "qp-3", "title": "Real-World Applications", "date": "Friday, Oct 3", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Physics: Quantum Mechanics Intro", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Physics: Schrödinger Equation", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Physics: Atomic Structure", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Physics: Quantum Computing Basics", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Physics: Experiment Notes", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "qp-quiz-1", "title": "Wave Functions Quiz", "category": "Fundamentals", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "qp-quiz-2", "title": "Quantum Mechanics Principles", "category": "Core Concepts", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "qp-quiz-3", "title": "Applications & Problem Solving", "category": "Advanced Topics", "date": "October 20, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "45 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "in-progress", "registeredDate": "2024-08-22"},
+        "tutor": {"status": "in-progress", "studentCount": 28, "registeredDate": "2024-08-22"}
+      }
+    },
+    {
+      "id": "c-literary-analysis",
+      "title": "Literary Analysis",
+      "code": "EN1004",
+      "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
+      "format": "In-person",
+      "capacity": 35,
+      "tags": ["LITERATURE"],
+      "upcomingSessions": [
+        {"id": "lit-1", "title": "Poetry Interpretation", "date": "Tuesday, Oct 7", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "lit-2", "title": "Close Reading Techniques", "date": "Thursday, Oct 9", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "lit-3", "title": "Narrative Structure Analysis", "date": "Saturday, Oct 11", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Literature: Poetry Fundamentals", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Literature: Narrative Techniques", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Literature: Critical Theories", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Literature: Essay Writing Guide", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Literature: Text Annotations", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "lit-quiz-1", "title": "Poetry Analysis Quiz", "category": "Poetry", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "30 minutes"},
+        {"id": "lit-quiz-2", "title": "Close Reading Challenge", "category": "Analysis", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "lit-quiz-3", "title": "Narrative Structure Exam", "category": "Prose", "date": "October 28, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "cancelled", "registeredDate": "2024-08-25"},
+        "tutor": {"status": "cancelled", "studentCount": 32, "registeredDate": "2024-08-25"}
+      }
+    },
+    {
+      "id": "c-data-structures",
+      "title": "Data Structures and Algorithms",
+      "code": "CO2002",
+      "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 48,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "ds-1", "title": "Sorting Algorithms", "date": "Wednesday, Oct 1", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "ds-2", "title": "Graph Algorithms", "date": "Friday, Oct 3", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "ds-3", "title": "Linked Lists & Trees", "date": "Sunday, Oct 5", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "ds-4", "title": "Complexity Analysis & Optimization", "date": "Tuesday, Oct 7", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "DSA: Sorting & Searching", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "DSA: Graph Theory", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "DSA: Trees & Heaps", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "DSA: Dynamic Programming", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "DSA: Code Templates", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "ds-quiz-1", "title": "Sorting & Searching Quiz", "category": "Fundamentals", "date": "October 8, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "45 minutes"},
+        {"id": "ds-quiz-2", "title": "Graph Algorithms Challenge", "category": "Advanced", "date": "October 15, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "ds-quiz-3", "title": "Trees & Dynamic Programming", "category": "Complex Structures", "date": "October 22, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "50 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "in-progress", "registeredDate": "2024-08-18"},
+        "tutor": {"status": "in-progress", "studentCount": 45, "registeredDate": "2024-08-18"}
+      }
+    },
+    {
+      "id": "c-cellular-biology",
+      "title": "Cellular Biology",
+      "code": "BI3002",
+      "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+      "format": "In-person",
+      "capacity": 42,
+      "tags": ["BIOLOGY"],
+      "upcomingSessions": [
+        {"id": "cb-1", "title": "Cell Structure & Organelles", "date": "Monday, Sep 29", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "cb-2", "title": "DNA & Gene Expression", "date": "Wednesday, Oct 1", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "cb-3", "title": "Cell Division & Reproduction", "date": "Friday, Oct 3", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "cb-4", "title": "Metabolic Pathways", "date": "Sunday, Oct 5", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Biology: Cell Structure", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Biology: Molecular Biology", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Biology: Genetics & Inheritance", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Biology: Metabolic Pathways", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Biology: Lab Procedures", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "cb-quiz-1", "title": "Cell Structure Quiz", "category": "Fundamentals", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "35 minutes"},
+        {"id": "cb-quiz-2", "title": "DNA & Gene Expression", "category": "Molecular", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "45 minutes"},
+        {"id": "cb-quiz-3", "title": "Cell Division & Metabolism", "category": "Processes", "date": "October 20, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "waiting", "registeredDate": "2024-08-28"},
+        "tutor": {"status": "waiting", "studentCount": 35, "registeredDate": "2024-08-28"}
+      }
+    },
+    {
+      "id": "c-web-development",
+      "title": "Web Development Advanced Topics",
+      "code": "CS3050",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 50,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "web-1", "title": "React Optimization Techniques", "date": "Tuesday, Oct 7", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "web-2", "title": "GraphQL & State Management", "date": "Thursday, Oct 9", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "web-3", "title": "Testing & Performance", "date": "Saturday, Oct 11", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Web: React Advanced Patterns", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Web: GraphQL Essentials", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Web: State Management Guide", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Web: Performance Optimization", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Web: Project Resources", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "web-quiz-1", "title": "React Optimization Quiz", "category": "Frontend", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "40 minutes"},
+        {"id": "web-quiz-2", "title": "GraphQL & APIs Challenge", "category": "Backend Integration", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "45 minutes"},
+        {"id": "web-quiz-3", "title": "Testing & Performance", "category": "Quality Assurance", "date": "October 28, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "35 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": {"status": "completed", "studentCount": 44, "registeredDate": "2024-08-30"}
+      }
+    },
+    {
+      "id": "c-python-advanced",
+      "title": "Advanced Python Programming",
+      "code": "CS2055",
+      "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
+      "format": "Online",
+      "capacity": 45,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "py-1", "title": "Decorators & Functional Programming", "date": "Monday, Sep 29", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "py-2", "title": "Async Programming & Concurrency", "date": "Wednesday, Oct 1", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "py-3", "title": "Performance Tuning & Profiling", "date": "Friday, Oct 3", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "py-4", "title": "Testing & Debugging Strategies", "date": "Sunday, Oct 5", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Python: Advanced Decorators", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Python: Async & Concurrency", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Python: Performance Optimization", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Python: Testing & Debugging", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Python: Code Snippets", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "py-quiz-1", "title": "Decorators & Functional Quiz", "category": "Advanced Concepts", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "40 minutes"},
+        {"id": "py-quiz-2", "title": "Async Programming Challenge", "category": "Concurrency", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "50 minutes"},
+        {"id": "py-quiz-3", "title": "Performance & Testing", "category": "Quality", "date": "October 20, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "45 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-mobile-development",
+      "title": "Mobile App Development",
+      "code": "CS3070",
+      "thumbnail": "https://images.unsplash.com/photo-1512941691920-25bca6c48a7e?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 40,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "mob-1", "title": "Cross-Platform Development", "date": "Wednesday, Oct 1", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "mob-2", "title": "UI Components & Navigation", "date": "Friday, Oct 3", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "mob-3", "title": "Deployment & App Store Setup", "date": "Sunday, Oct 5", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Mobile: React Native Fundamentals", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Mobile: Flutter Basics", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Mobile: Native Development", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Mobile: App Publishing Guide", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Mobile: API Integration", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "mob-quiz-1", "title": "Cross-Platform Basics Quiz", "category": "Fundamentals", "date": "October 8, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "35 minutes"},
+        {"id": "mob-quiz-2", "title": "UI & Navigation Challenge", "category": "Frontend", "date": "October 15, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"},
+        {"id": "mob-quiz-3", "title": "Deployment & Distribution", "category": "DevOps", "date": "October 22, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "40 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-devops-kubernetes",
+      "title": "DevOps & Kubernetes",
+      "code": "CS4010",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+      "format": "Online",
+      "capacity": 38,
+      "tags": ["CLOUD"],
+      "upcomingSessions": [
+        {"id": "k8s-1", "title": "Container Orchestration Basics", "date": "Tuesday, Oct 7", "time": "9:00 AM - 11:00 AM", "cta": "Join Session"},
+        {"id": "k8s-2", "title": "Kubernetes Deployment Strategies", "date": "Thursday, Oct 9", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "k8s-3", "title": "CI/CD Pipeline Setup", "date": "Saturday, Oct 11", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "k8s-4", "title": "Monitoring & Logging Solutions", "date": "Monday, Oct 13", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "DevOps: Docker & Containers", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "DevOps: Kubernetes Architecture", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "DevOps: CI/CD Workflows", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "DevOps: Infrastructure as Code", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "DevOps: Configuration Files", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "k8s-quiz-1", "title": "Container & Orchestration Quiz", "category": "Fundamentals", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "45 minutes"},
+        {"id": "k8s-quiz-2", "title": "Kubernetes Deployment Challenge", "category": "Advanced", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "k8s-quiz-3", "title": "CI/CD & Monitoring", "category": "Operations", "date": "October 28, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "50 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-ai-nlp",
+      "title": "AI & Natural Language Processing",
+      "code": "CS3085",
+      "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 48,
+      "tags": ["AI"],
+      "upcomingSessions": [
+        {"id": "ai-1", "title": "Transformer Models & Attention", "date": "Monday, Sep 29", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "ai-2", "title": "Prompt Engineering & LLMs", "date": "Wednesday, Oct 1", "time": "4:00 PM - 6:00 PM", "cta": "Join Session"},
+        {"id": "ai-3", "title": "Fine-tuning & Model Optimization", "date": "Friday, Oct 3", "time": "12:00 PM - 2:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "AI: Transformer Architecture", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "AI: Natural Language Processing", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "AI: Large Language Models", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "AI: Practical Applications", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "AI: Model Resources", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "ai-quiz-1", "title": "Transformers & Attention Quiz", "category": "Deep Learning", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"},
+        {"id": "ai-quiz-2", "title": "LLM & Prompt Engineering", "category": "NLP", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "ai-quiz-3", "title": "Fine-tuning & Optimization", "category": "Advanced NLP", "date": "October 20, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "35 minutes"}
+      ],
+      "enrollment": {
+        "student": {"status": "waiting", "registeredDate": "2024-09-25"},
+        "tutor": {"status": "waiting", "studentCount": 12, "registeredDate": "2024-09-25"}
+      }
+    },
+    {
+      "id": "c-database-design",
+      "title": "Advanced Database Design",
+      "code": "CS3020",
+      "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+      "format": "In-person",
+      "capacity": 46,
+      "tags": ["CS"],
+      "upcomingSessions": [
+        {"id": "db-1", "title": "Normalization & Schema Design", "date": "Wednesday, Oct 1", "time": "3:00 PM - 5:00 PM", "cta": "Join Session"},
+        {"id": "db-2", "title": "Query Optimization & Indexing", "date": "Friday, Oct 3", "time": "4:00 PM - 6:00 PM", "cta": "Join Session"},
+        {"id": "db-3", "title": "NoSQL & Distributed Databases", "date": "Sunday, Oct 5", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Database: Relational Design", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Database: SQL Query Optimization", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Database: NoSQL Patterns", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Database: Performance Tuning", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Database: Schema Examples", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "db-quiz-1", "title": "Schema Design Quiz", "category": "Fundamentals", "date": "October 8, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "db-quiz-2", "title": "Query Optimization Challenge", "category": "Performance", "date": "October 15, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "db-quiz-3", "title": "NoSQL & Distributed Systems", "category": "Advanced Databases", "date": "October 22, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "45 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-network-protocols",
+      "title": "Network Protocols & Architecture",
+      "code": "CS3060",
+      "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
+      "format": "Online",
+      "capacity": 42,
+      "tags": ["CYBER"],
+      "upcomingSessions": [
+        {"id": "net-1", "title": "TCP/IP & OSI Model", "date": "Tuesday, Oct 7", "time": "4:00 PM - 6:00 PM", "cta": "Join Session"},
+        {"id": "net-2", "title": "Network Security & Encryption", "date": "Thursday, Oct 9", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"},
+        {"id": "net-3", "title": "Routing & Network Architecture", "date": "Saturday, Oct 11", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Network: TCP/IP Stack", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Network: Security Fundamentals", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Network: Cryptography Essentials", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Network: Network Design", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Network: Packet Analysis", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "net-quiz-1", "title": "TCP/IP & OSI Quiz", "category": "Fundamentals", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "net-quiz-2", "title": "Network Security Challenge", "category": "Security", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "net-quiz-3", "title": "Routing & Architecture", "category": "Advanced Networking", "date": "October 28, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "45 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-blockchain",
+      "title": "Blockchain & Cryptocurrency",
+      "code": "CS4015",
+      "thumbnail": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 40,
+      "tags": ["BLOCKCHAIN"],
+      "upcomingSessions": [
+        {"id": "bc-1", "title": "Consensus Mechanisms", "date": "Monday, Sep 29", "time": "4:00 PM - 6:00 PM", "cta": "Join Session"},
+        {"id": "bc-2", "title": "Smart Contracts & Development", "date": "Wednesday, Oct 1", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "bc-3", "title": "Trading & Financial Applications", "date": "Friday, Oct 3", "time": "5:00 PM - 7:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Blockchain: Fundamentals", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Blockchain: Consensus & Mining", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Blockchain: Smart Contracts", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Blockchain: DeFi & Applications", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Blockchain: Code Examples", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "bc-quiz-1", "title": "Consensus & Mining Quiz", "category": "Fundamentals", "date": "October 6, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"},
+        {"id": "bc-quiz-2", "title": "Smart Contracts Challenge", "category": "Development", "date": "October 13, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-computer-vision",
+      "title": "Computer Vision & Image Processing",
+      "code": "CS3090",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+      "format": "Online",
+      "capacity": 44,
+      "tags": ["AI"],
+      "upcomingSessions": [
+        {"id": "cv-1", "title": "CNN Architecture & Applications", "date": "Tuesday, Oct 7", "time": "10:00 AM - 12:00 PM", "cta": "Join Session"},
+        {"id": "cv-2", "title": "Object Detection Models", "date": "Thursday, Oct 9", "time": "1:00 PM - 3:00 PM", "cta": "Join Session"},
+        {"id": "cv-3", "title": "Image Segmentation Lab", "date": "Saturday, Oct 11", "time": "11:00 AM - 1:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Vision: Convolutional Networks", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Vision: OpenCV Tutorial", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Vision: Deep Learning for Images", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Vision: PyTorch Image Models", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Vision: Project Ideas & Datasets", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "cv-quiz-1", "title": "CNN Architectures Quiz", "category": "Deep Learning", "date": "October 14, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "45 minutes"},
+        {"id": "cv-quiz-2", "title": "Object Detection Challenge", "category": "Detection Models", "date": "October 21, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "40 minutes"},
+        {"id": "cv-quiz-3", "title": "Image Processing & Segmentation", "category": "Image Analysis", "date": "October 28, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 8, "timeLimit": "35 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    },
+    {
+      "id": "c-cloud-computing",
+      "title": "Cloud Computing Fundamentals",
+      "code": "CS3045",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+      "format": "Blended",
+      "capacity": 50,
+      "tags": ["CLOUD"],
+      "upcomingSessions": [
+        {"id": "cloud-1", "title": "AWS Services & Architecture", "date": "Wednesday, Oct 1", "time": "9:00 AM - 11:00 AM", "cta": "Join Session"},
+        {"id": "cloud-2", "title": "GCP & Azure Cloud Platforms", "date": "Friday, Oct 3", "time": "2:00 PM - 4:00 PM", "cta": "Join Session"},
+        {"id": "cloud-3", "title": "Serverless & Microservices", "date": "Sunday, Oct 5", "time": "4:00 PM - 6:00 PM", "cta": "Join Session"},
+        {"id": "cloud-4", "title": "Cloud Security & Compliance", "date": "Tuesday, Oct 7", "time": "12:00 PM - 2:00 PM", "cta": "Join Session"}
+      ],
+      "materials": [
+        {"title": "Cloud: AWS Fundamentals", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Cloud: Google Cloud Platform", "type": "pdf", "url": "/pdfs/material2.pdf"},
+        {"title": "Cloud: Azure & Hybrid", "type": "pdf", "url": "/pdfs/material3.pdf"},
+        {"title": "Cloud: Serverless Architecture", "type": "pdf", "url": "/pdfs/material1.pdf"},
+        {"title": "Cloud: Deployment Templates", "type": "sheet", "url": "/materials/note.txt"}
+      ],
+      "quizzes": [
+        {"id": "cloud-quiz-1", "title": "AWS Services Quiz", "category": "Cloud Platforms", "date": "October 8, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 11, "timeLimit": "45 minutes"},
+        {"id": "cloud-quiz-2", "title": "Multi-Cloud & Architecture", "category": "Cloud Architecture", "date": "October 15, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 10, "timeLimit": "50 minutes"},
+        {"id": "cloud-quiz-3", "title": "Serverless & Security", "category": "Advanced Cloud", "date": "October 22, 2025 - 10:00 AM", "status": "Attempt Quiz", "questions": 9, "timeLimit": "50 minutes"}
+      ],
+      "enrollment": {
+        "student": null,
+        "tutor": null
+      }
+    }
+  ]
+}
