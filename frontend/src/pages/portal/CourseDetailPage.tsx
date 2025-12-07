@@ -1,4 +1,4 @@
-import { CalendarDays, Clock3, FileText, FileSpreadsheet, FileVideo, Code, FileText as FileDoc } from 'lucide-react';
+import { CalendarDays, Clock3, FileText, FileSpreadsheet, FileVideo, Code, FileText as FileDoc, Library, ExternalLink, User, MapPin, Calendar } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { courseIdFromSlug, toCourseSlug } from '../../utils/courseSlug';
@@ -35,6 +35,9 @@ const CourseDetailPage = () => {
   const normalizedCourseId = courseIdFromSlug(courseSlugParam);
   const course = normalizedCourseId ? portal?.courseDetails?.[normalizedCourseId] : undefined;
   const resolvedCourseSlug = courseSlugParam ?? toCourseSlug(course?.courseId ?? '') ?? normalizedCourseId ?? course?.courseId ?? '';
+  
+  // Find the course info from the courses list to get instructor, format, and schedule
+  const courseInfo = portal?.courses?.courses?.find((c: any) => c.id === normalizedCourseId);
 
   if (!course) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Course details not available.</div>;
@@ -66,6 +69,46 @@ const CourseDetailPage = () => {
         <p className="text-sm uppercase tracking-[0.35em] text-slate-400">Course dashboard</p>
         <h1 className="mt-2 text-3xl font-semibold text-ink">{course.title}</h1>
         <p className="mt-2 text-slate-500">Upcoming sessions, materials, and quizzes curated for you.</p>
+        
+        {/* Course Information Grid */}
+        {courseInfo && (
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {courseInfo.instructor && (
+              <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <User className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Instructor</p>
+                  <p className="text-sm font-semibold text-ink">{courseInfo.instructor}</p>
+                </div>
+              </div>
+            )}
+            {courseInfo.schedule && (
+              <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600">
+                  <Calendar className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Schedule</p>
+                  <p className="text-sm font-semibold text-ink">{courseInfo.schedule}</p>
+                </div>
+              </div>
+            )}
+            {courseInfo.format && (
+              <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Format</p>
+                  <p className="text-sm font-semibold text-ink">{courseInfo.format}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        
         {role === 'tutor' && resolvedCourseSlug && (
           <button
             type="button"
@@ -145,6 +188,32 @@ const CourseDetailPage = () => {
               );
             })}
           </ul>
+          
+          {/* Special HCMUT Library Access Button */}
+          <div className="mt-6 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => window.open('https://lib.hcmut.edu.vn/', '_blank', 'noopener,noreferrer')}
+              className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-[2px] transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/50"
+            >
+              <div className="relative flex items-center justify-between gap-4 rounded-2xl bg-white px-6 py-4 transition-colors duration-300 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:via-indigo-600 group-hover:to-purple-600">
+                <div className="flex items-center gap-4">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+                    <Library className="h-6 w-6" />
+                  </span>
+                  <div className="text-left">
+                    <p className="text-base font-bold text-ink transition-colors duration-300 group-hover:text-white">
+                      Access HCMUT Library
+                    </p>
+                    <p className="text-xs text-slate-500 transition-colors duration-300 group-hover:text-blue-100">
+                      Browse academic resources and research materials
+                    </p>
+                  </div>
+                </div>
+                <ExternalLink className="h-5 w-5 text-slate-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white" />
+              </div>
+            </button>
+          </div>
         </div>
 
         <div className="rounded-[32px] bg-white p-6 shadow-soft">

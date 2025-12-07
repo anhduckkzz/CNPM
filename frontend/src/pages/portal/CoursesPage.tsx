@@ -89,6 +89,11 @@ const CoursesPage = () => {
                   {(course as any).status && getStatusBadge((course as any).status)}
                 </div>
                 <p className="text-sm text-slate-500">Course ID: {course.code}</p>
+                {(course as any).instructor && (
+                  <p className="text-sm text-slate-600">
+                    <span className="font-medium">Instructor:</span> {(course as any).instructor}
+                  </p>
+                )}
                 {role === 'tutor' && (
                   <>
                     {(course as any).timeStudy && (

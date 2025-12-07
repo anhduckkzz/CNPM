@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 export interface ToastItem {
   id: string;
   message: string;
+  type?: 'success' | 'warning' | 'error' | 'info';
 }
 
 export const useStackedToasts = (duration = 2200) => {
@@ -18,9 +19,9 @@ export const useStackedToasts = (duration = 2200) => {
   }, []);
 
   const showToast = useCallback(
-    (message: string) => {
+    (message: string, type: 'success' | 'warning' | 'error' | 'info' = 'success') => {
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      setToasts((prev) => [...prev, { id, message }]);
+      setToasts((prev) => [...prev, { id, message, type }]);
       timers.current[id] = setTimeout(() => dismiss(id), duration);
     },
     [dismiss, duration],

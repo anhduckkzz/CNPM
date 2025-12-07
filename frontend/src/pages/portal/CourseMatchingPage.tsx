@@ -13,6 +13,82 @@ const FORMAT_CHOICES = ['In-person', 'Blended', 'Online'];
 const AI_STEPS = ['Scanning availability & capacity', 'Matching preferred formats', 'Locking the best section'];
 const AI_BAR_COUNT = 6;
 
+// Parse schedule time string to time slots
+const parseScheduleTime = (schedule: string): { day: string; start: number; end: number }[] => {
+  if (!schedule) return [];
+  
+  const slots: { day: string; start: number; end: number }[] = [];
+  const dayMap: Record<string, string> = {
+    'mon': 'Mon', 'tue': 'Tue', 'wed': 'Wed', 'thu': 'Thu', 'fri': 'Fri', 'sat': 'Sat', 'sun': 'Sun'
+  };
+  
+  // Parse formats like "Mon, Wed 8:00-10:00" or "Tue, Thu 14:00-16:00"
+  const parts = schedule.split(/\s+/);
+  const days: string[] = [];
+  let timeRange = '';
+  
+  parts.forEach(part => {
+    const cleaned = part.replace(/,/g, '').toLowerCase();
+    if (dayMap[cleaned]) {
+      days.push(dayMap[cleaned]);
+    } else if (part.match(/\d+:\d+-\d+:\d+/)) {
+      timeRange = part;
+    }
+  });
+  
+  if (timeRange) {
+    const [startStr, endStr] = timeRange.split('-');
+    const start = parseFloat(startStr.replace(':', '.'));
+    const end = parseFloat(endStr.replace(':', '.'));
+    
+    days.forEach(day => {
+      slots.push({ day, start, end });
+    });
+  }
+  
+  return slots;
+};
+
+// Check if two time slots overlap
+const timeSlotsOverlap = (slot1: { day: string; start: number; end: number }, slot2: { day: string; start: number; end: number }): boolean => {
+  if (slot1.day !== slot2.day) return false;
+  return !(slot1.end <= slot2.start || slot2.end <= slot1.start);
+};
+
+// Determine schedule conflict status
+const getScheduleConflictStatus = (slotTime: string | undefined, registeredCourses: any[]): 'blocked' | 'partial' | 'free' => {
+  if (!slotTime) return 'free';
+  
+  const slotSchedule = parseScheduleTime(slotTime);
+  if (slotSchedule.length === 0) return 'free';
+  
+  let hasConflict = false;
+  let hasPartialConflict = false;
+  
+  registeredCourses.forEach(course => {
+    if (course.status === 'in-progress' && course.schedule) {
+      const courseSchedule = parseScheduleTime(course.schedule);
+      
+      courseSchedule.forEach(courseSlot => {
+        slotSchedule.forEach(slot => {
+          if (timeSlotsOverlap(courseSlot, slot)) {
+            // Check if it's a full conflict (same time) or partial (overlapping)
+            if (courseSlot.start === slot.start && courseSlot.end === slot.end) {
+              hasConflict = true;
+            } else {
+              hasPartialConflict = true;
+            }
+          }
+        });
+      });
+    }
+  });
+  
+  if (hasConflict) return 'blocked';
+  if (hasPartialConflict) return 'partial';
+  return 'free';
+};
+
 // Normalize status to handle both 'in-progress' and 'In progress' formats
 const normalizeStatus = (status?: string): string => {
   if (!status) return 'in-progress';
@@ -236,6 +312,8 @@ const CourseMatchingPage = () => {
   );
 
   const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    
     const normalizedHistory = [...courseHistory];
     const idx = normalizedHistory.findIndex((item) => item.id === course.id);
     const historyEntry: CourseCard = {
@@ -258,11 +336,15 @@ const CourseMatchingPage = () => {
       title: course.title,
       code: course.code,
       thumbnail: course.thumbnail ?? '',
+      status: 'in-progress',
+      registeredDate: currentDate,
+      format: format,
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: 'TBD' })
     };
     if (regIdx === -1) {
       normalizedRegistered.push(regEntry);
     } else {
-      normalizedRegistered[regIdx] = regEntry;
+      normalizedRegistered[regIdx] = { ...normalizedRegistered[regIdx], ...regEntry };
     }
 
     const tutorDetail = await syncTutorCourseDetail(course.id);
@@ -279,16 +361,63 @@ const CourseMatchingPage = () => {
 
   const handleFormatChoice = async (format: string) => {
     if (!modalCourse) return;
+    
+    // Show pending notification
+    showToast(`⏳ Processing registration for ${modalCourse.title}...`, 'warning');
+    
+    // Simulate a small delay for registration processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Create the course with in-progress status and current date
+    const currentDate = new Date().toISOString().split('T')[0];
+    const courseToRegister: RegisteredCourse = {
+      id: modalCourse.id,
+      title: modalCourse.title,
+      code: modalCourse.code,
+      thumbnail: modalCourse.thumbnail ?? '',
+      status: 'in-progress',
+      registeredDate: currentDate,
+      format: format,
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: 'TBD' })
+    };
+    
     await upsertRegistration(modalCourse, format);
     setModalCourse(null);
-    showToast(`Registered ${modalCourse.title} in ${format}`);
+    
+    // Show success notification
+    showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
   };
 
-  const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number]) => {
-    if (!course) return;
-    await upsertRegistration(course, slot.format);
+  const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number], conflictStatus: 'blocked' | 'partial' | 'free') => {
+    if (!course || conflictStatus === 'blocked') return;
+    
+    // Close modal immediately
     setModalCourse(null);
-    showToast(`Registered ${course.title} - ${slot.section}`);
+    
+    // Show pending notification
+    showToast(`⏳ Processing registration for ${course.title}...`, 'warning');
+    
+    // Simulate a small delay for registration processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Create the course with in-progress status and current date
+    const currentDate = new Date().toISOString().split('T')[0];
+    const courseToRegister: RegisteredCourse = {
+      id: course.id,
+      title: course.title,
+      code: course.code,
+      thumbnail: course.thumbnail ?? '',
+      status: 'in-progress',
+      registeredDate: currentDate,
+      format: slot.format,
+      schedule: slot.time,
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: slot.time || 'TBD' })
+    };
+    
+    await upsertRegistration(course, slot.format);
+    
+    // Show success notification
+    showToast(`✅ Successfully registered ${course.title} - ${slot.section}!`, 'success');
   };
 
   const clearTimers = () => {
@@ -480,111 +609,12 @@ const CourseMatchingPage = () => {
             <h2 className="text-xl font-semibold text-ink">
               {isStudentView ? 'Your Registered Courses' : 'Your Teaching Assignments'}
             </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              {isStudentView ? 'View all your course registrations and their current status' : 'View all your teaching assignments and student counts'}
+            </p>
           </div>
           
-          {isStudentView ? (
-            // Student View: Show courses grouped by status (excluding cancelled)
-            <div className="space-y-6">
-              {['In progress', 'Completed'].map((status) => {
-                const coursesByStatus = registeredCourses.filter((c) => c.status === status && c.status !== 'Cancelled');
-                if (coursesByStatus.length === 0) return null;
-                
-                const statusConfig = {
-                  'In progress': { badge: 'bg-blue-100 text-blue-700', icon: '📚' },
-                  'Completed': { badge: 'bg-emerald-100 text-emerald-700', icon: '✅' },
-                  'Cancelled': { badge: 'bg-slate-100 text-slate-700', icon: '❌' },
-                };
-                
-                const config = statusConfig[status as keyof typeof statusConfig] || { badge: 'bg-slate-100 text-slate-700', icon: '📋' };
-                
-                return (
-                  <div key={status}>
-                    <div className="mb-4 flex items-center gap-3">
-                      <span className="text-xl">{config.icon}</span>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-600">{status}</p>
-                        <p className="text-xs text-slate-500">{coursesByStatus.length} course{coursesByStatus.length !== 1 ? 's' : ''}</p>
-                      </div>
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {coursesByStatus.map((course) => (
-                        <article key={course.id} className="flex flex-col rounded-[24px] border border-slate-100 p-4 shadow-soft">
-                          <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
-                          <div className="mt-3 space-y-1">
-                            <p className="text-base font-semibold text-ink">{course.title}</p>
-                            <p className="text-xs text-slate-500">Course ID: {course.code}</p>
-                            <div className="mt-2">
-                              <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}>
-                                {status}
-                              </span>
-                            </div>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            // Tutor View: Show all enrolled courses (In progress, Completed, Failed, Cancelled)
-            <div className="space-y-6">
-              {['In progress', 'Completed', 'Failed', 'Cancelled'].map((status) => {
-                const coursesByStatus = registeredCourses.filter((c) => c.status === status);
-                if (coursesByStatus.length === 0) return null;
-                
-                const statusConfig = {
-                  'In progress': { badge: 'bg-blue-100 text-blue-700', icon: '🎓', description: 'Currently tutoring' },
-                  'Completed': { badge: 'bg-emerald-100 text-emerald-700', icon: '✅', description: 'Completed tutoring' },
-                  'Cancelled': { badge: 'bg-slate-100 text-slate-700', icon: '❌', description: 'Tutor cancelled' },
-                  'Failed': { badge: 'bg-amber-100 text-amber-700', icon: '⚠️', description: 'No students enrolled' },
-                };
-                
-                const config = statusConfig[status as keyof typeof statusConfig] || { badge: 'bg-slate-100 text-slate-700', icon: '📋', description: 'Unknown' };
-                
-                return (
-                  <div key={status}>
-                    <div className="mb-4 flex items-center gap-3">
-                      <span className="text-xl">{config.icon}</span>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-600">{status}</p>
-                        <p className="text-xs text-slate-500">{config.description} • {coursesByStatus.length} course{coursesByStatus.length !== 1 ? 's' : ''}</p>
-                      </div>
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {coursesByStatus.map((course) => (
-                        <article key={course.id} className="flex flex-col rounded-[24px] border border-slate-100 p-4 shadow-soft">
-                          <CourseArtwork identifier={course.id} title={course.title} code={course.code} />
-                          <div className="mt-3 space-y-1">
-                            <p className="text-base font-semibold text-ink">{course.title}</p>
-                            <p className="text-xs text-slate-500">Course ID: {course.code}</p>
-                            {course.studentCount && <p className="text-xs text-slate-400">Students: {course.studentCount}</p>}
-                            <div className="mt-2">
-                              <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}>
-                                {status}
-                              </span>
-                            </div>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Course History Section - Both Student and Tutor Views */}
-      {registeredCourses.length > 0 && (
-        <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Course History</p>
-            <h2 className="text-xl font-semibold text-ink">Your Registered Courses</h2>
-            <p className="mt-1 text-sm text-slate-500">View all your course registrations and their current status</p>
-          </div>
-          
+          {/* Both Student and Tutor View: Show table format with all registration history */}
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -598,12 +628,20 @@ const CourseMatchingPage = () => {
                       <th className="pb-4 text-left text-sm font-semibold text-slate-700">Students</th>
                     </>
                   )}
-                  {!isStudentView && <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>}
+                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>
                 </tr>
               </thead>
               <tbody>
                 {registeredCourses.map((course, index) => {
-                  const displayStudentCount = normalizeStatus(course.status) === 'cancelled' ? 0 : (course.studentCount || 0);
+                  const normalized = normalizeStatus(course.status);
+                  const displayStudentCount = normalized === 'cancelled' ? 0 : (course.studentCount || 0);
+                  const statusConfigs = {
+                    'in-progress': { label: 'In Progress', class: 'bg-blue-50 text-blue-700' },
+                    'completed': { label: 'Completed', class: 'bg-emerald-50 text-emerald-700' },
+                    'cancelled': { label: 'Cancelled', class: 'bg-red-50 text-red-700' },
+                    'waiting': { label: 'Waiting', class: 'bg-amber-50 text-amber-700' },
+                  };
+                  const config = statusConfigs[normalized as keyof typeof statusConfigs] || { label: normalized, class: 'bg-slate-50 text-slate-700' };
                   
                   return (
                     <tr
@@ -619,37 +657,23 @@ const CourseMatchingPage = () => {
                         <p className="text-sm text-slate-600">{course.code}</p>
                       </td>
                       <td className="py-4">
-                        {(() => {
-                          const normalized = normalizeStatus(course.status);
-                          const statusConfigs = {
-                            'in-progress': { label: 'In Progress', class: 'bg-blue-50 text-blue-700' },
-                            'completed': { label: 'Completed', class: 'bg-emerald-50 text-emerald-700' },
-                            'cancelled': { label: 'Cancelled', class: 'bg-red-50 text-red-700' },
-                            'waiting': { label: 'Waiting', class: 'bg-amber-50 text-amber-700' },
-                          };
-                          const config = statusConfigs[normalized as keyof typeof statusConfigs] || { label: normalized, class: 'bg-slate-50 text-slate-700' };
-                          return (
-                            <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.class}`}>
-                              {config.label}
-                            </span>
-                          );
-                        })()}
+                        <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.class}`}>
+                          {config.label}
+                        </span>
                       </td>
                       {!isStudentView && (
                         <>
                           <td className="py-4">
-                            <p className="text-sm text-slate-600">{(course as any).timeStudy || 'N/A'}</p>
+                            <p className="text-sm text-slate-600">{(course as any).timeStudy || 'TBD'}</p>
                           </td>
                           <td className="py-4">
                             <p className="text-sm text-slate-600">{displayStudentCount} students</p>
                           </td>
                         </>
                       )}
-                      {!isStudentView && (
-                        <td className="py-4">
-                          <p className="text-sm text-slate-600">{course.registeredDate || 'N/A'}</p>
-                        </td>
-                      )}
+                      <td className="py-4">
+                        <p className="text-sm text-slate-600">{course.registeredDate || 'N/A'}</p>
+                      </td>
                     </tr>
                   );
                 })}
@@ -767,27 +791,89 @@ const CourseMatchingPage = () => {
                 <>
                   <p className="mt-8 text-sm font-semibold text-slate-500">Or manually select a section</p>
                   <div className="mt-4 space-y-3">
-                    {(data.modal?.slots ?? []).map((slot) => (
-                      <div
-                        key={slot.id}
-                        className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 p-4 transition hover:border-primary/40 hover:bg-primary/5"
-                      >
-                        <div className="flex-1 space-y-1">
-                          <p className="font-semibold text-ink">{slot.section}</p>
-                          <p className="text-sm text-slate-600">{slot.tutor}</p>
-                          <p className="text-xs text-slate-500">
-                            {slot.format} • {slot.days} • {slot.capacity}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleManualRegister(modalCourse, slot)}
-                          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                    {(data.modal?.slots ?? []).map((slot) => {
+                      const conflictStatus = getScheduleConflictStatus(slot.time, registeredCourses);
+                      const isBlocked = conflictStatus === 'blocked';
+                      const isPartial = conflictStatus === 'partial';
+                      const isFree = conflictStatus === 'free';
+                      
+                      // Border colors based on conflict status
+                      const borderColor = isBlocked 
+                        ? 'border-red-500 border-2' 
+                        : isPartial 
+                        ? 'border-yellow-500 border-2' 
+                        : 'border-green-500 border-2';
+                      
+                      const bgColor = isBlocked 
+                        ? 'bg-red-50/50' 
+                        : isPartial 
+                        ? 'bg-yellow-50/50' 
+                        : 'bg-green-50/50';
+                      
+                      const hoverEffect = isBlocked 
+                        ? '' 
+                        : 'hover:border-primary/40 hover:bg-primary/5';
+                      
+                      const cursorStyle = isBlocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer';
+                      
+                      return (
+                        <div
+                          key={slot.id}
+                          className={`flex items-start justify-between gap-4 rounded-2xl ${borderColor} ${bgColor} p-4 transition ${hoverEffect} ${cursorStyle}`}
+                          onClick={() => !isBlocked && handleManualRegister(modalCourse, slot, conflictStatus)}
                         >
-                          {slot.cta || 'Register'}
-                        </button>
-                      </div>
-                    ))}
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-ink">{slot.section}</p>
+                              {isBlocked && (
+                                <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
+                                  Conflict
+                                </span>
+                              )}
+                              {isPartial && (
+                                <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-semibold text-yellow-700">
+                                  Open Time
+                                </span>
+                              )}
+                              {isFree && (
+                                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">
+                                  Free
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-slate-600">{slot.tutor}</p>
+                            <p className="text-xs text-slate-500">
+                              {slot.format} • {slot.days} • {slot.capacity}
+                            </p>
+                            {slot.time && (
+                              <p className="text-xs font-medium text-slate-700">
+                                Schedule: {slot.time}
+                              </p>
+                            )}
+                            {isBlocked && (
+                              <p className="text-xs text-red-600 font-medium">
+                                ⚠️ This time conflicts with your busy schedule
+                              </p>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isBlocked) handleManualRegister(modalCourse, slot, conflictStatus);
+                            }}
+                            disabled={isBlocked}
+                            className={`rounded-full px-4 py-2 text-sm font-semibold text-white shadow-soft transition ${
+                              isBlocked 
+                                ? 'bg-slate-400 cursor-not-allowed' 
+                                : 'bg-primary hover:bg-primary-dark'
+                            }`}
+                          >
+                            {isBlocked ? 'Locked' : slot.cta || 'Register'}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </>
               )}
@@ -816,20 +902,44 @@ const CourseMatchingPage = () => {
         )}
 
       <div aria-live="polite" className="pointer-events-none fixed top-6 left-1/2 -translate-x-1/2 z-40 flex w-full max-w-sm flex-col gap-2">
-        {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className="pointer-events-auto rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-xl"
-          >
-            <div className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5" />
-              <div>
-                <p className="font-semibold">Registration successful</p>
-                <p className="text-xs text-emerald-600">{toast.message || 'You are now assigned to this course.'}</p>
+        {toasts.map((toast) => {
+          const isWarning = toast.type === 'warning';
+          const isError = toast.type === 'error';
+          const isSuccess = !isWarning && !isError;
+          
+          const bgColor = isWarning 
+            ? 'bg-amber-50 border-amber-200' 
+            : isError 
+            ? 'bg-red-50 border-red-200' 
+            : 'bg-emerald-50 border-emerald-200';
+          
+          const textColor = isWarning 
+            ? 'text-amber-700' 
+            : isError 
+            ? 'text-red-700' 
+            : 'text-emerald-700';
+          
+          const iconColor = isWarning 
+            ? 'text-amber-600' 
+            : isError 
+            ? 'text-red-600' 
+            : 'text-emerald-600';
+          
+          return (
+            <div
+              key={toast.id}
+              className={`pointer-events-auto rounded-2xl border ${bgColor} p-4 text-sm ${textColor} shadow-xl`}
+            >
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className={`h-5 w-5 ${iconColor}`} />
+                <div>
+                  <p className="font-semibold">{isWarning ? 'Processing...' : isSuccess ? 'Registration successful' : 'Error'}</p>
+                  <p className={`text-xs ${iconColor}`}>{toast.message}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       </div>
 

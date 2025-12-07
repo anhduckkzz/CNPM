@@ -207,6 +207,41 @@
                 ],
                 "actionLabel": "Go To Your Course",
                 "format": "Blended"
+            },
+            {
+                "id": "c-computer-vision",
+                "title": "Computer Vision & Image Processing",
+                "code": "CS3090",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "actionLabel": "Go To Your Course",
+                "tutor": "Assigned soon",
+                "format": "In-person"
+            },
+            {
+                "id": "c-digital-signal",
+                "title": "Digital Signal Processing",
+                "code": "CO3002",
+                "format": "Blended",
+                "capacity": "47/70",
+                "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
+                "actionLabel": "Go To Your Course",
+                "tutor": "Assigned soon"
+            },
+            {
+                "id": "c-web-development",
+                "title": "Web Development Advanced Topics",
+                "code": "CS3050",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "timeStudy": "Tue & Thu 10:00-12:00",
+                "studentCount": 44,
+                "registeredDate": "2024-08-30",
+                "status": "completed",
+                "tutor": "Assigned soon",
+                "tags": [
+                    "CS"
+                ],
+                "actionLabel": "Go To Your Course",
+                "format": "In-person"
             }
         ],
         "modal": {
@@ -218,7 +253,8 @@
                     "tutor": "Nguyễn Văn An",
                     "format": "Blended",
                     "capacity": "77/100",
-                    "days": "Monday (7h-9h)",
+                    "days": "Monday (8h-10h)",
+                    "time": "Mon 8:00-10:00",
                     "cta": "Register Course"
                 },
                 {
@@ -227,7 +263,8 @@
                     "tutor": "Nguyễn Văn Bình",
                     "format": "Online",
                     "capacity": "68/100",
-                    "days": "Tuesday (7h-9h)",
+                    "days": "Wednesday (9h-11h)",
+                    "time": "Wed 9:00-11:00",
                     "cta": "Register Course"
                 },
                 {
@@ -236,7 +273,8 @@
                     "tutor": "Nguyễn Văn Cường",
                     "format": "In-person",
                     "capacity": "68/100",
-                    "days": "Wednesday (7h-9h)",
+                    "days": "Tuesday (10h-12h)",
+                    "time": "Tue 10:00-12:00",
                     "cta": "Register Course"
                 },
                 {
@@ -245,7 +283,8 @@
                     "tutor": "Nguyễn Văn Dũng",
                     "format": "In-person",
                     "capacity": "56/100",
-                    "days": "Thursday (7h-9h)",
+                    "days": "Friday (14h-16h)",
+                    "time": "Fri 14:00-16:00",
                     "cta": "Register Course"
                 }
             ]
@@ -260,55 +299,97 @@
                 "title": "Introduction to Programming",
                 "code": "CO1002",
                 "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress"
+                "status": "in-progress",
+                "registeredDate": "2025-09-15",
+                "instructor": "Dr. Nguyễn Văn A",
+                "format": "Blended",
+                "schedule": "Mon, Wed 8:00-10:00"
             },
             {
                 "id": "c-advanced-calculus",
                 "title": "Advanced Calculus",
                 "code": "M1T003",
                 "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80",
-                "status": "completed"
+                "status": "completed",
+                "registeredDate": "2025-08-22",
+                "instructor": "Prof. Trần Thị B",
+                "format": "In-person",
+                "schedule": "Tue, Thu 14:00-16:00"
             },
             {
                 "id": "c-quantum-physics",
                 "title": "Quantum Physics",
                 "code": "PH4021",
                 "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress"
+                "status": "in-progress",
+                "registeredDate": "2025-09-01",
+                "instructor": "Dr. Lê Văn C",
+                "format": "In-person",
+                "schedule": "Wed, Fri 10:00-12:00"
             },
             {
                 "id": "c-literary-analysis",
                 "title": "Literary Analysis",
                 "code": "EN1004",
                 "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
-                "status": "cancelled"
+                "status": "cancelled",
+                "registeredDate": "2025-07-10",
+                "instructor": "Dr. Phạm Thị D",
+                "format": "Blended",
+                "schedule": "Mon 15:00-17:00"
             },
             {
                 "id": "c-data-structures",
                 "title": "Data Structures and Algorithms",
                 "code": "CO2002",
                 "thumbnail": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress"
+                "status": "in-progress",
+                "registeredDate": "2025-09-20",
+                "instructor": "Dr. Hoàng Văn E",
+                "format": "Blended",
+                "schedule": "Tue, Thu 8:00-10:00"
             },
             {
                 "id": "c-cellular-biology",
                 "title": "Cellular Biology",
                 "code": "BI3002",
                 "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-                "status": "waiting"
-            },
-            {
-                "id": "c-blockchain",
-                "title": "Blockchain & Cryptocurrency",
-                "code": "CS4015",
-                "thumbnail": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80"
+                "status": "waiting",
+                "registeredDate": "2025-10-05",
+                "instructor": "Prof. Vũ Thị F",
+                "format": "In-person",
+                "schedule": "Mon, Wed 13:00-15:00"
             },
             {
                 "id": "c-ai-nlp",
                 "title": "AI & Natural Language Processing",
                 "code": "CS3085",
                 "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress"
+                "status": "in-progress",
+                "registeredDate": "2025-11-12",
+                "instructor": "Dr. Đỗ Văn G",
+                "format": "Blended",
+                "schedule": "Fri 14:00-17:00"
+            },
+            {
+                "id": "c-computer-vision",
+                "title": "Computer Vision & Image Processing",
+                "code": "CS3090",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-07",
+                "instructor": "Prof. Bùi Thị H",
+                "format": "In-person",
+                "schedule": "Mon, Wed 9:00-11:00"
+            },
+            {
+                "id": "c-web-development",
+                "title": "Web Development Advanced Topics",
+                "code": "CS3050",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-07",
+                "format": "In-person"
             }
         ]
     },
@@ -2105,7 +2186,3 @@
         "student@hcmut.edu.vn": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80"
     }
 }
-
-
-
-
