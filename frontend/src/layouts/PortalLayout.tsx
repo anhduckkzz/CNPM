@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
-import { LayoutGrid, User2, BookOpen, CalendarDays, MessageSquare, Repeat, BellRing, FileText, Menu, X } from 'lucide-react';
+import { LayoutGrid, User2, BookOpen, CalendarDays, MessageSquare, Repeat, BellRing, FileText, Menu, X, Sparkles } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -60,6 +60,7 @@ const PortalLayout = () => {
     const normalized = label.toLowerCase();
     if (normalized.includes('dashboard') || normalized.includes('home')) return <LayoutGrid size={16} />;
     if (normalized.includes('profile')) return <User2 size={16} />;
+    if (normalized.includes('registration')) return <Sparkles size={16} />;
     if (normalized.includes('course')) return <BookOpen size={16} />;
     if (normalized.includes('schedule')) return <CalendarDays size={16} />;
     if (normalized.includes('feedback')) return <MessageSquare size={16} />;
@@ -237,9 +238,9 @@ const PortalLayout = () => {
             <div className="flex flex-wrap items-center gap-3">
               <div className="text-right">
                 <p className="text-xs text-slate-400">Logged in as</p>
-                <p className="font-semibold">{user?.name}</p>
+                <p className="font-semibold">{portal?.user?.name ?? user?.name}</p>
               </div>
-              <img src={user?.avatar} alt={user?.name} className="h-12 w-12 rounded-2xl object-cover" />
+              <img src={portal?.user?.avatar ?? user?.avatar} alt={portal?.user?.name ?? user?.name} className="h-12 w-12 rounded-2xl object-cover" />
               <button
                 type="button"
                 onClick={logout}

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CheckCircle2, Search, Sparkles, X } from 'lucide-react';
+import { CheckCircle2, Search, Sparkles, X, XCircle, AlertCircle, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchPortalBundle } from '../../lib/api';
 import type { CourseCard, CourseDetailSection, CourseMatchingSection, RegisteredCourse } from '../../types/portal';
@@ -21,9 +21,13 @@ const CourseMatchingPage = () => {
   const [formatFilter, setFormatFilter] = useState('All Formats');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
   const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [tagFilter, setTagFilter] = useState('All Tags');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarSearch, setSidebarSearch] = useState('');
   const [modalCourse, setModalCourse] = useState<CourseCard | null>(null);
   const [courseHistory, setCourseHistory] = useState<CourseCard[]>(data?.history ?? []);
   const [registeredCourses, setRegisteredCourses] = useState<RegisteredCourse[]>(portal?.courses?.courses ?? []);
+  const [allAvailableCourses, setAllAvailableCourses] = useState<CourseCard[]>([]);
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
   const [aiStepIndex, setAiStepIndex] = useState(0);
   const [aiBarActive, setAiBarActive] = useState(0);
@@ -41,6 +45,20 @@ const CourseMatchingPage = () => {
     setCourseHistory(data?.history ?? []);
     setRegisteredCourses(portal?.courses?.courses ?? []);
   }, [data?.history, portal?.courses?.courses]);
+
+  // Load all available courses from tutor bundle
+  useEffect(() => {
+    const loadAllCourses = async () => {
+      try {
+        const bundle = await fetchPortalBundle('tutor');
+        const tutorCourses = bundle.courses?.courses ?? [];
+        setAllAvailableCourses(tutorCourses as CourseCard[]);
+      } catch (error) {
+        console.error('Failed to load all courses', error);
+      }
+    };
+    loadAllCourses();
+  }, []);
 
   const availableRecommended = useMemo(() => {
     const registeredIds = new Set(registeredCourses.map((course) => course.id));
@@ -113,6 +131,16 @@ const CourseMatchingPage = () => {
     return ['All Statuses', ...unique];
   }, [availableRecommended]);
 
+  const tagOptions = useMemo(() => {
+    const allTags = new Set<string>();
+    availableRecommended.forEach((course) => {
+      if (course.tags && Array.isArray(course.tags)) {
+        course.tags.forEach((tag) => allTags.add(tag));
+      }
+    });
+    return ['All Tags', ...Array.from(allTags).sort()];
+  }, [availableRecommended]);
+
   const filteredCourses = useMemo(() => {
     return availableRecommended.filter((course) => {
       const matchesSearch =
@@ -123,9 +151,21 @@ const CourseMatchingPage = () => {
       const matchesCategory = categoryFilter === 'All Categories' || courseCategory === categoryFilter;
       const courseStatus = getCourseStatus(course);
       const matchesStatus = statusFilter === 'All Statuses' || courseStatus.label === statusFilter;
-      return matchesSearch && matchesFormat && matchesCategory && matchesStatus;
+      const matchesTag = 
+        tagFilter === 'All Tags' || 
+        (course.tags && Array.isArray(course.tags) && course.tags.includes(tagFilter));
+      return matchesSearch && matchesFormat && matchesCategory && matchesStatus && matchesTag;
     });
-  }, [availableRecommended, formatFilter, categoryFilter, statusFilter, searchTerm]);
+  }, [availableRecommended, formatFilter, categoryFilter, statusFilter, tagFilter, searchTerm]);
+
+  const sidebarFilteredCourses = useMemo(() => {
+    return allAvailableCourses.filter((course) => {
+      const matchesSearch =
+        course.title.toLowerCase().includes(sidebarSearch.toLowerCase()) ||
+        course.code.toLowerCase().includes(sidebarSearch.toLowerCase());
+      return matchesSearch;
+    });
+  }, [allAvailableCourses, sidebarSearch]);
 
   const persistState = async (
     nextHistory: CourseCard[],
@@ -229,6 +269,13 @@ const CourseMatchingPage = () => {
     showToast(`Registered ${modalCourse.title} in ${format}`);
   };
 
+  const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number]) => {
+    if (!course) return;
+    await upsertRegistration(course, slot.format);
+    setModalCourse(null);
+    showToast(`Registered ${course.title} - ${slot.section}`);
+  };
+
   const clearTimers = () => {
     timers.current.forEach((timer) => clearTimeout(timer));
     timers.current = [];
@@ -280,7 +327,9 @@ const CourseMatchingPage = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="flex gap-6">
+      {/* Main Content */}
+      <div className="flex-1 space-y-8">
       <header className="rounded-[32px] bg-white p-8 shadow-soft">
         <div className="flex flex-col gap-6">
           <div>
@@ -296,7 +345,7 @@ const CourseMatchingPage = () => {
                 : 'Explore open courses that align with your expertise. Register for a teaching format and keep track of the cohorts you\'re already coaching.'}
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-5">
             <label className="relative flex items-center rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500">
               <Search className="mr-2 h-4 w-4 text-slate-400" />
               <input
@@ -340,6 +389,17 @@ const CourseMatchingPage = () => {
                 </option>
               ))}
             </select>
+            <select
+              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-600 focus:border-primary focus:outline-none"
+              value={tagFilter}
+              onChange={(event) => setTagFilter(event.target.value)}
+            >
+              {tagOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </header>
@@ -349,7 +409,7 @@ const CourseMatchingPage = () => {
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Recommended Courses</p>
             <h2 className="text-xl font-semibold text-ink">
-              {isStudentView ? 'Open cohorts you can register for' : 'Open cohorts you can register to tutor'}
+              {isStudentView ? 'Recommended courses that may suit your interests' : 'Recommend course that may suitable with your personal interest'}
             </h2>
           </div>
           <span className="rounded-full bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
@@ -396,24 +456,93 @@ const CourseMatchingPage = () => {
         </div>
       </section>
 
+      {!isStudentView && data.registrationResults && data.registrationResults.length > 0 && (
+        <section className="space-y-4 rounded-[32px] bg-white p-8 shadow-soft">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Registration Results</p>
+            <h2 className="text-xl font-semibold text-ink">Course Registration Status</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {data.registrationResults.map((result: any) => {
+              const getStatusBadge = (status: string) => {
+                switch (status) {
+                  case 'processing':
+                    return (
+                      <div className="flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                        <CheckCircle2 className="h-4 w-4" />
+                        Active
+                      </div>
+                    );
+                  case 'cancelled':
+                    return (
+                      <div className="flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-700">
+                        <XCircle className="h-4 w-4" />
+                        Cancelled
+                      </div>
+                    );
+                  case 'failed':
+                    return (
+                      <div className="flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-700">
+                        <AlertCircle className="h-4 w-4" />
+                        Failed
+                      </div>
+                    );
+                  default:
+                    return null;
+                }
+              };
+
+              return (
+                <article key={result.id} className="flex flex-col rounded-[28px] border border-slate-200 bg-slate-50 p-5 shadow-soft">
+                  <CourseArtwork identifier={result.id} title={result.title} code={result.code} />
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-lg font-semibold text-ink">{result.title}</p>
+                      {getStatusBadge(result.status)}
+                    </div>
+                    <p className="text-sm text-slate-500">
+                      Course ID: {result.code} | Format: {result.format}
+                    </p>
+                    {result.registeredDate && (
+                      <p className="text-xs text-slate-400">Registered: {result.registeredDate}</p>
+                    )}
+                    {result.reason && result.status !== 'processing' && (
+                      <div className="mt-3 rounded-2xl bg-white p-3 text-sm text-slate-600">
+                        <p className="font-semibold text-slate-700 mb-1">Reason:</p>
+                        <p>{result.reason}</p>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {modalCourse &&
         modalTarget &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-slate-900/50 p-6">
-            <div className="relative w-full max-w-2xl rounded-[32px] bg-white p-8 shadow-2xl">
-              <button
-                type="button"
-                onClick={() => {
-                  clearTimers();
-                  setAiAnalyzing(false);
-                  setAiStepIndex(0);
-                  setAiBarActive(0);
-                  setModalCourse(null);
-                }}
-                className="absolute right-6 top-6 rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-50"
-              >
-                <X className="h-4 w-4" />
-              </button>
+          <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-slate-900/80 p-6">
+            <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-[32px] bg-white shadow-2xl">
+              <div className="sticky top-0 z-10 flex items-start justify-between bg-white rounded-t-[32px] p-8 pb-0">
+                <div />
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearTimers();
+                    setAiAnalyzing(false);
+                    setAiStepIndex(0);
+                    setAiBarActive(0);
+                    setModalCourse(null);
+                  }}
+                  className="rounded-full border border-slate-200 p-2 text-slate-500 hover:bg-slate-100 transition"
+                  aria-label="Close modal"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="px-8 pb-8">
               <CourseArtwork identifier={modalCourse.id} title={modalCourse.title} code={modalCourse.code} size="modal" />
               <div className="mt-6 space-y-1">
                 <p className="text-sm uppercase tracking-[0.3em] text-slate-400">{modalCourse.code}</p>
@@ -495,25 +624,59 @@ const CourseMatchingPage = () => {
                 </div>
               )}
 
-              <p className="mt-8 text-sm font-semibold text-slate-500">Choose your teaching format</p>
-              <div className="mt-4 flex flex-wrap gap-4">
-                {FORMAT_CHOICES.map((format) => (
-                  <button
-                    key={format}
-                    type="button"
-                    onClick={() => handleFormatChoice(format)}
-                    className="flex-1 rounded-2xl border border-primary/30 px-4 py-3 text-center text-sm font-semibold text-primary transition hover:bg-primary/10"
-                  >
-                    {format}
-                  </button>
-                ))}
+              {isStudentView && (
+                <>
+                  <p className="mt-8 text-sm font-semibold text-slate-500">Or manually select a section</p>
+                  <div className="mt-4 space-y-3">
+                    {(data.modal?.slots ?? []).map((slot) => (
+                      <div
+                        key={slot.id}
+                        className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 p-4 transition hover:border-primary/40 hover:bg-primary/5"
+                      >
+                        <div className="flex-1 space-y-1">
+                          <p className="font-semibold text-ink">{slot.section}</p>
+                          <p className="text-sm text-slate-600">{slot.tutor}</p>
+                          <p className="text-xs text-slate-500">
+                            {slot.format} • {slot.days} • {slot.capacity}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleManualRegister(modalCourse, slot)}
+                          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-soft transition hover:bg-primary-dark"
+                        >
+                          {slot.cta || 'Register'}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {!isStudentView && (
+                <>
+                  <p className="mt-8 text-sm font-semibold text-slate-500">Choose your teaching format</p>
+                  <div className="mt-4 flex flex-wrap gap-4">
+                    {FORMAT_CHOICES.map((format) => (
+                      <button
+                        key={format}
+                        type="button"
+                        onClick={() => handleFormatChoice(format)}
+                        className="flex-1 rounded-2xl border border-primary/30 px-4 py-3 text-center text-sm font-semibold text-primary transition hover:bg-primary/10"
+                      >
+                        {format}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
               </div>
             </div>
           </div>,
           modalTarget,
         )}
 
-      <div aria-live="polite" className="pointer-events-none fixed bottom-6 right-6 z-40 flex w-full max-w-sm flex-col gap-2">
+      <div aria-live="polite" className="pointer-events-none fixed top-6 left-1/2 -translate-x-1/2 z-40 flex w-full max-w-sm flex-col gap-2">
         {toasts.map((toast) => (
           <div
             key={toast.id}
@@ -528,6 +691,86 @@ const CourseMatchingPage = () => {
             </div>
           </div>
         ))}
+      </div>
+      </div>
+
+      {/* Right Sidebar - Collapsible Course Search */}
+      <div className={`transition-all duration-300 ${sidebarOpen ? 'w-80' : 'w-16'}`}>
+        {/* Toggle Button */}
+        <div className="sticky top-0 z-30 mb-4 flex items-center justify-between rounded-[32px] bg-white p-4 shadow-soft">
+          <h2 className={`text-lg font-semibold text-ink transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0 hidden'}`}>
+            Find Course
+          </h2>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="rounded-full p-2 text-slate-500 hover:bg-slate-100 transition"
+            aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          >
+            {sidebarOpen ? <ChevronRight className="h-5 w-5" /> : <ChevronRight className="h-5 w-5 rotate-180" />}
+          </button>
+        </div>
+
+        {/* Sidebar Content */}
+        {sidebarOpen && (
+          <div className="sticky top-20 space-y-4">
+            {/* Search Input */}
+            <div className="rounded-[28px] bg-white p-4 shadow-soft">
+              <label className="relative flex items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-slate-500">
+                <Search className="mr-2 h-4 w-4 text-slate-400 flex-shrink-0" />
+                <input
+                  type="search"
+                  placeholder="Search courses..."
+                  value={sidebarSearch}
+                  onChange={(event) => setSidebarSearch(event.target.value)}
+                  className="w-full bg-transparent text-sm focus:outline-none"
+                />
+              </label>
+            </div>
+
+            {/* Course Results */}
+            <div className="rounded-[28px] bg-white shadow-soft overflow-hidden">
+              <div className="border-b border-slate-100 px-4 py-3">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em]">
+                  Results ({sidebarFilteredCourses.length})
+                </p>
+              </div>
+              <div className="max-h-96 overflow-y-auto">
+                {sidebarFilteredCourses.length > 0 ? (
+                  <div className="divide-y divide-slate-100">
+                    {sidebarFilteredCourses.map((course) => (
+                      <button
+                        key={course.id}
+                        type="button"
+                        onClick={() => setModalCourse(course)}
+                        className="w-full px-4 py-3 text-left transition hover:bg-slate-50 active:bg-slate-100"
+                      >
+                        <p className="font-semibold text-sm text-ink line-clamp-2">{course.title}</p>
+                        <p className="text-xs text-slate-500 mt-1">{course.code}</p>
+                        {course.capacity && (
+                          <p className="text-xs text-slate-400 mt-1">Capacity: {course.capacity}</p>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-4 py-8 text-center">
+                    <p className="text-sm text-slate-500">
+                      {sidebarSearch ? 'No courses found' : 'Search to find courses'}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Info Text */}
+            <div className="rounded-[28px] bg-blue-50 p-4 border border-blue-100">
+              <p className="text-xs text-blue-700">
+                Click any course to see details and register. Use the search bar above to find specific courses.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -54,6 +54,7 @@ export interface CourseCard {
   badge?: string;
   actionLabel: string;
   accent?: string;
+  tags?: string[];
 }
 
 export interface CourseMatchingSection {
@@ -62,6 +63,16 @@ export interface CourseMatchingSection {
   filters: string[];
   recommended: CourseCard[];
   history: CourseCard[];
+  registrationResults?: Array<{
+    id: string;
+    title: string;
+    code: string;
+    format: string;
+    thumbnail: string;
+    status: 'cancelled' | 'failed' | 'processing';
+    reason?: string;
+    registeredDate?: string;
+  }>;
   modal: {
     focusCourseId: string;
     slots: Array<{

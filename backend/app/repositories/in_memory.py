@@ -54,7 +54,7 @@ class PortalRepository:
 
     def _load_bundle(self, role: Role) -> Dict:
         json_path = self._json_path(role)
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, 'r', encoding='utf-8-sig') as f:
             bundle = json.load(f)
             self._apply_avatar_store(bundle)
             self._bundles[role] = bundle

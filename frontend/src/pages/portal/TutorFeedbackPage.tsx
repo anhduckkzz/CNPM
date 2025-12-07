@@ -27,17 +27,25 @@ const TutorFeedbackPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.attendance.map((entry) => (
-                <tr key={entry.id} className="border-t border-slate-100">
-                  <td className="px-4 py-3 font-semibold text-ink">{entry.name}</td>
-                  <td className="px-4 py-3">
-                    <span className={`rounded-full px-3 py-1 text-xs ${entry.attended ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
-                      {entry.attended ? 'Present' : 'Absent'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-500">{entry.inClassScore}</td>
-                </tr>
-              ))}
+              {data.attendance.map((entry) => {
+                const scorePercent = entry.inClassScore * 10;
+                const isLowScore = scorePercent < 50;
+                return (
+                  <tr key={entry.id} className="border-t border-slate-100">
+                    <td className="px-4 py-3 font-semibold text-ink">{entry.name}</td>
+                    <td className="px-4 py-3">
+                      <span className={`rounded-full px-3 py-1 text-xs ${entry.attended ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
+                        {entry.attended ? 'Present' : 'Absent'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`font-semibold ${isLowScore ? 'text-red-600' : 'text-green-600'}`}>
+                        {scorePercent}%
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

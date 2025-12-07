@@ -455,16 +455,47 @@ const CourseAdminPage = () => {
             </div>
           </div>
           <div className="mt-6 space-y-4">
-            {sessions.map((session) => (
+            {sessions.map((session, index) => (
               <div
                 key={session.id}
                 className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-100 p-4"
               >
-                <div>
-                  <p className="font-semibold text-ink">{session.title}</p>
-                  <p className="text-sm text-slate-500">
-                    {session.date} - {session.time}
-                  </p>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={session.title}
+                    onChange={(e) => {
+                      const updatedSessions = [...sessions];
+                      updatedSessions[index] = { ...session, title: e.target.value };
+                      setSessions(updatedSessions);
+                    }}
+                    className="w-full font-semibold text-ink bg-transparent border-b border-transparent hover:border-slate-200 focus:border-primary focus:outline-none px-2 py-1"
+                    placeholder="Session title"
+                  />
+                  <div className="flex gap-3 mt-2">
+                    <input
+                      type="text"
+                      value={session.date}
+                      onChange={(e) => {
+                        const updatedSessions = [...sessions];
+                        updatedSessions[index] = { ...session, date: e.target.value };
+                        setSessions(updatedSessions);
+                      }}
+                      className="flex-1 text-sm text-slate-500 bg-transparent border-b border-transparent hover:border-slate-200 focus:border-primary focus:outline-none px-2 py-1"
+                      placeholder="Date"
+                    />
+                    <input
+                      type="text"
+                      value={session.time}
+                      onChange={(e) => {
+                        const updatedSessions = [...sessions];
+                        updatedSessions[index] = { ...session, time: e.target.value };
+                        setSessions(updatedSessions);
+                      }}
+                      className="flex-1 text-sm text-slate-500 bg-transparent border-b border-transparent hover:border-slate-200 focus:border-primary focus:outline-none px-2 py-1"
+                      placeholder="Time"
+                    />
+                  </div>
                 </div>
                 <button
                   type="button"

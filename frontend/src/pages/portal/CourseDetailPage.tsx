@@ -17,6 +17,9 @@ const materialIconMap: Record<string, typeof FileText> = {
 const resolveMaterialUrl = (rawUrl: string | undefined) => {
   if (!rawUrl) return '';
   if (rawUrl.startsWith('http')) return rawUrl;
+  // Keep frontend-served paths as-is (PDFs and note.txt)
+  if (rawUrl.startsWith('/pdfs/') || rawUrl === '/materials/note.txt') return rawUrl;
+  // Resolve other paths to backend
   try {
     return new URL(rawUrl, BACKEND_BASE_URL).toString();
   } catch {

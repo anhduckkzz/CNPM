@@ -117,8 +117,8 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
         studentId: row.studentId,
         name: row.name,
         major: row.major,
-        totalCredits: `${row.totalCredits} hrs`,
-        semesterCredits: `${row.semesterCredits} hrs`,
+        totalCredits: `${Math.abs(Number(row.totalCredits))} hrs`,
+        semesterCredits: `${Math.abs(Number(row.semesterCredits))} hrs`,
       })),
     },
     {
@@ -343,7 +343,7 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
               </button>
               {expandedSections[section.id] && (
                 <div className="border-t border-slate-100 px-6 pb-6 pt-4">
-                  <div className="overflow-x-auto">
+                  <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
                     <table className="w-full min-w-[640px] text-left text-sm">
                       <thead className="text-slate-500">
                         <tr>
@@ -415,7 +415,6 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                     type="button"
                     onClick={() => {
                       setActiveHistoryTab(tab);
-                      showToast(tab === 'scholarship' ? 'Viewing scholarship grants' : 'Viewing training credits');
                     }}
                     className={`rounded-full px-4 py-1 text-sm font-semibold ${
                       activeHistoryTab === tab ? 'bg-white text-ink shadow-soft' : 'text-slate-500'
@@ -427,7 +426,7 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
               </div>
             </div>
             <div className="border-t border-slate-100 px-6 pb-6 pt-4">
-              <div className="overflow-x-auto">
+              <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
                 <table className="w-full min-w-[640px] text-left text-sm">
                   <thead className="text-slate-500">
                     <tr>

@@ -1,0 +1,1366 @@
+{
+    "courseContent":  {
+                          "c-intro-programming":  {
+                                                      "courseId":  "c-intro-programming",
+                                                      "title":  "Introduction to Programming",
+                                                      "upcomingSessions":  [
+                                                                               {
+                                                                                   "id":  "intro-1",
+                                                                                   "title":  "Variables \u0026 Data Types",
+                                                                                   "date":  "Tuesday, Sep 30",
+                                                                                   "time":  "9:00 AM - 11:00 AM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "intro-2",
+                                                                                   "title":  "Control Flow \u0026 Loops",
+                                                                                   "date":  "Thursday, Oct 2",
+                                                                                   "time":  "2:00 PM - 4:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "intro-3",
+                                                                                   "title":  "Functions \u0026 Debugging",
+                                                                                   "date":  "Saturday, Oct 4",
+                                                                                   "time":  "10:00 AM - 12:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "intro-4",
+                                                                                   "title":  "Practice Problem Solving",
+                                                                                   "date":  "Monday, Oct 6",
+                                                                                   "time":  "3:00 PM - 5:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               }
+                                                                           ],
+                                                      "materials":  [
+                                                                        {
+                                                                            "title":  "Programming: Getting Started",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Programming: Syntax Fundamentals",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Programming: Control Structures",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material3.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Programming: Functions \u0026 Scope",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Programming: Coding Best Practices",
+                                                                            "type":  "sheet",
+                                                                            "url":  "/materials/note.txt"
+                                                                        }
+                                                                    ],
+                                                      "quizzes":  [
+                                                                      {
+                                                                          "id":  "intro-quiz-1",
+                                                                          "title":  "Variables \u0026 Data Types Quiz",
+                                                                          "category":  "Fundamentals",
+                                                                          "date":  "October 7, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  12,
+                                                                          "timeLimit":  "30 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "intro-quiz-2",
+                                                                          "title":  "Control Flow Challenge",
+                                                                          "category":  "Logic",
+                                                                          "date":  "October 14, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  10,
+                                                                          "timeLimit":  "25 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "intro-quiz-3",
+                                                                          "title":  "Functions \u0026 Debugging",
+                                                                          "category":  "Advanced Basics",
+                                                                          "date":  "October 21, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  11,
+                                                                          "timeLimit":  "35 minutes"
+                                                                      }
+                                                                  ]
+                                                  },
+                          "c-advanced-calculus":  {
+                                                      "courseId":  "c-advanced-calculus",
+                                                      "title":  "Advanced Calculus",
+                                                      "upcomingSessions":  [
+                                                                               {
+                                                                                   "id":  "calc-1",
+                                                                                   "title":  "Series \u0026 Convergence",
+                                                                                   "date":  "Wednesday, Oct 1",
+                                                                                   "time":  "10:00 AM - 12:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "calc-2",
+                                                                                   "title":  "Laplace Transforms",
+                                                                                   "date":  "Friday, Oct 3",
+                                                                                   "time":  "1:00 PM - 3:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "calc-3",
+                                                                                   "title":  "Derivative Applications",
+                                                                                   "date":  "Sunday, Oct 5",
+                                                                                   "time":  "2:00 PM - 4:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               }
+                                                                           ],
+                                                      "materials":  [
+                                                                        {
+                                                                            "title":  "Calculus: Series Theory",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Calculus: Transform Methods",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material3.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Calculus: Multivariable Calculus",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Calculus: Problem Solving Techniques",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Calculus: Formula Reference",
+                                                                            "type":  "sheet",
+                                                                            "url":  "/materials/note.txt"
+                                                                        }
+                                                                    ],
+                                                      "quizzes":  [
+                                                                      {
+                                                                          "id":  "calc-quiz-1",
+                                                                          "title":  "Series \u0026 Convergence Quiz",
+                                                                          "category":  "Sequences",
+                                                                          "date":  "October 8, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  10,
+                                                                          "timeLimit":  "40 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "calc-quiz-2",
+                                                                          "title":  "Transform \u0026 Integration Quiz",
+                                                                          "category":  "Calculus",
+                                                                          "date":  "October 15, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  9,
+                                                                          "timeLimit":  "45 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "calc-quiz-3",
+                                                                          "title":  "Applications \u0026 Optimization",
+                                                                          "category":  "Real-World Calculus",
+                                                                          "date":  "October 22, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  8,
+                                                                          "timeLimit":  "35 minutes"
+                                                                      }
+                                                                  ]
+                                                  },
+                          "c-quantum-physics":  {
+                                                    "courseId":  "c-quantum-physics",
+                                                    "title":  "Quantum Physics Foundations",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "qp-1",
+                                                                                 "title":  "Wave Functions \u0026 Superposition",
+                                                                                 "date":  "Monday, Sep 29",
+                                                                                 "time":  "11:00 AM - 1:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "qp-2",
+                                                                                 "title":  "Quantum Mechanics Principles",
+                                                                                 "date":  "Wednesday, Oct 1",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "qp-3",
+                                                                                 "title":  "Real-World Applications",
+                                                                                 "date":  "Friday, Oct 3",
+                                                                                 "time":  "10:00 AM - 12:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Physics: Quantum Mechanics Intro",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Physics: Schrödinger Equation",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Physics: Atomic Structure",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Physics: Quantum Computing Basics",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Physics: Experiment Notes",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "qp-quiz-1",
+                                                                        "title":  "Wave Functions Quiz",
+                                                                        "category":  "Fundamentals",
+                                                                        "date":  "October 6, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "40 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "qp-quiz-2",
+                                                                        "title":  "Quantum Mechanics Principles",
+                                                                        "category":  "Core Concepts",
+                                                                        "date":  "October 13, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "qp-quiz-3",
+                                                                        "title":  "Applications \u0026 Problem Solving",
+                                                                        "category":  "Advanced Topics",
+                                                                        "date":  "October 20, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  8,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-literary-analysis":  {
+                                                      "courseId":  "c-literary-analysis",
+                                                      "title":  "Literary Analysis \u0026 Criticism",
+                                                      "upcomingSessions":  [
+                                                                               {
+                                                                                   "id":  "lit-1",
+                                                                                   "title":  "Poetry Interpretation",
+                                                                                   "date":  "Tuesday, Oct 7",
+                                                                                   "time":  "2:00 PM - 4:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "lit-2",
+                                                                                   "title":  "Close Reading Techniques",
+                                                                                   "date":  "Thursday, Oct 9",
+                                                                                   "time":  "10:00 AM - 12:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "lit-3",
+                                                                                   "title":  "Narrative Structure Analysis",
+                                                                                   "date":  "Saturday, Oct 11",
+                                                                                   "time":  "3:00 PM - 5:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               }
+                                                                           ],
+                                                      "materials":  [
+                                                                        {
+                                                                            "title":  "Literature: Poetry Fundamentals",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Literature: Narrative Techniques",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Literature: Critical Theories",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material3.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Literature: Essay Writing Guide",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Literature: Text Annotations",
+                                                                            "type":  "sheet",
+                                                                            "url":  "/materials/note.txt"
+                                                                        }
+                                                                    ],
+                                                      "quizzes":  [
+                                                                      {
+                                                                          "id":  "lit-quiz-1",
+                                                                          "title":  "Poetry Analysis Quiz",
+                                                                          "category":  "Poetry",
+                                                                          "date":  "October 14, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  8,
+                                                                          "timeLimit":  "30 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "lit-quiz-2",
+                                                                          "title":  "Close Reading Challenge",
+                                                                          "category":  "Analysis",
+                                                                          "date":  "October 21, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  9,
+                                                                          "timeLimit":  "40 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "lit-quiz-3",
+                                                                          "title":  "Narrative Structure Exam",
+                                                                          "category":  "Prose",
+                                                                          "date":  "October 28, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  10,
+                                                                          "timeLimit":  "45 minutes"
+                                                                      }
+                                                                  ]
+                                                  },
+                          "c-data-structures":  {
+                                                    "courseId":  "c-data-structures",
+                                                    "title":  "Data Structures \u0026 Algorithms",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "ds-1",
+                                                                                 "title":  "Sorting Algorithms",
+                                                                                 "date":  "Wednesday, Oct 1",
+                                                                                 "time":  "2:00 PM - 4:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "ds-2",
+                                                                                 "title":  "Graph Algorithms",
+                                                                                 "date":  "Friday, Oct 3",
+                                                                                 "time":  "11:00 AM - 1:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "ds-3",
+                                                                                 "title":  "Linked Lists \u0026 Trees",
+                                                                                 "date":  "Sunday, Oct 5",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "ds-4",
+                                                                                 "title":  "Complexity Analysis \u0026 Optimization",
+                                                                                 "date":  "Tuesday, Oct 7",
+                                                                                 "time":  "1:00 PM - 3:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "DSA: Sorting \u0026 Searching",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "DSA: Graph Theory",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "DSA: Trees \u0026 Heaps",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "DSA: Dynamic Programming",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "DSA: Code Templates",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "ds-quiz-1",
+                                                                        "title":  "Sorting \u0026 Searching Quiz",
+                                                                        "category":  "Fundamentals",
+                                                                        "date":  "October 8, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  11,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "ds-quiz-2",
+                                                                        "title":  "Graph Algorithms Challenge",
+                                                                        "category":  "Advanced",
+                                                                        "date":  "October 15, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "ds-quiz-3",
+                                                                        "title":  "Trees \u0026 Dynamic Programming",
+                                                                        "category":  "Complex Structures",
+                                                                        "date":  "October 22, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-cellular-biology":  {
+                                                     "courseId":  "c-cellular-biology",
+                                                     "title":  "Cellular Biology \u0026 Molecular Processes",
+                                                     "upcomingSessions":  [
+                                                                              {
+                                                                                  "id":  "cb-1",
+                                                                                  "title":  "Cell Structure \u0026 Organelles",
+                                                                                  "date":  "Monday, Sep 29",
+                                                                                  "time":  "1:00 PM - 3:00 PM",
+                                                                                  "cta":  "Join Session"
+                                                                              },
+                                                                              {
+                                                                                  "id":  "cb-2",
+                                                                                  "title":  "DNA \u0026 Gene Expression",
+                                                                                  "date":  "Wednesday, Oct 1",
+                                                                                  "time":  "11:00 AM - 1:00 PM",
+                                                                                  "cta":  "Join Session"
+                                                                              },
+                                                                              {
+                                                                                  "id":  "cb-3",
+                                                                                  "title":  "Cell Division \u0026 Reproduction",
+                                                                                  "date":  "Friday, Oct 3",
+                                                                                  "time":  "2:00 PM - 4:00 PM",
+                                                                                  "cta":  "Join Session"
+                                                                              },
+                                                                              {
+                                                                                  "id":  "cb-4",
+                                                                                  "title":  "Metabolic Pathways",
+                                                                                  "date":  "Sunday, Oct 5",
+                                                                                  "time":  "10:00 AM - 12:00 PM",
+                                                                                  "cta":  "Join Session"
+                                                                              }
+                                                                          ],
+                                                     "materials":  [
+                                                                       {
+                                                                           "title":  "Biology: Cell Structure",
+                                                                           "type":  "pdf",
+                                                                           "url":  "/pdfs/material3.pdf"
+                                                                       },
+                                                                       {
+                                                                           "title":  "Biology: Molecular Biology",
+                                                                           "type":  "pdf",
+                                                                           "url":  "/pdfs/material1.pdf"
+                                                                       },
+                                                                       {
+                                                                           "title":  "Biology: Genetics \u0026 Inheritance",
+                                                                           "type":  "pdf",
+                                                                           "url":  "/pdfs/material2.pdf"
+                                                                       },
+                                                                       {
+                                                                           "title":  "Biology: Metabolic Pathways",
+                                                                           "type":  "pdf",
+                                                                           "url":  "/pdfs/material3.pdf"
+                                                                       },
+                                                                       {
+                                                                           "title":  "Biology: Lab Procedures",
+                                                                           "type":  "sheet",
+                                                                           "url":  "/materials/note.txt"
+                                                                       }
+                                                                   ],
+                                                     "quizzes":  [
+                                                                     {
+                                                                         "id":  "cb-quiz-1",
+                                                                         "title":  "Cell Structure Quiz",
+                                                                         "category":  "Fundamentals",
+                                                                         "date":  "October 6, 2025 - 10:00 AM",
+                                                                         "status":  "Attempt Quiz",
+                                                                         "questions":  10,
+                                                                         "timeLimit":  "35 minutes"
+                                                                     },
+                                                                     {
+                                                                         "id":  "cb-quiz-2",
+                                                                         "title":  "DNA \u0026 Gene Expression",
+                                                                         "category":  "Molecular",
+                                                                         "date":  "October 13, 2025 - 10:00 AM",
+                                                                         "status":  "Attempt Quiz",
+                                                                         "questions":  11,
+                                                                         "timeLimit":  "45 minutes"
+                                                                     },
+                                                                     {
+                                                                         "id":  "cb-quiz-3",
+                                                                         "title":  "Cell Division \u0026 Metabolism",
+                                                                         "category":  "Processes",
+                                                                         "date":  "October 20, 2025 - 10:00 AM",
+                                                                         "status":  "Attempt Quiz",
+                                                                         "questions":  9,
+                                                                         "timeLimit":  "40 minutes"
+                                                                     }
+                                                                 ]
+                                                 },
+                          "c-web-development":  {
+                                                    "courseId":  "c-web-development",
+                                                    "title":  "Modern Web Development",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "web-1",
+                                                                                 "title":  "React Optimization Techniques",
+                                                                                 "date":  "Tuesday, Oct 7",
+                                                                                 "time":  "11:00 AM - 1:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "web-2",
+                                                                                 "title":  "GraphQL \u0026 State Management",
+                                                                                 "date":  "Thursday, Oct 9",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "web-3",
+                                                                                 "title":  "Testing \u0026 Performance",
+                                                                                 "date":  "Saturday, Oct 11",
+                                                                                 "time":  "1:00 PM - 3:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Web: React Advanced Patterns",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Web: GraphQL Essentials",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Web: State Management Guide",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Web: Performance Optimization",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Web: Project Resources",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "web-quiz-1",
+                                                                        "title":  "React Optimization Quiz",
+                                                                        "category":  "Frontend",
+                                                                        "date":  "October 14, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "40 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "web-quiz-2",
+                                                                        "title":  "GraphQL \u0026 APIs Challenge",
+                                                                        "category":  "Backend Integration",
+                                                                        "date":  "October 21, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "web-quiz-3",
+                                                                        "title":  "Testing \u0026 Performance",
+                                                                        "category":  "Quality Assurance",
+                                                                        "date":  "October 28, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  8,
+                                                                        "timeLimit":  "35 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-python-advanced":  {
+                                                    "courseId":  "c-python-advanced",
+                                                    "title":  "Advanced Python Programming",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "py-1",
+                                                                                 "title":  "Decorators \u0026 Functional Programming",
+                                                                                 "date":  "Monday, Sep 29",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "py-2",
+                                                                                 "title":  "Async Programming \u0026 Concurrency",
+                                                                                 "date":  "Wednesday, Oct 1",
+                                                                                 "time":  "1:00 PM - 3:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "py-3",
+                                                                                 "title":  "Performance Tuning \u0026 Profiling",
+                                                                                 "date":  "Friday, Oct 3",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "py-4",
+                                                                                 "title":  "Testing \u0026 Debugging Strategies",
+                                                                                 "date":  "Sunday, Oct 5",
+                                                                                 "time":  "11:00 AM - 1:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Python: Advanced Decorators",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Python: Async \u0026 Concurrency",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Python: Performance Optimization",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Python: Testing \u0026 Debugging",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Python: Code Snippets",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "py-quiz-1",
+                                                                        "title":  "Decorators \u0026 Functional Quiz",
+                                                                        "category":  "Advanced Concepts",
+                                                                        "date":  "October 6, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "40 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "py-quiz-2",
+                                                                        "title":  "Async Programming Challenge",
+                                                                        "category":  "Concurrency",
+                                                                        "date":  "October 13, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  11,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "py-quiz-3",
+                                                                        "title":  "Performance \u0026 Testing",
+                                                                        "category":  "Quality",
+                                                                        "date":  "October 20, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-mobile-development":  {
+                                                       "courseId":  "c-mobile-development",
+                                                       "title":  "Mobile App Development",
+                                                       "upcomingSessions":  [
+                                                                                {
+                                                                                    "id":  "mob-1",
+                                                                                    "title":  "Cross-Platform Development",
+                                                                                    "date":  "Wednesday, Oct 1",
+                                                                                    "time":  "10:00 AM - 12:00 PM",
+                                                                                    "cta":  "Join Session"
+                                                                                },
+                                                                                {
+                                                                                    "id":  "mob-2",
+                                                                                    "title":  "UI Components \u0026 Navigation",
+                                                                                    "date":  "Friday, Oct 3",
+                                                                                    "time":  "1:00 PM - 3:00 PM",
+                                                                                    "cta":  "Join Session"
+                                                                                },
+                                                                                {
+                                                                                    "id":  "mob-3",
+                                                                                    "title":  "Deployment \u0026 App Store Setup",
+                                                                                    "date":  "Sunday, Oct 5",
+                                                                                    "time":  "2:00 PM - 4:00 PM",
+                                                                                    "cta":  "Join Session"
+                                                                                }
+                                                                            ],
+                                                       "materials":  [
+                                                                         {
+                                                                             "title":  "Mobile: React Native Fundamentals",
+                                                                             "type":  "pdf",
+                                                                             "url":  "/pdfs/material3.pdf"
+                                                                         },
+                                                                         {
+                                                                             "title":  "Mobile: Flutter Basics",
+                                                                             "type":  "pdf",
+                                                                             "url":  "/pdfs/material1.pdf"
+                                                                         },
+                                                                         {
+                                                                             "title":  "Mobile: Native Development",
+                                                                             "type":  "pdf",
+                                                                             "url":  "/pdfs/material2.pdf"
+                                                                         },
+                                                                         {
+                                                                             "title":  "Mobile: App Publishing Guide",
+                                                                             "type":  "pdf",
+                                                                             "url":  "/pdfs/material3.pdf"
+                                                                         },
+                                                                         {
+                                                                             "title":  "Mobile: API Integration",
+                                                                             "type":  "sheet",
+                                                                             "url":  "/materials/note.txt"
+                                                                         }
+                                                                     ],
+                                                       "quizzes":  [
+                                                                       {
+                                                                           "id":  "mob-quiz-1",
+                                                                           "title":  "Cross-Platform Basics Quiz",
+                                                                           "category":  "Fundamentals",
+                                                                           "date":  "October 8, 2025 - 10:00 AM",
+                                                                           "status":  "Attempt Quiz",
+                                                                           "questions":  9,
+                                                                           "timeLimit":  "35 minutes"
+                                                                       },
+                                                                       {
+                                                                           "id":  "mob-quiz-2",
+                                                                           "title":  "UI \u0026 Navigation Challenge",
+                                                                           "category":  "Frontend",
+                                                                           "date":  "October 15, 2025 - 10:00 AM",
+                                                                           "status":  "Attempt Quiz",
+                                                                           "questions":  10,
+                                                                           "timeLimit":  "45 minutes"
+                                                                       },
+                                                                       {
+                                                                           "id":  "mob-quiz-3",
+                                                                           "title":  "Deployment \u0026 Distribution",
+                                                                           "category":  "DevOps",
+                                                                           "date":  "October 22, 2025 - 10:00 AM",
+                                                                           "status":  "Attempt Quiz",
+                                                                           "questions":  8,
+                                                                           "timeLimit":  "40 minutes"
+                                                                       }
+                                                                   ]
+                                                   },
+                          "c-devops-kubernetes":  {
+                                                      "courseId":  "c-devops-kubernetes",
+                                                      "title":  "DevOps \u0026 Kubernetes Mastery",
+                                                      "upcomingSessions":  [
+                                                                               {
+                                                                                   "id":  "k8s-1",
+                                                                                   "title":  "Container Orchestration Basics",
+                                                                                   "date":  "Tuesday, Oct 7",
+                                                                                   "time":  "9:00 AM - 11:00 AM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "k8s-2",
+                                                                                   "title":  "Kubernetes Deployment Strategies",
+                                                                                   "date":  "Thursday, Oct 9",
+                                                                                   "time":  "2:00 PM - 4:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "k8s-3",
+                                                                                   "title":  "CI/CD Pipeline Setup",
+                                                                                   "date":  "Saturday, Oct 11",
+                                                                                   "time":  "10:00 AM - 12:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "k8s-4",
+                                                                                   "title":  "Monitoring \u0026 Logging Solutions",
+                                                                                   "date":  "Monday, Oct 13",
+                                                                                   "time":  "1:00 PM - 3:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               }
+                                                                           ],
+                                                      "materials":  [
+                                                                        {
+                                                                            "title":  "DevOps: Docker \u0026 Containers",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "DevOps: Kubernetes Architecture",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "DevOps: CI/CD Workflows",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material3.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "DevOps: Infrastructure as Code",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "DevOps: Configuration Files",
+                                                                            "type":  "sheet",
+                                                                            "url":  "/materials/note.txt"
+                                                                        }
+                                                                    ],
+                                                      "quizzes":  [
+                                                                      {
+                                                                          "id":  "k8s-quiz-1",
+                                                                          "title":  "Container \u0026 Orchestration Quiz",
+                                                                          "category":  "Fundamentals",
+                                                                          "date":  "October 14, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  11,
+                                                                          "timeLimit":  "45 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "k8s-quiz-2",
+                                                                          "title":  "Kubernetes Deployment Challenge",
+                                                                          "category":  "Advanced",
+                                                                          "date":  "October 21, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  10,
+                                                                          "timeLimit":  "50 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "k8s-quiz-3",
+                                                                          "title":  "CI/CD \u0026 Monitoring",
+                                                                          "category":  "Operations",
+                                                                          "date":  "October 28, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  9,
+                                                                          "timeLimit":  "50 minutes"
+                                                                      }
+                                                                  ]
+                                                  },
+                          "c-ai-nlp":  {
+                                           "courseId":  "c-ai-nlp",
+                                           "title":  "AI \u0026 Natural Language Processing",
+                                           "upcomingSessions":  [
+                                                                    {
+                                                                        "id":  "ai-1",
+                                                                        "title":  "Transformer Models \u0026 Attention",
+                                                                        "date":  "Monday, Sep 29",
+                                                                        "time":  "2:00 PM - 4:00 PM",
+                                                                        "cta":  "Join Session"
+                                                                    },
+                                                                    {
+                                                                        "id":  "ai-2",
+                                                                        "title":  "Prompt Engineering \u0026 LLMs",
+                                                                        "date":  "Wednesday, Oct 1",
+                                                                        "time":  "4:00 PM - 6:00 PM",
+                                                                        "cta":  "Join Session"
+                                                                    },
+                                                                    {
+                                                                        "id":  "ai-3",
+                                                                        "title":  "Fine-tuning \u0026 Model Optimization",
+                                                                        "date":  "Friday, Oct 3",
+                                                                        "time":  "12:00 PM - 2:00 PM",
+                                                                        "cta":  "Join Session"
+                                                                    }
+                                                                ],
+                                           "materials":  [
+                                                             {
+                                                                 "title":  "AI: Transformer Architecture",
+                                                                 "type":  "pdf",
+                                                                 "url":  "/pdfs/material2.pdf"
+                                                             },
+                                                             {
+                                                                 "title":  "AI: Natural Language Processing",
+                                                                 "type":  "pdf",
+                                                                 "url":  "/pdfs/material3.pdf"
+                                                             },
+                                                             {
+                                                                 "title":  "AI: Large Language Models",
+                                                                 "type":  "pdf",
+                                                                 "url":  "/pdfs/material1.pdf"
+                                                             },
+                                                             {
+                                                                 "title":  "AI: Practical Applications",
+                                                                 "type":  "pdf",
+                                                                 "url":  "/pdfs/material2.pdf"
+                                                             },
+                                                             {
+                                                                 "title":  "AI: Model Resources",
+                                                                 "type":  "sheet",
+                                                                 "url":  "/materials/note.txt"
+                                                             }
+                                                         ],
+                                           "quizzes":  [
+                                                           {
+                                                               "id":  "ai-quiz-1",
+                                                               "title":  "Transformers \u0026 Attention Quiz",
+                                                               "category":  "Deep Learning",
+                                                               "date":  "October 6, 2025 - 10:00 AM",
+                                                               "status":  "Attempt Quiz",
+                                                               "questions":  10,
+                                                               "timeLimit":  "45 minutes"
+                                                           },
+                                                           {
+                                                               "id":  "ai-quiz-2",
+                                                               "title":  "LLM \u0026 Prompt Engineering",
+                                                               "category":  "NLP",
+                                                               "date":  "October 13, 2025 - 10:00 AM",
+                                                               "status":  "Attempt Quiz",
+                                                               "questions":  9,
+                                                               "timeLimit":  "40 minutes"
+                                                           },
+                                                           {
+                                                               "id":  "ai-quiz-3",
+                                                               "title":  "Fine-tuning \u0026 Optimization",
+                                                               "category":  "Advanced NLP",
+                                                               "date":  "October 20, 2025 - 10:00 AM",
+                                                               "status":  "Attempt Quiz",
+                                                               "questions":  8,
+                                                               "timeLimit":  "35 minutes"
+                                                           }
+                                                       ]
+                                       },
+                          "c-database-design":  {
+                                                    "courseId":  "c-database-design",
+                                                    "title":  "Database Design \u0026 Optimization",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "db-1",
+                                                                                 "title":  "Normalization \u0026 Schema Design",
+                                                                                 "date":  "Wednesday, Oct 1",
+                                                                                 "time":  "3:00 PM - 5:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "db-2",
+                                                                                 "title":  "Query Optimization \u0026 Indexing",
+                                                                                 "date":  "Friday, Oct 3",
+                                                                                 "time":  "4:00 PM - 6:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "db-3",
+                                                                                 "title":  "NoSQL \u0026 Distributed Databases",
+                                                                                 "date":  "Sunday, Oct 5",
+                                                                                 "time":  "1:00 PM - 3:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Database: Relational Design",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Database: SQL Query Optimization",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Database: NoSQL Patterns",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Database: Performance Tuning",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Database: Schema Examples",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "db-quiz-1",
+                                                                        "title":  "Schema Design Quiz",
+                                                                        "category":  "Fundamentals",
+                                                                        "date":  "October 8, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "40 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "db-quiz-2",
+                                                                        "title":  "Query Optimization Challenge",
+                                                                        "category":  "Performance",
+                                                                        "date":  "October 15, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "db-quiz-3",
+                                                                        "title":  "NoSQL \u0026 Distributed Systems",
+                                                                        "category":  "Advanced Databases",
+                                                                        "date":  "October 22, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  8,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-network-protocols":  {
+                                                      "courseId":  "c-network-protocols",
+                                                      "title":  "Network Protocols \u0026 Security",
+                                                      "upcomingSessions":  [
+                                                                               {
+                                                                                   "id":  "net-1",
+                                                                                   "title":  "TCP/IP \u0026 OSI Model",
+                                                                                   "date":  "Tuesday, Oct 7",
+                                                                                   "time":  "4:00 PM - 6:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "net-2",
+                                                                                   "title":  "Network Security \u0026 Encryption",
+                                                                                   "date":  "Thursday, Oct 9",
+                                                                                   "time":  "11:00 AM - 1:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "net-3",
+                                                                                   "title":  "Routing \u0026 Network Architecture",
+                                                                                   "date":  "Saturday, Oct 11",
+                                                                                   "time":  "2:00 PM - 4:00 PM",
+                                                                                   "cta":  "Join Session"
+                                                                               }
+                                                                           ],
+                                                      "materials":  [
+                                                                        {
+                                                                            "title":  "Network: TCP/IP Stack",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Network: Security Fundamentals",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material2.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Network: Cryptography Essentials",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material3.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Network: Network Design",
+                                                                            "type":  "pdf",
+                                                                            "url":  "/pdfs/material1.pdf"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Network: Packet Analysis",
+                                                                            "type":  "sheet",
+                                                                            "url":  "/materials/note.txt"
+                                                                        }
+                                                                    ],
+                                                      "quizzes":  [
+                                                                      {
+                                                                          "id":  "net-quiz-1",
+                                                                          "title":  "TCP/IP \u0026 OSI Quiz",
+                                                                          "category":  "Fundamentals",
+                                                                          "date":  "October 14, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  9,
+                                                                          "timeLimit":  "40 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "net-quiz-2",
+                                                                          "title":  "Network Security Challenge",
+                                                                          "category":  "Security",
+                                                                          "date":  "October 21, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  10,
+                                                                          "timeLimit":  "50 minutes"
+                                                                      },
+                                                                      {
+                                                                          "id":  "net-quiz-3",
+                                                                          "title":  "Routing \u0026 Architecture",
+                                                                          "category":  "Advanced Networking",
+                                                                          "date":  "October 28, 2025 - 10:00 AM",
+                                                                          "status":  "Attempt Quiz",
+                                                                          "questions":  8,
+                                                                          "timeLimit":  "45 minutes"
+                                                                      }
+                                                                  ]
+                                                  },
+                          "c-blockchain":  {
+                                               "courseId":  "c-blockchain",
+                                               "title":  "Blockchain \u0026 Distributed Ledger",
+                                               "upcomingSessions":  [
+                                                                        {
+                                                                            "id":  "bc-1",
+                                                                            "title":  "Consensus Mechanisms",
+                                                                            "date":  "Monday, Sep 29",
+                                                                            "time":  "4:00 PM - 6:00 PM",
+                                                                            "cta":  "Join Session"
+                                                                        },
+                                                                        {
+                                                                            "id":  "bc-2",
+                                                                            "title":  "Smart Contracts \u0026 Development",
+                                                                            "date":  "Wednesday, Oct 1",
+                                                                            "time":  "2:00 PM - 4:00 PM",
+                                                                            "cta":  "Join Session"
+                                                                        },
+                                                                        {
+                                                                            "id":  "bc-3",
+                                                                            "title":  "Trading \u0026 Financial Applications",
+                                                                            "date":  "Friday, Oct 3",
+                                                                            "time":  "5:00 PM - 7:00 PM",
+                                                                            "cta":  "Join Session"
+                                                                        }
+                                                                    ],
+                                               "materials":  [
+                                                                 {
+                                                                     "title":  "Blockchain: Fundamentals",
+                                                                     "type":  "pdf",
+                                                                     "url":  "/pdfs/material2.pdf"
+                                                                 },
+                                                                 {
+                                                                     "title":  "Blockchain: Consensus \u0026 Mining",
+                                                                     "type":  "pdf",
+                                                                     "url":  "/pdfs/material3.pdf"
+                                                                 },
+                                                                 {
+                                                                     "title":  "Blockchain: Smart Contracts",
+                                                                     "type":  "pdf",
+                                                                     "url":  "/pdfs/material1.pdf"
+                                                                 },
+                                                                 {
+                                                                     "title":  "Blockchain: DeFi \u0026 Applications",
+                                                                     "type":  "pdf",
+                                                                     "url":  "/pdfs/material2.pdf"
+                                                                 },
+                                                                 {
+                                                                     "title":  "Blockchain: Code Examples",
+                                                                     "type":  "sheet",
+                                                                     "url":  "/materials/note.txt"
+                                                                 }
+                                                             ],
+                                               "quizzes":  [
+                                                               {
+                                                                   "id":  "bc-quiz-1",
+                                                                   "title":  "Consensus \u0026 Mining Quiz",
+                                                                   "category":  "Fundamentals",
+                                                                   "date":  "October 6, 2025 - 10:00 AM",
+                                                                   "status":  "Attempt Quiz",
+                                                                   "questions":  10,
+                                                                   "timeLimit":  "45 minutes"
+                                                               },
+                                                               {
+                                                                   "id":  "bc-quiz-2",
+                                                                   "title":  "Smart Contracts Challenge",
+                                                                   "category":  "Development",
+                                                                   "date":  "October 13, 2025 - 10:00 AM",
+                                                                   "status":  "Attempt Quiz",
+                                                                   "questions":  9,
+                                                                   "timeLimit":  "40 minutes"
+                                                               }
+                                                           ]
+                                           },
+                          "c-computer-vision":  {
+                                                    "courseId":  "c-computer-vision",
+                                                    "title":  "Computer Vision \u0026 Image Processing",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "cv-1",
+                                                                                 "title":  "CNN Architecture \u0026 Applications",
+                                                                                 "date":  "Tuesday, Oct 7",
+                                                                                 "time":  "10:00 AM - 12:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "cv-2",
+                                                                                 "title":  "Object Detection Models",
+                                                                                 "date":  "Thursday, Oct 9",
+                                                                                 "time":  "1:00 PM - 3:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "cv-3",
+                                                                                 "title":  "Image Segmentation Lab",
+                                                                                 "date":  "Saturday, Oct 11",
+                                                                                 "time":  "11:00 AM - 1:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Vision: Convolutional Networks",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Vision: OpenCV Tutorial",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Vision: Deep Learning for Images",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Vision: PyTorch Image Models",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Vision: Project Ideas \u0026 Datasets",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "cv-quiz-1",
+                                                                        "title":  "CNN Architectures Quiz",
+                                                                        "category":  "Deep Learning",
+                                                                        "date":  "October 14, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "cv-quiz-2",
+                                                                        "title":  "Object Detection Challenge",
+                                                                        "category":  "Detection Models",
+                                                                        "date":  "October 21, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "40 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "cv-quiz-3",
+                                                                        "title":  "Image Processing \u0026 Segmentation",
+                                                                        "category":  "Image Analysis",
+                                                                        "date":  "October 28, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  8,
+                                                                        "timeLimit":  "35 minutes"
+                                                                    }
+                                                                ]
+                                                },
+                          "c-cloud-computing":  {
+                                                    "courseId":  "c-cloud-computing",
+                                                    "title":  "Cloud Computing \u0026 Infrastructure",
+                                                    "upcomingSessions":  [
+                                                                             {
+                                                                                 "id":  "cloud-1",
+                                                                                 "title":  "AWS Services \u0026 Architecture",
+                                                                                 "date":  "Wednesday, Oct 1",
+                                                                                 "time":  "9:00 AM - 11:00 AM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "cloud-2",
+                                                                                 "title":  "GCP \u0026 Azure Cloud Platforms",
+                                                                                 "date":  "Friday, Oct 3",
+                                                                                 "time":  "2:00 PM - 4:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "cloud-3",
+                                                                                 "title":  "Serverless \u0026 Microservices",
+                                                                                 "date":  "Sunday, Oct 5",
+                                                                                 "time":  "4:00 PM - 6:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             },
+                                                                             {
+                                                                                 "id":  "cloud-4",
+                                                                                 "title":  "Cloud Security \u0026 Compliance",
+                                                                                 "date":  "Tuesday, Oct 7",
+                                                                                 "time":  "12:00 PM - 2:00 PM",
+                                                                                 "cta":  "Join Session"
+                                                                             }
+                                                                         ],
+                                                    "materials":  [
+                                                                      {
+                                                                          "title":  "Cloud: AWS Fundamentals",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Cloud: Google Cloud Platform",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material2.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Cloud: Azure \u0026 Hybrid",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material3.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Cloud: Serverless Architecture",
+                                                                          "type":  "pdf",
+                                                                          "url":  "/pdfs/material1.pdf"
+                                                                      },
+                                                                      {
+                                                                          "title":  "Cloud: Deployment Templates",
+                                                                          "type":  "sheet",
+                                                                          "url":  "/materials/note.txt"
+                                                                      }
+                                                                  ],
+                                                    "quizzes":  [
+                                                                    {
+                                                                        "id":  "cloud-quiz-1",
+                                                                        "title":  "AWS Services Quiz",
+                                                                        "category":  "Cloud Platforms",
+                                                                        "date":  "October 8, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  11,
+                                                                        "timeLimit":  "45 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "cloud-quiz-2",
+                                                                        "title":  "Multi-Cloud \u0026 Architecture",
+                                                                        "category":  "Cloud Architecture",
+                                                                        "date":  "October 15, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  10,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    },
+                                                                    {
+                                                                        "id":  "cloud-quiz-3",
+                                                                        "title":  "Serverless \u0026 Security",
+                                                                        "category":  "Advanced Cloud",
+                                                                        "date":  "October 22, 2025 - 10:00 AM",
+                                                                        "status":  "Attempt Quiz",
+                                                                        "questions":  9,
+                                                                        "timeLimit":  "50 minutes"
+                                                                    }
+                                                                ]
+                                                }
+                      }
+}
+

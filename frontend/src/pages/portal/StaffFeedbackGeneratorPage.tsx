@@ -1,9 +1,11 @@
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 const StaffFeedbackGeneratorPage = () => {
   const { portal, role } = useAuth();
+  const navigate = useNavigate();
   const feedbackReport = portal?.reports?.feedback;
   const { toasts, showToast } = useStackedToasts();
 
@@ -23,6 +25,14 @@ const StaffFeedbackGeneratorPage = () => {
             <p className="text-sm uppercase tracking-widest text-slate-400">Feedback Generation</p>
             <h1 className="text-3xl font-semibold text-ink">Manage and generate comprehensive feedback reports</h1>
           </div>
+          <button
+            type="button"
+            onClick={() => navigate('/portal/staff/reports')}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary/10"
+          >
+            <ExternalLink className="h-4 w-4" />
+            View All Reports
+          </button>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <label className="text-sm font-semibold text-slate-500">

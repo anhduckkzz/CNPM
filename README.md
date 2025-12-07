@@ -154,24 +154,31 @@ npm install
 npm run dev          # Served on http://127.0.0.1:5173
 ```
 
-Optional `.env` if pointing to a remote API:
+### Environment Variables
 
+Create `frontend/.env.local` for local development:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+VITE_BACKEND_URL=http://localhost:8000
 ```
-VITE_API_URL=https://your-backend.vercel.app/api
+
+For production deployment, use your actual backend URL:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com/api
+VITE_BACKEND_URL=https://your-backend.onrender.com
 ```
+
+**Important:** `VITE_BACKEND_URL` is required for PDF and static file URLs to work correctly in production!
 
 ### Mock logins
 
-| Role    | Email                  |
-|---------|------------------------|
-|Student  | `student@hcmut.edu.vn` |
-|Tutor    | `tutor@hcmut.edu.vn`   |
-|Staff    | `staff@hcmut.edu.vn`   |
-
-Demo passwords:
-
-- Students & Tutors: `12345678`
-- Staff: `password`
+| Role    | Email                  | Password |
+|---------|------------------------|----------|
+|Student  | `student@hcmut.edu.vn` | `12345678` |
+|Tutor    | `tutor@hcmut.edu.vn`   | (any password) |
+|Staff    | `staff@hcmut.edu.vn`   | (any password) |
 
 ---
 
@@ -195,10 +202,16 @@ uvicorn app.main:app --reload
   1. New Web Service → Root directory `backend/`
   2. Build command: `pip install -r requirements.txt`
   3. Start command: `uvicorn app.main:app --host 0.0.0.0 --port ${PORT}`
-  4. Deploy and note the public URL (e.g., `https://your-render-backend.onrender.com`)
+  4. Deploy and note the public URL (e.g., `https://your-backend.onrender.com`)
 
 - **Vercel (React + Vite frontend)**
   1. Create a project with root `frontend/`
   2. Build command: `npm run build`; output directory: `dist`
-  3. Add `VITE_API_URL=https://your-render-backend.onrender.com/api`
+  3. **Add Environment Variables** (Required!):
+     - `VITE_API_URL=https://your-backend.onrender.com/api`
+     - `VITE_BACKEND_URL=https://your-backend.onrender.com`
   4. Deploy; the UI will call the Render backend automatically
+
+> **Important:** Without setting `VITE_BACKEND_URL` in Vercel, PDF links will still point to localhost and won't work in production.
+
+📄 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.

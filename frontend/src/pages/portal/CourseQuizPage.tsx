@@ -548,6 +548,12 @@ const buildQuizContent = (
 ): QuizContent => {
   const meta = COURSE_META[course.courseId] ?? FALLBACK_META;
   const templates = QUESTION_LIBRARY[course.courseId] ?? FALLBACK_QUESTIONS;
+  
+  // Check if there's saved quiz history in courseDetails
+  const savedQuizData = (course as any).quizHistory?.[quiz.id];
+  const history = savedQuizData?.history ?? meta.history;
+  const gradeStats = savedQuizData?.gradeStats ?? meta.gradeStats;
+  
   return {
     quizId: quiz.id,
     title: quiz.title,
@@ -559,14 +565,14 @@ const buildQuizContent = (
     weight: meta.weight,
     focusAreas: meta.focusAreas,
     maxAttempts: meta.maxAttempts,
-    gradeStats: meta.gradeStats,
-    history: meta.history,
+    gradeStats,
+    history,
     questions: createQuestions(templates, quiz.id),
   };
 };
 
 const CourseQuizPage = () => {
-  const { portal, role } = useAuth();
+  const { portal, role, updatePortal } = useAuth();
   const navigate = useNavigate();
   const { courseId: courseSlugParam, quizId } = useParams();
   const normalizedCourseId = courseIdFromSlug(courseSlugParam);
@@ -676,7 +682,7 @@ const CourseQuizPage = () => {
   };
 
   const handleSubmitQuiz = useCallback(
-    (autoSubmit = false) => {
+    async (autoSubmit = false) => {
       if (!questions.length || quizResult) return;
       const correctCount = questions.reduce(
         (total, question) => (selectedAnswers[question.id] === question.correctOptionId ? total + 1 : total),
@@ -704,8 +710,77 @@ const CourseQuizPage = () => {
       if (autoSubmit) {
         setRemainingSeconds(0);
       }
+
+      // Save quiz history
+      try {
+        if (!normalizedCourseId || !updatePortal) return;
+
+        const now = new Date();
+        const timestamp = now.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: '2-digit', 
+          year: 'numeric' 
+        }) + ' - ' + now.toLocaleTimeString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          hour12: true 
+        });
+
+        const attemptNumber = activeQuiz.history.length + 1;
+        const newHistoryEntry: QuizHistoryEntry = {
+          attemptLabel: `Attempt ${attemptNumber}`,
+          timestamp,
+          duration: `${elapsedMinutes}m`,
+          scorePercent,
+          status: autoSubmit && completionPercent < 100 ? 'Expired' : 'Completed',
+        };
+
+        // Update history and grade stats
+        const updatedHistory = [...activeQuiz.history, newHistoryEntry];
+        const allScores = updatedHistory.map(h => h.scorePercent);
+        const updatedGradeStats: QuizGradeStats = {
+          best: Math.max(...allScores),
+          latest: scorePercent,
+          average: Math.round(allScores.reduce((sum, s) => sum + s, 0) / allScores.length),
+        };
+
+        // Update COURSE_META with new history and stats
+        if (COURSE_META[normalizedCourseId]) {
+          COURSE_META[normalizedCourseId].history = updatedHistory;
+          COURSE_META[normalizedCourseId].gradeStats = updatedGradeStats;
+        }
+
+        // Also persist to backend via updatePortal
+        await updatePortal((prev) => {
+          if (!prev.courseDetails) return prev;
+          const courseDetail = prev.courseDetails[normalizedCourseId];
+          if (!courseDetail) return prev;
+
+          // Store quiz history in course metadata
+          const updatedCourseDetail = {
+            ...courseDetail,
+            quizHistory: {
+              ...(courseDetail as any).quizHistory,
+              [activeQuiz.quizId]: {
+                history: updatedHistory,
+                gradeStats: updatedGradeStats,
+              },
+            },
+          };
+
+          return {
+            ...prev,
+            courseDetails: {
+              ...prev.courseDetails,
+              [normalizedCourseId]: updatedCourseDetail,
+            },
+          };
+        });
+      } catch (error) {
+        console.error('Failed to save quiz history:', error);
+      }
     },
-    [questions, quizResult, selectedAnswers, quizStartTime, minutesBudget, answeredCount, activeQuiz.focusAreas],
+    [questions, quizResult, selectedAnswers, quizStartTime, minutesBudget, answeredCount, activeQuiz, normalizedCourseId, updatePortal],
   );
 
   const handleRestartQuiz = () => {
