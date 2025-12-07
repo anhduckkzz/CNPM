@@ -588,7 +588,7 @@ const CourseMatchingPage = () => {
               Student Registration History
             </h2>
             <p className="mt-1 text-sm text-slate-500">
-              Track all students registered in your courses with their academic performance
+              Track all students registered in your courses
             </p>
           </div>
           
@@ -598,22 +598,12 @@ const CourseMatchingPage = () => {
                 <tr className="border-b border-slate-100">
                   <th className="pb-4 text-left text-sm font-semibold text-slate-700">Student Name</th>
                   <th className="pb-4 text-left text-sm font-semibold text-slate-700">Student ID</th>
-                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Email</th>
                   <th className="pb-4 text-left text-sm font-semibold text-slate-700">Course</th>
-                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">Status</th>
-                  <th className="pb-4 text-left text-sm font-semibold text-slate-700">GPA</th>
                   <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>
                 </tr>
               </thead>
               <tbody>
                 {data.studentHistory.map((student, index) => {
-                  const statusConfigs: Record<string, { label: string; class: string }> = {
-                    'active': { label: 'Active', class: 'bg-blue-50 text-blue-700' },
-                    'completed': { label: 'Completed', class: 'bg-emerald-50 text-emerald-700' },
-                    'dropped': { label: 'Dropped', class: 'bg-red-50 text-red-700' },
-                  };
-                  const config = statusConfigs[student.status] || { label: student.status, class: 'bg-slate-50 text-slate-700' };
-                  
                   return (
                     <tr
                       key={student.id}
@@ -628,21 +618,10 @@ const CourseMatchingPage = () => {
                         <p className="text-sm text-slate-600">{student.studentId}</p>
                       </td>
                       <td className="py-4">
-                        <p className="text-sm text-slate-600">{student.email}</p>
-                      </td>
-                      <td className="py-4">
                         <div>
                           <p className="font-medium text-ink">{student.courseTitle}</p>
                           <p className="text-xs text-slate-500">{student.courseCode}</p>
                         </div>
-                      </td>
-                      <td className="py-4">
-                        <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${config.class}`}>
-                          {config.label}
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <p className="text-sm font-semibold text-ink">{student.gpa}</p>
                       </td>
                       <td className="py-4">
                         <p className="text-sm text-slate-600">{student.registeredDate}</p>
