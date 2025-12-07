@@ -295,21 +295,32 @@ const CoursesPage = () => {
                     // Remove from registered courses
                     const updatedCourses = registered.courses.filter(c => c.id !== deleteCourseId);
                     
-                    // Add back to course registration recommended list
-                    const courseCard = {
-                      id: courseToDelete.id,
-                      title: courseToDelete.title,
-                      code: courseToDelete.code,
-                      thumbnail: courseToDelete.thumbnail,
-                      format: (courseToDelete as any).format || 'Blended',
-                      capacity: '0/100',
-                      actionLabel: 'Register Tutor'
-                    };
+                    // Check if course already exists in recommended list to avoid duplicates
+                    const existingInRecommended = (portal.courseMatching?.recommended || []).find(
+                      rec => rec.id === deleteCourseId
+                    );
                     
-                    const updatedRecommended = [
-                      ...(portal.courseMatching?.recommended || []),
-                      courseCard
-                    ];
+                    let updatedRecommended = portal.courseMatching?.recommended || [];
+                    
+                    // Only add back if not already in recommended list
+                    if (!existingInRecommended) {
+                      const courseCard = {
+                        id: courseToDelete.id,
+                        title: courseToDelete.title,
+                        code: courseToDelete.code,
+                        thumbnail: courseToDelete.thumbnail,
+                        format: (courseToDelete as any).format || 'Blended',
+                        capacity: (courseToDelete as any).capacity || '0/100',
+                        actionLabel: role === 'student' ? 'Register' : 'Register Tutor',
+                        instructor: (courseToDelete as any).instructor,
+                        schedule: (courseToDelete as any).schedule,
+                      };
+                      
+                      updatedRecommended = [
+                        ...updatedRecommended,
+                        courseCard
+                      ];
+                    }
                     
                     // Update portal state
                     updatePortal({

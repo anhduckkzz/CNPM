@@ -370,16 +370,21 @@ const CourseMatchingPage = () => {
     nextRegistered: RegisteredCourse[],
     courseDetailUpserts?: Record<string, CourseDetailSection>,
     courseDetailRemovals?: string[],
+    nextRecommended?: CourseCard[],
   ) => {
     if (!updatePortal) return;
     await updatePortal((prev) => {
+      const currentRecommended = nextRecommended !== undefined 
+        ? nextRecommended 
+        : (prev.courseMatching?.recommended || []);
+      
       const nextCourseMatching = prev.courseMatching
-        ? { ...prev.courseMatching, history: nextHistory }
+        ? { ...prev.courseMatching, history: nextHistory, recommended: currentRecommended }
         : {
             title: 'Course Registration',
             description: 'Registered and available courses',
             filters: [],
-            recommended: [],
+            recommended: currentRecommended,
             history: nextHistory,
             modal: { focusCourseId: '', slots: [] },
           };
@@ -459,9 +464,14 @@ const CourseMatchingPage = () => {
     const tutorDetail = await syncTutorCourseDetail(course.id);
     const detailPatch = tutorDetail ? { [tutorDetail.courseId]: tutorDetail } : undefined;
 
+    // Remove from recommended list when registering
+    const updatedRecommended = (portal?.courseMatching?.recommended || []).filter(
+      (rec) => rec.id !== course.id
+    );
+
     setCourseHistory(normalizedHistory);
     setRegisteredCourses(normalizedRegistered);
-    await persistState(normalizedHistory, normalizedRegistered, detailPatch);
+    await persistState(normalizedHistory, normalizedRegistered, detailPatch, undefined, updatedRecommended);
   };
 
   const handleRegisterClick = (course: CourseCard) => {
