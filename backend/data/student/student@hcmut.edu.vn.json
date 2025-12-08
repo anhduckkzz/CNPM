@@ -97,59 +97,26 @@
         ],
         "recommended": [
             {
-                "id": "c-intro-programming",
-                "title": "Introduction to Programming",
-                "code": "CO1002",
+                "id": "c-digital-signal",
+                "title": "Digital Signal Processing",
+                "code": "CO3002",
                 "format": "Blended",
-                "capacity": "70/100",
-                "thumbnail": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
+                "capacity": "47/70",
+                "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Register Course",
-                "instructor": "Dr. Nguyễn Văn A",
-                "schedule": "Mon, Wed 8:00-10:00"
+                "instructor": "Dr. Võ Văn I",
+                "schedule": "Tue, Thu 10:00-12:00"
             },
             {
-                "id": "c-advanced-calculus",
-                "title": "Advanced Calculus",
-                "code": "M1T002",
-                "format": "In-person",
-                "capacity": "50/60",
-                "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Course",
-                "instructor": "Prof. Trần Thị B",
-                "schedule": "Tue, Thu 14:00-16:00"
-            },
-            {
-                "id": "c-quantum-physics",
-                "title": "Quantum Physics",
-                "code": "PH4003",
+                "id": "c-machine-learning",
+                "title": "Machine Learning Fundamentals",
+                "code": "CS4001",
                 "format": "Online",
-                "capacity": "30/40",
-                "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+                "capacity": "55/80",
+                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Register Course",
-                "instructor": "Dr. Lê Văn C",
-                "schedule": "Wed, Fri 10:00-12:00"
-            },
-            {
-                "id": "c-literary-analysis",
-                "title": "Literary Analysis",
-                "code": "EN1002",
-                "format": "In-person",
-                "capacity": "62/80",
-                "thumbnail": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Course",
-                "instructor": "Dr. Phạm Thị D",
-                "schedule": "Mon 15:00-17:00"
-            },
-            {
-                "id": "c-cellular-biology",
-                "title": "Cellular Biology",
-                "code": "BI3002",
-                "format": "In-person",
-                "capacity": "49/60",
-                "thumbnail": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Course",
-                "instructor": "Prof. Vũ Thị F",
-                "schedule": "Mon, Wed 13:00-15:00"
+                "instructor": "Dr. Trần Văn J",
+                "schedule": "Mon, Wed 14:00-16:00"
             }
         ],
         "history": [
@@ -395,17 +362,6 @@
                 "instructor": "Prof. Vũ Thị F",
                 "format": "In-person",
                 "schedule": "Mon, Wed 13:00-15:00"
-            },
-            {
-                "id": "c-devops-kubernetes",
-                "title": "DevOps & Kubernetes",
-                "code": "CS4010",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-07",
-                "format": "In-person",
-                "instructor": "Nguyễn Văn Dũng",
-                "schedule": "Fri 14:00-16:00"
             }
         ]
     },

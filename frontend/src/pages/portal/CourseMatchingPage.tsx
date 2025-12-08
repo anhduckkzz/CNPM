@@ -423,8 +423,50 @@ const CourseMatchingPage = () => {
     [loadTutorCourses],
   );
 
-  const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string, scheduleTime?: string) => {
+  // Find free time slots for tutor based on existing schedule
+  const findFreeTimeSlot = (): string => {
+    const possibleDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const possibleTimes = [
+      '8:00-10:00', '10:00-12:00', '13:00-15:00', '14:00-16:00', '15:00-17:00', '16:00-18:00'
+    ];
+    
+    // Get all occupied time slots from registered courses
+    const occupiedSlots = new Set<string>();
+    registeredCourses.forEach((course) => {
+      if (course.status === 'in-progress' && (course as any).timeStudy) {
+        const timeStudy = (course as any).timeStudy;
+        // Parse "Mon & Wed 14:00-16:00" or "Tue & Thu 09:00-11:00"
+        occupiedSlots.add(timeStudy);
+      }
+    });
+    
+    // Try to find a free slot
+    for (let i = 0; i < possibleDays.length; i++) {
+      for (let j = i + 1; j < possibleDays.length; j++) {
+        for (const time of possibleTimes) {
+          const slot = `${possibleDays[i]} & ${possibleDays[j]} ${time}`;
+          if (!occupiedSlots.has(slot)) {
+            return slot;
+          }
+        }
+      }
+    }
+    
+    // If no free slot found, return a default
+    return 'TBD';
+  };
+
+  const upsertRegistration = async (course: CourseCard, format: string, badge?: string, tutor?: string, scheduleTime?: string): Promise<boolean> => {
     const currentDate = new Date().toISOString().split('T')[0];
+    
+    // Check for duplicate registration
+    const existingCourse = registeredCourses.find(
+      (reg) => reg.id === course.id && reg.status === 'in-progress'
+    );
+    if (existingCourse) {
+      showToast(`❌ Duplicate registration: You are already ${isStudentView ? 'enrolled in' : 'teaching'} "${course.title}" (In Progress)`, 'error');
+      return false;
+    }
     
     const normalizedHistory = [...courseHistory];
     const idx = normalizedHistory.findIndex((item) => item.id === course.id);
@@ -441,6 +483,12 @@ const CourseMatchingPage = () => {
       normalizedHistory[idx] = { ...normalizedHistory[idx], ...historyEntry };
     }
 
+    // For tutors, auto-assign free time slot
+    let assignedTime = scheduleTime || (course as any).schedule;
+    if (!isStudentView && !assignedTime) {
+      assignedTime = findFreeTimeSlot();
+    }
+
     const normalizedRegistered = [...registeredCourses];
     const regIdx = normalizedRegistered.findIndex((item) => item.id === course.id);
     const regEntry: RegisteredCourse = {
@@ -453,7 +501,7 @@ const CourseMatchingPage = () => {
       format: format,
       instructor: tutor || (course as any).instructor,
       schedule: scheduleTime || (course as any).schedule,
-      ...(role === 'tutor' && { studentCount: 0, timeStudy: scheduleTime || (course as any).schedule || 'TBD' })
+      ...(role === 'tutor' && { studentCount: 0, timeStudy: assignedTime || 'TBD' })
     };
     if (regIdx === -1) {
       normalizedRegistered.push(regEntry);
@@ -472,6 +520,7 @@ const CourseMatchingPage = () => {
     setCourseHistory(normalizedHistory);
     setRegisteredCourses(normalizedRegistered);
     await persistState(normalizedHistory, normalizedRegistered, detailPatch, undefined, updatedRecommended);
+    return true;
   };
 
   const handleRegisterClick = (course: CourseCard) => {
@@ -493,10 +542,12 @@ const CourseMatchingPage = () => {
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    await upsertRegistration(modalCourse, format, undefined, slot?.tutor, slot?.time);
+    const success = await upsertRegistration(modalCourse, format, undefined, slot?.tutor, slot?.time);
     
-    // Show success notification
-    showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
+    // Show success notification only if registration succeeded
+    if (success) {
+      showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
+    }
   };
 
   const handleManualRegister = async (course: CourseCard | null, slot: CourseMatchingSection['modal']['slots'][number], conflictStatus: ConflictStatus) => {
@@ -511,10 +562,12 @@ const CourseMatchingPage = () => {
     // Simulate a small delay for registration processing
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    await upsertRegistration(course, slot.format, undefined, slot.tutor, slot.time);
+    const success = await upsertRegistration(course, slot.format, undefined, slot.tutor, slot.time);
     
-    // Show success notification
-    showToast(`✅ Successfully registered ${course.title} - ${slot.section}!`, 'success');
+    // Show success notification only if registration succeeded
+    if (success) {
+      showToast(`✅ Successfully registered ${course.title} - ${slot.section}!`, 'success');
+    }
   };
 
   const clearTimers = () => {
@@ -562,11 +615,13 @@ const CourseMatchingPage = () => {
         capacity: capacityLabel,
         badge: 'AI matched',
       };
-      await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor, slot?.time);
+      const success = await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor, slot?.time);
       const sectionLabel = slot?.section ?? `${course.code} - best available section`;
       
-      // Show success notification
-      showToast(`✅ Successfully AI matched to ${sectionLabel}!`, 'success');
+      // Show success notification only if registration succeeded
+      if (success) {
+        showToast(`✅ Successfully AI matched to ${sectionLabel}!`, 'success');
+      }
       setAiAnalyzing(false);
       setModalCourse(null);
     }, 2800);
