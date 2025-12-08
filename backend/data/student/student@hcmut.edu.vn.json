@@ -2074,7 +2074,17 @@
         "title": "Feedback and Evaluation",
         "instructions": "Provide your feedback for a tutoring session.",
         "sessions": [
-            "CO2021 - Lecture 01 (Data Structures) at 2024-05-15"
+            "CO2021 - Lecture 01 (Data Structures) at 2024-05-15",
+            "CO2021 - Lecture 02 (Data Structures - Advanced Graphs) - Oct 7, 2025",
+            "CS101 - Introduction to Programming (Python Basics) - Oct 5, 2025",
+            "MA301 - Advanced Calculus (Differential Equations) - Oct 6, 2025",
+            "PH201 - Quantum Physics (Wave-Particle Duality Lab) - Oct 7, 2025",
+            "CS401 - AI & NLP (Transformers Architecture Seminar) - Oct 8, 2025",
+            "CS501 - Cloud Computing (AWS Deep Dive Workshop) - Oct 9, 2025",
+            "CS302 - Web Development (React Hooks Tutorial) - Oct 10, 2025",
+            "CS201 - Cellular Biology Lab Session - Oct 11, 2025",
+            "EN102 - Literary Analysis Workshop - Oct 12, 2025",
+            "CS601 - Computer Vision Advanced Topics - Oct 13, 2025"
         ],
         "ratingScale": [
             "Awful",
@@ -2086,6 +2096,14 @@
             "Excellent"
         ],
         "history": [
+            {
+                "id": "1765222442767",
+                "course": "CO2021 - Lecture 01 (Data Structures) at 2024-05-15",
+                "submittedOn": "Dec 9, 2025",
+                "status": "Reviewed",
+                "rating": 4,
+                "summary": "The session was very insightful and promoted active learning..."
+            },
             {
                 "id": "fb-1",
                 "course": "CS101",

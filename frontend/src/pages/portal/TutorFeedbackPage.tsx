@@ -1,8 +1,16 @@
+import { useState } from 'react';
+import { CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 const TutorFeedbackPage = () => {
-  const { portal, role } = useAuth();
+  const { portal, role, updatePortal } = useAuth();
   const data = portal?.tutorFeedback;
+  const [selectedSession, setSelectedSession] = useState('');
+  const [sessionReflection, setSessionReflection] = useState('Session was insightful and promoted active learning.');
+  const [systemFeedback, setSystemFeedback] = useState('Improve performance and navigation clarity.');
+  const [sessionRating, setSessionRating] = useState(data?.sessionRating || 5);
+  const { toasts, showToast } = useStackedToasts();
 
   if (role !== 'tutor') {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Tutor feedback is only available for tutors.</div>;
@@ -12,8 +20,64 @@ const TutorFeedbackPage = () => {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Tutor feedback data unavailable.</div>;
   }
 
+  const handleSubmit = async () => {
+    if (!selectedSession) {
+      showToast('Please select a session');
+      return;
+    }
+
+    if (!portal?.tutorFeedback) {
+      showToast('Tutor feedback data unavailable');
+      return;
+    }
+
+    const newFeedback = {
+      id: Date.now().toString(),
+      course: selectedSession,
+      submittedOn: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      rating: sessionRating,
+      status: sessionRating >= 5 ? 'System: Excellent' : sessionRating >= 4 ? 'System: Good' : 'System: Neutral',
+      summary: sessionReflection.slice(0, 60) + (sessionReflection.length > 60 ? '...' : '')
+    };
+
+    await updatePortal((prev) => ({
+      ...prev,
+      tutorFeedback: {
+        ...prev.tutorFeedback!,
+        history: [newFeedback, ...prev.tutorFeedback!.history]
+      }
+    }));
+    
+    showToast('Tutor feedback submitted successfully');
+    
+    // Reset form
+    setSelectedSession('');
+    setSessionReflection('Session was insightful and promoted active learning.');
+    setSystemFeedback('Improve performance and navigation clarity.');
+    setSessionRating(5);
+  };
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+    <>
+      {toasts.length > 0 && (
+        <div aria-live="assertive" className="pointer-events-none fixed left-6 top-6 z-[60] flex w-full max-w-xs flex-col gap-2">
+          {toasts.map((toast) => (
+            <div
+              key={toast.id}
+              className="pointer-events-auto rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-700 shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold">Success</p>
+                  <p className="text-xs text-emerald-800/80">{toast.message || 'Action completed successfully.'}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <h1 className="text-3xl font-semibold text-ink">Tutor Feedback and Evaluation</h1>
         <p className="mt-2 text-slate-500">Monitor attendance, capture reflections, and submit system feedback.</p>
@@ -49,21 +113,56 @@ const TutorFeedbackPage = () => {
             </tbody>
           </table>
         </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 space-y-4">
+          <label className="block text-sm font-semibold text-slate-500">
+            Select Session
+            <select
+              className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3"
+              value={selectedSession}
+              onChange={(e) => setSelectedSession(e.target.value)}
+            >
+              <option value="">Choose a session...</option>
+              {data.sessions?.map((session) => (
+                <option key={session} value={session}>{session}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-semibold text-slate-500">
             Session Reflection
-            <textarea className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3" defaultValue="Session was insightful and promoted active learning." />
+            <textarea 
+              className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3" 
+              value={sessionReflection}
+              onChange={(e) => setSessionReflection(e.target.value)}
+            />
           </label>
           <label className="block text-sm font-semibold text-slate-500">
             System Feedback
-            <textarea className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3" defaultValue="Improve performance and navigation clarity." />
+            <textarea 
+              className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3" 
+              value={systemFeedback}
+              onChange={(e) => setSystemFeedback(e.target.value)}
+            />
           </label>
         </div>
         <div className="mt-4 rounded-2xl bg-slate-50 p-4">
           <p className="text-sm font-semibold text-slate-500">Overall System Experience</p>
-          <input type="range" min={1} max={7} defaultValue={data.sessionRating} className="mt-4 w-full accent-primary" />
+          <input 
+            type="range" 
+            min={1} 
+            max={7} 
+            value={sessionRating} 
+            onChange={(e) => setSessionRating(Number(e.target.value))}
+            className="mt-4 w-full accent-primary" 
+          />
+          <p className="mt-2 text-center text-sm text-slate-600">Rating: {sessionRating}/7</p>
         </div>
-        <button className="mt-6 w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft" type="button">
+        <button 
+          className="mt-6 w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-primary/90" 
+          type="button"
+          onClick={handleSubmit}
+        >
           Submit Tutor Feedback
         </button>
       </section>
@@ -81,6 +180,7 @@ const TutorFeedbackPage = () => {
         </div>
       </aside>
     </div>
+    </>
   );
 };
 

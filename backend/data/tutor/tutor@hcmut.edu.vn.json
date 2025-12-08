@@ -565,7 +565,7 @@
                 "title": "Cellular Biology",
                 "code": "BI3002",
                 "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
+                "status": "waiting",
                 "registeredDate": "2025-12-07",
                 "instructor": "Dr. Ngô Xuân F",
                 "format": "Blended",
@@ -582,112 +582,17 @@
                 "title": "Web Development Advanced Topics",
                 "code": "CS3050",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
+                "status": "completed",
                 "registeredDate": "2025-12-08",
-                "instructor": "Nguyễn Văn Dũng",
-                "format": "Blended",
-                "timeStudy": "Mon & Tue 14:00-16:00",
-                "studentCount": 0,
+                "instructor": "Prof. Bùi Minh G",
+                "format": "In-person",
+                "schedule": "Tue, Thu 10:00-12:00",
+                "timeStudy": "Tue & Thu 10:00-12:00",
+                "studentCount": 44,
                 "tutor": "You",
                 "tags": [
                     "CS"
                 ]
-            },
-            {
-                "id": "c-cloud-computing",
-                "title": "Cloud Computing Fundamentals",
-                "code": "CS3045",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Blended",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 8:00-10:00"
-            },
-            {
-                "id": "c-computer-vision",
-                "title": "Computer Vision & Image Processing",
-                "code": "CS3090",
-                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "In-person",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 8:00-10:00"
-            },
-            {
-                "id": "c-network-protocols",
-                "title": "Network Protocols & Architecture",
-                "code": "CS3060",
-                "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Blended",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 8:00-10:00"
-            },
-            {
-                "id": "c-blockchain",
-                "title": "Blockchain & Cryptocurrency",
-                "code": "CS4015",
-                "thumbnail": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "In-person",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 10:00-12:00"
-            },
-            {
-                "id": "c-database-design",
-                "title": "Advanced Database Design",
-                "code": "CS3020",
-                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Blended",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 13:00-15:00"
-            },
-            {
-                "id": "c-ai-nlp",
-                "title": "AI & Natural Language Processing",
-                "code": "CS3085",
-                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Online",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 13:00-15:00"
-            },
-            {
-                "id": "c-mobile-development",
-                "title": "Mobile App Development",
-                "code": "CS3070",
-                "thumbnail": "https://images.unsplash.com/photo-1512941691920-25bca6c48a7e?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Blended",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 13:00-15:00"
-            },
-            {
-                "id": "c-python-advanced",
-                "title": "Advanced Python Programming",
-                "code": "CS2055",
-                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "format": "Online",
-                "instructor": "Nguyễn Văn Dũng",
-                "studentCount": 0,
-                "timeStudy": "Mon & Tue 14:00-16:00"
             }
         ]
     },
@@ -2805,6 +2710,19 @@
                 "attended": false,
                 "inClassScore": 0
             }
+        ],
+        "sessions": [
+            "Data Structures - Sorting Algorithms (Meetup) - Oct 4, 2025",
+            "Intro Programming - Python Basics (Lecture) - Oct 5, 2025",
+            "Advanced Calculus - Differential Equations (Workshop) - Oct 6, 2025",
+            "Quantum Physics - Wave-Particle Duality (Lab) - Oct 7, 2025",
+            "AI & NLP - Transformers Architecture (Seminar) - Oct 8, 2025",
+            "Cloud Computing - AWS Deep Dive (Hands-on) - Oct 9, 2025",
+            "Web Development - React Hooks (Tutorial) - Oct 10, 2025",
+            "Advanced Database Design - Normalization Workshop - Oct 6, 2025",
+            "Blockchain - Smart Contracts with Solidity - Oct 7, 2025",
+            "Mobile App Development - React Native Introduction - Oct 6, 2025",
+            "Network Protocols - TCP/IP Protocol Suite - Oct 6, 2025"
         ],
         "sessionRating": 5,
         "history": [
