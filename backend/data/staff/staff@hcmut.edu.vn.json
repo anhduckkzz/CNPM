@@ -6,7 +6,7 @@
                 "title": "Staff Operations",
                 "links": [
                     {"label": "Academic Records", "path": "/portal/staff/academic-records"},
-                    {"label": "Feedback Generation", "path": "/portal/staff/feedback-generation"}
+                    {"label": "Feedback Generation", "path": "/portal/staff/reports"}
                 ]
             }
         ]
@@ -49,16 +49,35 @@
             {"order": 1, "studentId": "2315622", "name": "Nguy\u1ec5n Th\u1ecb An", "major": "Computer Science", "gpa": "3.85", "status": "Active"},
             {"order": 2, "studentId": "2315315", "name": "Tr\u1ea7n V\u0103n B\u00ecnh", "major": "Electrical Eng.", "gpa": "3.60", "status": "Active"},
             {"order": 3, "studentId": "2315716", "name": "L\u00ea Th\u1ecb C\u00fac", "major": "Chemical Eng.", "gpa": "3.92", "status": "Active"},
-            {"order": 4, "studentId": "2315728", "name": "Ph\u1ea1m Minh Duy", "major": "Civil Eng.", "gpa": "3.45", "status": "Active"}
+            {"order": 4, "studentId": "2315728", "name": "Ph\u1ea1m Minh Duy", "major": "Civil Eng.", "gpa": "3.45", "status": "Active"},
+            {"order": 5, "studentId": "2315801", "name": "Ho\u00e0ng V\u0103n Khi\u00eam", "major": "Mechanical Eng.", "gpa": "3.75", "status": "Active"},
+            {"order": 6, "studentId": "2315902", "name": "V\u00f5 Th\u1ecb Lan", "major": "Computer Science", "gpa": "3.88", "status": "Active"},
+            {"order": 7, "studentId": "2316003", "name": "\u0110\u1ed7 Minh Tu\u1ea5n", "major": "Information Systems", "gpa": "3.65", "status": "Active"},
+            {"order": 8, "studentId": "2316104", "name": "B\u00f9i Th\u1ecb Mai", "major": "Chemical Eng.", "gpa": "3.70", "status": "Active"},
+            {"order": 9, "studentId": "2316205", "name": "L\u01b0\u01a1ng V\u0103n H\u00f9ng", "major": "Civil Eng.", "gpa": "3.55", "status": "Active"},
+            {"order": 10, "studentId": "2316306", "name": "\u0110\u00e0o Th\u1ecb Nh\u01b0", "major": "Electrical Eng.", "gpa": "3.80", "status": "Active"},
+            {"order": 11, "studentId": "2316407", "name": "Phan V\u0103n Qu\u00e2n", "major": "Computer Science", "gpa": "3.95", "status": "Active"},
+            {"order": 12, "studentId": "2316508", "name": "Nguy\u1ec5n Th\u1ecb Ph\u01b0\u01a1ng", "major": "Mechanical Eng.", "gpa": "3.50", "status": "Active"},
+            {"order": 13, "studentId": "2316609", "name": "Tr\u1ea7n Minh S\u01a1n", "major": "Information Systems", "gpa": "3.72", "status": "Active"},
+            {"order": 14, "studentId": "2316710", "name": "L\u00ea V\u0103n To\u00e0n", "major": "Chemical Eng.", "gpa": "3.68", "status": "Active"},
+            {"order": 15, "studentId": "2316811", "name": "Ph\u1ea1m Th\u1ecb Th\u1ea3o", "major": "Civil Eng.", "gpa": "3.58", "status": "Active"},
+            {"order": 16, "studentId": "2316912", "name": "V\u00f5 Minh Tr\u00ed", "major": "Electrical Eng.", "gpa": "3.82", "status": "Active"},
+            {"order": 17, "studentId": "2317013", "name": "Ho\u00e0ng Th\u1ecb Uy\u00ean", "major": "Computer Science", "gpa": "3.90", "status": "Active"},
+            {"order": 18, "studentId": "2317114", "name": "\u0110\u1ed7 V\u0103n Vi\u1ec7t", "major": "Mechanical Eng.", "gpa": "3.62", "status": "Active"},
+            {"order": 19, "studentId": "2317215", "name": "B\u00f9i Minh Xu\u00e2n", "major": "Information Systems", "gpa": "3.78", "status": "Active"},
+            {"order": 20, "studentId": "2317316", "name": "L\u01b0\u01a1ng Th\u1ecb Y\u1ebfn", "major": "Chemical Eng.", "gpa": "3.86", "status": "Active"},
+            {"order": 21, "studentId": "2317417", "name": "\u0110\u00e0o V\u0103n Duy", "major": "Civil Eng.", "gpa": "3.52", "status": "Active"},
+            {"order": 22, "studentId": "2317518", "name": "Phan Th\u1ecb Anh", "major": "Electrical Eng.", "gpa": "3.74", "status": "Active"},
+            {"order": 23, "studentId": "2317619", "name": "Nguy\u1ec5n Minh B\u1ea3o", "major": "Computer Science", "gpa": "3.93", "status": "Active"},
+            {"order": 24, "studentId": "2317720", "name": "Tr\u1ea7n Th\u1ecb Cam", "major": "Mechanical Eng.", "gpa": "3.66", "status": "Active"}
         ],
         "notifications": [
             {"title": "Scholarship Awarded", "body": "You've been awarded the Academic Excellence Grant.", "timeAgo": "2 hours ago"},
             {"title": "New Academic Report", "body": "A new academic performance report is ready for viewing.", "timeAgo": "Yesterday"}
         ],
         "quickActions": [
-            {"label": "Open Scholarship Board", "path": "/portal/staff/records"},
-            {"label": "Notify Students", "path": "/portal/staff/notify-students"},
-            {"label": "Generate Reports", "path": "/portal/staff/reports"}
+            {"label": "Generate Reports", "path": "/portal/staff/records"},
+            {"label": "Notify Students", "path": "/portal/staff/notify-students"}
         ],
         "tabs": ["Student Academic Records", "Scholarship & Training Credits", "Award Management"]
     },

@@ -1327,7 +1327,7 @@ const CourseMatchingPage = () => {
             </div>
             
             <p className="mb-6 text-slate-600">
-              Are you sure you want to reject this class? The course status will be changed to cancelled and the student count will be set to 0.
+              This will permanently decline the teaching assignment. The course will be marked as unavailable, and you will not be able to reopen it later. Any enrolled students will be notified of this change.
             </p>
             
             <div className="flex gap-3">
@@ -1365,7 +1365,7 @@ const CourseMatchingPage = () => {
             </div>
             
             <p className="mb-6 text-slate-600">
-              Are you sure you want to drop this class? The course status will be changed to cancelled.
+              This will withdraw your registration from this course. You may need to contact your advisor if you wish to re-enroll later. This action is permanent and cannot be undone.
             </p>
             
             <div className="flex gap-3">

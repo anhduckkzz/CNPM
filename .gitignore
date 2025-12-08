@@ -4,3 +4,15 @@ dist
 .vscode
 .DS_Store
 .playwright-mcp/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/fonts/*.zip

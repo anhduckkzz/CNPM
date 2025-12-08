@@ -164,6 +164,46 @@ const TOTAL_MINUTES = (END_HOUR - START_HOUR) * 60;
 const MIN_BLOCK_HEIGHT = (45 / TOTAL_MINUTES) * 100;
 const timeStops = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, idx) => START_HOUR + idx);
 
+// Extract color from course thumbnail or generate based on course ID
+const getCourseColor = (courseId: string): { bg: string; text: string } => {
+  // Color palette for different courses
+  const courseColors: Record<string, { bg: string; text: string }> = {
+    'c-intro-programming': { bg: 'bg-blue-200', text: 'text-blue-900' },
+    'c-data-structures': { bg: 'bg-purple-200', text: 'text-purple-900' },
+    'c-quantum-physics': { bg: 'bg-indigo-200', text: 'text-indigo-900' },
+    'c-advanced-calculus': { bg: 'bg-pink-200', text: 'text-pink-900' },
+    'c-web-development': { bg: 'bg-cyan-200', text: 'text-cyan-900' },
+    'c-machine-learning': { bg: 'bg-emerald-200', text: 'text-emerald-900' },
+    'c-database-systems': { bg: 'bg-amber-200', text: 'text-amber-900' },
+    'c-algorithms': { bg: 'bg-rose-200', text: 'text-rose-900' },
+    'c-computer-networks': { bg: 'bg-teal-200', text: 'text-teal-900' },
+    'c-operating-systems': { bg: 'bg-orange-200', text: 'text-orange-900' },
+  };
+  
+  // Return course-specific color or generate from hash
+  if (courseColors[courseId]) {
+    return courseColors[courseId];
+  }
+  
+  // Generate color from course ID hash for unknown courses
+  const colors = [
+    { bg: 'bg-red-200', text: 'text-red-900' },
+    { bg: 'bg-yellow-200', text: 'text-yellow-900' },
+    { bg: 'bg-green-200', text: 'text-green-900' },
+    { bg: 'bg-blue-200', text: 'text-blue-900' },
+    { bg: 'bg-indigo-200', text: 'text-indigo-900' },
+    { bg: 'bg-purple-200', text: 'text-purple-900' },
+    { bg: 'bg-pink-200', text: 'text-pink-900' },
+  ];
+  
+  let hash = 0;
+  for (let i = 0; i < courseId.length; i++) {
+    hash = courseId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};
+
 const eventColorMap: Record<string, { bg: string; text: string }> = {
   busy: { bg: 'bg-rose-200', text: 'text-rose-900' },
   free: { bg: 'bg-emerald-200', text: 'text-emerald-900' },
@@ -285,7 +325,8 @@ const SchedulePage = () => {
             end: timeRange.end,
             type: 'busy',
             location: course.format === 'In-person' ? 'Campus' : 'Online',
-          });
+            courseId: course.id,
+          } as any);
         }
       });
       
@@ -302,7 +343,8 @@ const SchedulePage = () => {
             end: parsed.end,
             type: 'busy',
             location: 'Online',
-          });
+            courseId: course.id,
+          } as any);
         }
       });
     });
@@ -435,7 +477,9 @@ const SchedulePage = () => {
                         const durationMinutes = clampedEnd - clampedStart;
                         const blockHeight = Math.max(height, MIN_BLOCK_HEIGHT);
                         const showTime = durationMinutes > 60;
-                        const color = eventColorMap[event.type] ?? eventColorMap.default;
+                        // Use course-specific color instead of generic event type color
+                        const courseId = (event as any).courseId;
+                        const color = courseId ? getCourseColor(courseId) : (eventColorMap[event.type] ?? eventColorMap.default);
                         const detailAvailable = !!eventDetailMap[event.id];
                         
                         // Calculate width and position based on overlaps
@@ -503,7 +547,9 @@ const SchedulePage = () => {
               <div className="mt-6 space-y-4">
                 {todaysEvents.length ? (
                   todaysEvents.map((event) => {
-                    const color = eventColorMap[event.type] ?? eventColorMap.default;
+                    // Use course-specific color instead of generic event type color
+                    const courseId = (event as any).courseId;
+                    const color = courseId ? getCourseColor(courseId) : (eventColorMap[event.type] ?? eventColorMap.default);
                     return (
                       <button
                         key={event.id}

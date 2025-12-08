@@ -106,6 +106,17 @@
                 "actionLabel": "Register Course",
                 "instructor": "Dr. Võ Văn I",
                 "schedule": "Tue, Thu 10:00-12:00"
+            },
+            {
+                "id": "c-machine-learning",
+                "title": "Machine Learning Fundamentals",
+                "code": "CS4001",
+                "format": "Online",
+                "capacity": "55/80",
+                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
+                "actionLabel": "Register Course",
+                "instructor": "Dr. Trần Văn J",
+                "schedule": "Mon, Wed 14:00-16:00"
             }
         ],
         "history": [
@@ -174,8 +185,14 @@
                 "code": "CS3090",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "actionLabel": "Go To Your Course",
-                "tutor": "Assigned soon",
-                "format": "In-person"
+                "tutor": "Nguyễn Văn Dũng",
+                "format": "In-person",
+                "capacity": "56/100",
+                "tags": [
+                    "AI"
+                ],
+                "badge": "AI matched",
+                "accent": ""
             },
             {
                 "id": "c-digital-signal",
@@ -261,6 +278,21 @@
                 "instructor": "Dr. Trần Văn J",
                 "schedule": "Mon, Wed 14:00-16:00",
                 "tutor": "Nguyễn Văn Bình"
+            },
+            {
+                "id": "c-network-protocols",
+                "title": "Network Protocols & Architecture",
+                "code": "CS3060",
+                "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "42/100",
+                "tutor": "Nguyễn Văn Cường",
+                "tags": [
+                    "CYBER"
+                ],
+                "actionLabel": "Go To Your Course",
+                "badge": "",
+                "accent": ""
             }
         ],
         "modal": {
@@ -391,15 +423,26 @@
                 "schedule": "Fri 14:00-16:00"
             },
             {
-                "id": "c-machine-learning",
-                "title": "Machine Learning Fundamentals",
-                "code": "CS4001",
-                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
+                "id": "c-computer-vision",
+                "title": "Computer Vision & Image Processing",
+                "code": "CS3090",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "status": "waiting",
                 "registeredDate": "2025-12-08",
-                "format": "Online",
-                "instructor": "Nguyễn Văn Bình",
-                "schedule": "Wed 9:00-11:00"
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "schedule": "Fri 14:00-16:00"
+            },
+            {
+                "id": "c-network-protocols",
+                "title": "Network Protocols & Architecture",
+                "code": "CS3060",
+                "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
+                "status": "waiting",
+                "registeredDate": "2025-12-08",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Cường",
+                "schedule": "Thu 12:00-14:00"
             }
         ]
     },
@@ -1507,21 +1550,21 @@
             "title": "Computer Vision & Image Processing",
             "upcomingSessions": [
                 {
-                    "id": "cv-sess-1",
+                    "id": "cv-1",
                     "title": "CNN Architecture & Applications",
                     "date": "Tuesday, Oct 7",
                     "time": "10:00 AM - 12:00 PM",
                     "cta": "Join Session"
                 },
                 {
-                    "id": "cv-sess-2",
+                    "id": "cv-2",
                     "title": "Object Detection Models",
                     "date": "Thursday, Oct 9",
                     "time": "1:00 PM - 3:00 PM",
                     "cta": "Join Session"
                 },
                 {
-                    "id": "cv-sess-3",
+                    "id": "cv-3",
                     "title": "Image Segmentation Lab",
                     "date": "Saturday, Oct 11",
                     "time": "11:00 AM - 1:00 PM",
@@ -1532,20 +1575,25 @@
                 {
                     "title": "Vision: Convolutional Networks",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material3.pdf"
                 },
                 {
                     "title": "Vision: OpenCV Tutorial",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material1.pdf"
                 },
                 {
                     "title": "Vision: Deep Learning for Images",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material2.pdf"
                 },
                 {
                     "title": "Vision: PyTorch Image Models",
+                    "type": "pdf",
+                    "url": "/pdfs/material3.pdf"
+                },
+                {
+                    "title": "Vision: Project Ideas & Datasets",
                     "type": "sheet",
                     "url": "/materials/note.txt"
                 }

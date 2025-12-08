@@ -100,15 +100,6 @@
                 "capacity": "47/70",
                 "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
                 "actionLabel": "Register Tutor"
-            },
-            {
-                "id": "c-python-advanced",
-                "title": "Advanced Python Programming",
-                "code": "CS2055",
-                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
-                "format": "Blended",
-                "capacity": "0/100",
-                "actionLabel": "Register Tutor"
             }
         ],
         "history": [
@@ -142,19 +133,22 @@
                 "timeStudy": "Tue & Sat 10:00-12:00",
                 "studentCount": 29,
                 "registeredDate": "2025-12-01",
-                "tutor": "You",
+                "tutor": "Nguyễn Văn Dũng",
                 "tags": [
                     "AI"
                 ],
                 "actionLabel": "Manage Your Course",
-                "format": "Blended"
+                "format": "In-person",
+                "capacity": "44/100",
+                "badge": "",
+                "accent": ""
             },
             {
                 "id": "c-devops-kubernetes",
                 "title": "DevOps & Kubernetes",
                 "code": "CS4010",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "format": "In-person",
+                "format": "Online",
                 "capacity": "38/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
@@ -199,7 +193,7 @@
                 "title": "AI & Natural Language Processing",
                 "code": "CS3085",
                 "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "format": "Blended",
+                "format": "Online",
                 "capacity": "48/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
@@ -214,7 +208,7 @@
                 "title": "Cloud Computing Fundamentals",
                 "code": "CS3045",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "format": "In-person",
+                "format": "Blended",
                 "capacity": "50/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
@@ -274,7 +268,7 @@
                 "title": "Mobile App Development",
                 "code": "CS3070",
                 "thumbnail": "https://images.unsplash.com/photo-1512941691920-25bca6c48a7e?auto=format&fit=crop&w=900&q=80",
-                "format": "In-person",
+                "format": "Blended",
                 "capacity": "40/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
@@ -289,8 +283,53 @@
                 "title": "Advanced Database Design",
                 "code": "CS3020",
                 "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
-                "format": "In-person",
+                "format": "Blended",
                 "capacity": "46/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CS"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-blockchain",
+                "title": "Blockchain & Cryptocurrency",
+                "code": "CS4015",
+                "thumbnail": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "40/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "BLOCKCHAIN"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-network-protocols",
+                "title": "Network Protocols & Architecture",
+                "code": "CS3060",
+                "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
+                "format": "Blended",
+                "capacity": "42/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CYBER"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-python-advanced",
+                "title": "Advanced Python Programming",
+                "code": "CS2055",
+                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
+                "format": "Online",
+                "capacity": "45/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
                     "CS"
@@ -526,7 +565,7 @@
                 "title": "Cellular Biology",
                 "code": "BI3002",
                 "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-                "status": "waiting",
+                "status": "in-progress",
                 "registeredDate": "2025-12-07",
                 "instructor": "Dr. Ngô Xuân F",
                 "format": "Blended",
@@ -543,17 +582,64 @@
                 "title": "Web Development Advanced Topics",
                 "code": "CS3050",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "completed",
+                "status": "in-progress",
                 "registeredDate": "2025-12-08",
-                "instructor": "Prof. Bùi Minh G",
-                "format": "In-person",
-                "schedule": "Tue, Thu 10:00-12:00",
-                "timeStudy": "Tue & Thu 10:00-12:00",
-                "studentCount": 44,
+                "instructor": "Nguyễn Văn Dũng",
+                "format": "Blended",
+                "timeStudy": "Mon & Tue 14:00-16:00",
+                "studentCount": 0,
                 "tutor": "You",
                 "tags": [
                     "CS"
                 ]
+            },
+            {
+                "id": "c-cloud-computing",
+                "title": "Cloud Computing Fundamentals",
+                "code": "CS3045",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "Blended",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 8:00-10:00"
+            },
+            {
+                "id": "c-computer-vision",
+                "title": "Computer Vision & Image Processing",
+                "code": "CS3090",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 8:00-10:00"
+            },
+            {
+                "id": "c-network-protocols",
+                "title": "Network Protocols & Architecture",
+                "code": "CS3060",
+                "thumbnail": "https://images.unsplash.com/photo-1550751827-4bd582f6de8d?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "Blended",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 8:00-10:00"
+            },
+            {
+                "id": "c-blockchain",
+                "title": "Blockchain & Cryptocurrency",
+                "code": "CS4015",
+                "thumbnail": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 10:00-12:00"
             },
             {
                 "id": "c-database-design",
@@ -562,10 +648,46 @@
                 "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
                 "status": "in-progress",
                 "registeredDate": "2025-12-08",
-                "format": "In-person",
+                "format": "Blended",
                 "instructor": "Nguyễn Văn Dũng",
                 "studentCount": 0,
-                "timeStudy": "Mon & Tue 8:00-10:00"
+                "timeStudy": "Mon & Tue 13:00-15:00"
+            },
+            {
+                "id": "c-ai-nlp",
+                "title": "AI & Natural Language Processing",
+                "code": "CS3085",
+                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "Online",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 13:00-15:00"
+            },
+            {
+                "id": "c-mobile-development",
+                "title": "Mobile App Development",
+                "code": "CS3070",
+                "thumbnail": "https://images.unsplash.com/photo-1512941691920-25bca6c48a7e?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "Blended",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 13:00-15:00"
+            },
+            {
+                "id": "c-python-advanced",
+                "title": "Advanced Python Programming",
+                "code": "CS2055",
+                "thumbnail": "https://images.unsplash.com/photo-1517394002768-9e3a7b51a165?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "Online",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 14:00-16:00"
             }
         ]
     },
@@ -1729,6 +1851,330 @@
                     "status": "Attempt Quiz",
                     "questions": 9,
                     "timeLimit": "40 minutes"
+                }
+            ]
+        },
+        "c-database-design": {
+            "courseId": "c-database-design",
+            "title": "Advanced Database Design",
+            "upcomingSessions": [
+                {
+                    "id": "db-sess-1",
+                    "title": "Database Normalization Workshop",
+                    "date": "Monday, Oct 6",
+                    "time": "8:00 AM - 10:00 AM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "db-sess-2",
+                    "title": "SQL Query Optimization",
+                    "date": "Tuesday, Oct 7",
+                    "time": "8:00 AM - 10:00 AM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "db-sess-3",
+                    "title": "NoSQL vs Relational Databases",
+                    "date": "Monday, Oct 13",
+                    "time": "8:00 AM - 10:00 AM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "db-sess-4",
+                    "title": "Database Indexing Strategies",
+                    "date": "Tuesday, Oct 14",
+                    "time": "8:00 AM - 10:00 AM",
+                    "cta": "Join Session"
+                }
+            ],
+            "materials": [
+                {
+                    "title": "Database Design: Schema Modeling Guide",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Database Design: SQL Advanced Queries",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Database Design: Indexing Best Practices",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Database Design: Transaction Management",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Database Design: Instructor Notes",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
+            ],
+            "quizzes": [
+                {
+                    "id": "db-quiz-1",
+                    "title": "Normalization & Keys Quiz",
+                    "category": "Database Design Module",
+                    "date": "October 15, 2025 - 08:00 AM",
+                    "status": "Attempt Quiz",
+                    "questions": 12,
+                    "timeLimit": "50 minutes"
+                },
+                {
+                    "id": "db-quiz-2",
+                    "title": "Query Optimization Challenge",
+                    "category": "Database Design Module",
+                    "date": "October 22, 2025 - 08:00 AM",
+                    "status": "Attempt Quiz",
+                    "questions": 10,
+                    "timeLimit": "45 minutes"
+                }
+            ]
+        },
+        "c-blockchain": {
+            "courseId": "c-blockchain",
+            "title": "Blockchain & Cryptocurrency",
+            "upcomingSessions": [
+                {
+                    "id": "bc-sess-1",
+                    "title": "Blockchain Fundamentals",
+                    "date": "Monday, Oct 6",
+                    "time": "10:00 AM - 12:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "bc-sess-2",
+                    "title": "Smart Contracts with Solidity",
+                    "date": "Tuesday, Oct 7",
+                    "time": "10:00 AM - 12:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "bc-sess-3",
+                    "title": "Cryptocurrency Mining & Consensus",
+                    "date": "Monday, Oct 13",
+                    "time": "10:00 AM - 12:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "bc-sess-4",
+                    "title": "DeFi & Decentralized Apps",
+                    "date": "Tuesday, Oct 14",
+                    "time": "10:00 AM - 12:00 PM",
+                    "cta": "Join Session"
+                }
+            ],
+            "materials": [
+                {
+                    "title": "Blockchain: Distributed Ledger Technology",
+                    "type": "pdf",
+                    "url": "/pdfs/material1.pdf"
+                },
+                {
+                    "title": "Blockchain: Smart Contract Development",
+                    "type": "pdf",
+                    "url": "/pdfs/material2.pdf"
+                },
+                {
+                    "title": "Blockchain: Ethereum & Web3 Guide",
+                    "type": "pdf",
+                    "url": "/pdfs/material3.pdf"
+                },
+                {
+                    "title": "Blockchain: Security Best Practices",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Blockchain: Project Resources",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
+            ],
+            "quizzes": [
+                {
+                    "id": "bc-quiz-1",
+                    "title": "Blockchain Basics Quiz",
+                    "category": "Blockchain Module",
+                    "date": "October 16, 2025 - 10:00 AM",
+                    "status": "Attempt Quiz",
+                    "questions": 15,
+                    "timeLimit": "60 minutes"
+                },
+                {
+                    "id": "bc-quiz-2",
+                    "title": "Smart Contracts Assessment",
+                    "category": "Blockchain Module",
+                    "date": "October 23, 2025 - 10:00 AM",
+                    "status": "Attempt Quiz",
+                    "questions": 12,
+                    "timeLimit": "50 minutes"
+                }
+            ]
+        },
+        "c-mobile-development": {
+            "courseId": "c-mobile-development",
+            "title": "Mobile App Development",
+            "upcomingSessions": [
+                {
+                    "id": "mobile-sess-1",
+                    "title": "React Native Introduction",
+                    "date": "Monday, Oct 6",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "mobile-sess-2",
+                    "title": "Mobile UI/UX Design Patterns",
+                    "date": "Tuesday, Oct 7",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "mobile-sess-3",
+                    "title": "State Management in Mobile Apps",
+                    "date": "Monday, Oct 13",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "mobile-sess-4",
+                    "title": "Mobile App Testing & Deployment",
+                    "date": "Tuesday, Oct 14",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                }
+            ],
+            "materials": [
+                {
+                    "title": "Mobile: React Native Getting Started",
+                    "type": "pdf",
+                    "url": "/pdfs/material1.pdf"
+                },
+                {
+                    "title": "Mobile: Flutter vs React Native",
+                    "type": "pdf",
+                    "url": "/pdfs/material2.pdf"
+                },
+                {
+                    "title": "Mobile: Native Modules Integration",
+                    "type": "pdf",
+                    "url": "/pdfs/material3.pdf"
+                },
+                {
+                    "title": "Mobile: App Store Publishing Guide",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Mobile: Development Resources",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
+            ],
+            "quizzes": [
+                {
+                    "id": "mobile-quiz-1",
+                    "title": "Mobile Development Fundamentals",
+                    "category": "Mobile App Module",
+                    "date": "October 17, 2025 - 01:00 PM",
+                    "status": "Attempt Quiz",
+                    "questions": 10,
+                    "timeLimit": "45 minutes"
+                },
+                {
+                    "id": "mobile-quiz-2",
+                    "title": "Cross-Platform Development Quiz",
+                    "category": "Mobile App Module",
+                    "date": "October 24, 2025 - 01:00 PM",
+                    "status": "Attempt Quiz",
+                    "questions": 12,
+                    "timeLimit": "50 minutes"
+                }
+            ]
+        },
+        "c-network-protocols": {
+            "courseId": "c-network-protocols",
+            "title": "Network Protocols & Architecture",
+            "upcomingSessions": [
+                {
+                    "id": "net-sess-1",
+                    "title": "TCP/IP Protocol Suite",
+                    "date": "Monday, Oct 6",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "net-sess-2",
+                    "title": "Network Security & Encryption",
+                    "date": "Tuesday, Oct 7",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "net-sess-3",
+                    "title": "HTTP/HTTPS & Web Protocols",
+                    "date": "Monday, Oct 13",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "net-sess-4",
+                    "title": "Network Architecture Design",
+                    "date": "Tuesday, Oct 14",
+                    "time": "1:00 PM - 3:00 PM",
+                    "cta": "Join Session"
+                }
+            ],
+            "materials": [
+                {
+                    "title": "Network: OSI Model Deep Dive",
+                    "type": "pdf",
+                    "url": "/pdfs/data-structures-survival-kit.pdf"
+                },
+                {
+                    "title": "Network: Routing Protocols Guide",
+                    "type": "pdf",
+                    "url": "/pdfs/differential-equations-workbook.pdf"
+                },
+                {
+                    "title": "Network: Security Best Practices",
+                    "type": "pdf",
+                    "url": "/pdfs/calculus-quick-reference.pdf"
+                },
+                {
+                    "title": "Network: Protocol Analysis Tools",
+                    "type": "pdf",
+                    "url": "/pdfs/systems-design-blueprint.pdf"
+                },
+                {
+                    "title": "Network: Configuration Examples",
+                    "type": "sheet",
+                    "url": "/materials/note.txt"
+                }
+            ],
+            "quizzes": [
+                {
+                    "id": "net-quiz-1",
+                    "title": "Protocol Fundamentals Quiz",
+                    "category": "Network Protocols Module",
+                    "date": "October 18, 2025 - 01:00 PM",
+                    "status": "Attempt Quiz",
+                    "questions": 15,
+                    "timeLimit": "60 minutes"
+                },
+                {
+                    "id": "net-quiz-2",
+                    "title": "Network Security Assessment",
+                    "category": "Network Protocols Module",
+                    "date": "October 25, 2025 - 01:00 PM",
+                    "status": "Attempt Quiz",
+                    "questions": 10,
+                    "timeLimit": "45 minutes"
                 }
             ]
         }

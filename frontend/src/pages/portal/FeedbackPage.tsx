@@ -4,10 +4,14 @@ import { useAuth } from '../../context/AuthContext';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
 
 const FeedbackPage = () => {
-  const { portal } = useAuth();
+  const { portal, updatePortal } = useAuth();
   const feedback = portal?.feedback;
   const [rating, setRating] = useState(4);
   const [experience, setExperience] = useState(4);
+  const [selectedSession, setSelectedSession] = useState('');
+  const [sessionComments, setSessionComments] = useState('The session was very insightful and promoted active learning.');
+  const [systemFeedback, setSystemFeedback] = useState('Please improve system performance and navigation clarity.');
+  const [activeTab, setActiveTab] = useState<'submit' | 'history'>('submit');
   const { toasts, showToast } = useStackedToasts();
 
   if (!feedback) {
@@ -16,96 +20,192 @@ const FeedbackPage = () => {
 
   const ratingLabels = feedback.ratingScale.slice(0, 5);
 
+  const handleSubmit = async () => {
+    if (!selectedSession) {
+      showToast('Please select a session');
+      return;
+    }
+
+    if (!portal?.feedback) {
+      showToast('Feedback data unavailable');
+      return;
+    }
+
+    const newFeedback = {
+      id: Date.now().toString(),
+      course: selectedSession,
+      submittedOn: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      status: 'Reviewed',
+      rating,
+      summary: sessionComments.slice(0, 60) + (sessionComments.length > 60 ? '...' : '')
+    };
+
+    await updatePortal((prev) => ({
+      ...prev,
+      feedback: {
+        ...prev.feedback!,
+        history: [newFeedback, ...prev.feedback!.history]
+      }
+    }));
+    
+    showToast('Student feedback submitted successfully');
+    
+    // Reset form
+    setSelectedSession('');
+    setSessionComments('The session was very insightful and promoted active learning.');
+    setSystemFeedback('Please improve system performance and navigation clarity.');
+    setRating(4);
+    setExperience(4);
+    
+    // Switch to history tab
+    setActiveTab('history');
+  };
+
   return (
     <>
-      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <section className="rounded-[32px] bg-white p-8 shadow-soft">
-        <p className="text-sm uppercase tracking-widest text-slate-400">{feedback.title}</p>
-        <h1 className="text-3xl font-semibold text-ink">{feedback.instructions}</h1>
-        <div className="mt-6 space-y-4">
-          <label className="block text-sm font-semibold text-slate-500">
-            Select Session
-            <select className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3">
-              {feedback.sessions.map((session) => (
-                <option key={session}>{session}</option>
-              ))}
-            </select>
-          </label>
-          <label className="block text-sm font-semibold text-slate-500">
-            Session Comments
-            <textarea
-              className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3"
-              defaultValue="The session was very insightful and promoted active learning."
-            />
-          </label>
-          <div>
-            <p className="text-sm font-semibold text-slate-500">Session Rating</p>
-            <div className="mt-2 flex gap-2">
-              {[1, 2, 3, 4, 5].map((index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setRating(index)}
-                  className="text-primary"
-                >
-                  <Star
-                    size={28}
-                    className={index <= rating ? 'fill-primary text-primary' : 'text-slate-200'}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl bg-slate-50 p-4">
-            <p className="text-sm font-semibold text-slate-500">Overall System Experience</p>
-            <select
-              className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-ink"
-              value={experience}
-              onChange={(e) => setExperience(Number(e.target.value))}
-            >
-              {ratingLabels.map((label, index) => (
-                <option key={label} value={index + 1}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <label className="block text-sm font-semibold text-slate-500">
-            System Feedback
-            <textarea
-              className="mt-2 h-24 w-full rounded-2xl border border-slate-200 px-4 py-3"
-              defaultValue="Please improve system performance and navigation clarity."
-            />
-          </label>
-          <button
-            className="w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-primary/90"
-            type="button"
-            onClick={() => showToast('Student feedback submitted')}
-          >
-            Submit Student Feedback
-          </button>
-        </div>
-      </section>
+      <div className="mb-6 flex gap-3">
+        <button
+          onClick={() => setActiveTab('submit')}
+          className={`rounded-2xl px-6 py-3 font-semibold transition ${
+            activeTab === 'submit'
+              ? 'bg-primary text-white shadow-soft'
+              : 'bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Submit Feedback
+        </button>
+        <button
+          onClick={() => setActiveTab('history')}
+          className={`rounded-2xl px-6 py-3 font-semibold transition ${
+            activeTab === 'history'
+              ? 'bg-primary text-white shadow-soft'
+              : 'bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Feedback History
+        </button>
+      </div>
 
-      <aside className="rounded-[32px] bg-white p-8 shadow-soft">
-        <h2 className="text-xl font-semibold text-ink">Feedback History</h2>
-        <div className="mt-4 space-y-4">
-          {feedback.history.map((item) => (
-            <div key={item.id} className="rounded-2xl border border-slate-100 px-4 py-3">
-              <p className="text-sm font-semibold text-ink">{item.course}</p>
-              <p className="text-xs text-slate-400">Submitted on {item.submittedOn}</p>
-              <div className="mt-2 flex items-center justify-between text-xs">
-                <span className="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary">
-                  {item.status}
-                </span>
-                <span className="text-slate-400">{'★'.repeat(item.rating)}</span>
+      {activeTab === 'submit' ? (
+        <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+          <section className="rounded-[32px] bg-white p-8 shadow-soft">
+            <p className="text-sm uppercase tracking-widest text-slate-400">{feedback.title}</p>
+            <h1 className="text-3xl font-semibold text-ink">{feedback.instructions}</h1>
+            <div className="mt-6 space-y-4">
+              <label className="block text-sm font-semibold text-slate-500">
+                Select Session
+                <select
+                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3"
+                  value={selectedSession}
+                  onChange={(e) => setSelectedSession(e.target.value)}
+                >
+                  <option value="">Choose a session...</option>
+                  {feedback.sessions.map((session) => (
+                    <option key={session} value={session}>{session}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block text-sm font-semibold text-slate-500">
+                Session Comments
+                <textarea
+                  className="mt-2 h-28 w-full rounded-2xl border border-slate-200 px-4 py-3"
+                  value={sessionComments}
+                  onChange={(e) => setSessionComments(e.target.value)}
+                />
+              </label>
+              <div>
+                <p className="text-sm font-semibold text-slate-500">Session Rating</p>
+                <div className="mt-2 flex gap-2">
+                  {[1, 2, 3, 4, 5].map((index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setRating(index)}
+                      className="text-primary"
+                    >
+                      <Star
+                        size={28}
+                        className={index <= rating ? 'fill-primary text-primary' : 'text-slate-200'}
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
-              <p className="mt-2 text-sm text-slate-500">{item.summary}</p>
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-sm font-semibold text-slate-500">Overall System Experience</p>
+                <select
+                  className="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-ink"
+                  value={experience}
+                  onChange={(e) => setExperience(Number(e.target.value))}
+                >
+                  {ratingLabels.map((label, index) => (
+                    <option key={label} value={index + 1}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <label className="block text-sm font-semibold text-slate-500">
+                System Feedback
+                <textarea
+                  className="mt-2 h-24 w-full rounded-2xl border border-slate-200 px-4 py-3"
+                  value={systemFeedback}
+                  onChange={(e) => setSystemFeedback(e.target.value)}
+                />
+              </label>
+              <button
+                className="w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-primary/90"
+                type="button"
+                onClick={handleSubmit}
+              >
+                Submit Student Feedback
+              </button>
             </div>
-          ))}
+          </section>
+
+          <aside className="rounded-[32px] bg-white p-8 shadow-soft">
+            <h2 className="text-xl font-semibold text-ink">Recent Submissions</h2>
+            <div className="mt-4 space-y-4">
+              {feedback.history.slice(0, 3).map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-100 px-4 py-3">
+                  <p className="text-sm font-semibold text-ink">{item.course}</p>
+                  <p className="text-xs text-slate-400">Submitted on {item.submittedOn}</p>
+                  <div className="mt-2 flex items-center justify-between text-xs">
+                    <span className="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary">
+                      {item.status}
+                    </span>
+                    <span className="text-slate-400">{'★'.repeat(item.rating)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
         </div>
-      </aside>
-    </div>
+      ) : (
+        <div className="rounded-[32px] bg-white p-8 shadow-soft">
+          <h2 className="text-2xl font-semibold text-ink">Feedback History</h2>
+          <p className="mt-2 text-sm text-slate-500">All your submitted feedback and their status</p>
+          <div className="mt-6 space-y-4">
+            {feedback.history.map((item) => (
+              <div key={item.id} className="rounded-2xl border border-slate-100 px-6 py-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-base font-semibold text-ink">{item.course}</p>
+                    <p className="mt-1 text-xs text-slate-400">Submitted on {item.submittedOn}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary">
+                      {item.status}
+                    </span>
+                    <span className="text-base text-yellow-500">{'★'.repeat(item.rating)}</span>
+                  </div>
+                </div>
+                <p className="mt-3 text-sm text-slate-600">{item.summary}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div aria-live="assertive" className="pointer-events-none fixed left-6 top-6 z-[60] flex w-full max-w-xs flex-col gap-2">
         {toasts.map((toast) => (
