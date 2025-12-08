@@ -156,6 +156,8 @@ const CourseMatchingPage = () => {
   const tutorCoursesRef = useRef<Record<string, CourseDetailSection> | null>(null);
   const tutorLoadPromise = useRef<Promise<void> | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [rejectCourseId, setRejectCourseId] = useState<string | null>(null);
+  const [dropCourseId, setDropCourseId] = useState<string | null>(null);
   const { toasts, showToast } = useStackedToasts(2400);
   const modalTarget = typeof document !== 'undefined' ? document.body : null;
 
@@ -496,7 +498,7 @@ const CourseMatchingPage = () => {
       title: course.title,
       code: course.code,
       thumbnail: course.thumbnail ?? '',
-      status: 'in-progress',
+      status: 'waiting',
       registeredDate: currentDate,
       format: format,
       instructor: tutor || (course as any).instructor,
@@ -544,9 +546,9 @@ const CourseMatchingPage = () => {
     
     const success = await upsertRegistration(modalCourse, format, undefined, slot?.tutor, slot?.time);
     
-    // Show success notification only if registration succeeded
+    // Show waiting notification only if registration succeeded
     if (success) {
-      showToast(`✅ Successfully registered ${modalCourse.title} in ${format}!`, 'success');
+      showToast(`⏳ Registration submitted for ${modalCourse.title}. Status: Waiting for approval.`, 'warning');
     }
   };
 
@@ -564,15 +566,56 @@ const CourseMatchingPage = () => {
     
     const success = await upsertRegistration(course, slot.format, undefined, slot.tutor, slot.time);
     
-    // Show success notification only if registration succeeded
+    // Show waiting notification only if registration succeeded
     if (success) {
-      showToast(`✅ Successfully registered ${course.title} - ${slot.section}!`, 'success');
+      showToast(`⏳ Registration submitted for ${course.title}. Status: Waiting for approval.`, 'warning');
     }
   };
 
   const clearTimers = () => {
     timers.current.forEach((timer) => clearTimeout(timer));
     timers.current = [];
+  };
+
+  const handleOpenClass = async (courseId: string) => {
+    const updatedCourses = registeredCourses.map(course => {
+      if (course.id === courseId) {
+        return { ...course, status: 'in-progress' as const };
+      }
+      return course;
+    });
+    
+    setRegisteredCourses(updatedCourses);
+    await persistState(courseHistory, updatedCourses);
+    showToast('✅ Class opened successfully! Course is now active.', 'success');
+  };
+
+  const handleRejectClass = async (courseId: string) => {
+    const updatedCourses = registeredCourses.map(course => {
+      if (course.id === courseId) {
+        return { ...course, status: 'cancelled' as const, studentCount: 0 };
+      }
+      return course;
+    });
+    
+    setRegisteredCourses(updatedCourses);
+    await persistState(courseHistory, updatedCourses);
+    setRejectCourseId(null);
+    showToast('❌ Class rejected. Status changed to cancelled.', 'error');
+  };
+
+  const handleDropClass = async (courseId: string) => {
+    const updatedCourses = registeredCourses.map(course => {
+      if (course.id === courseId) {
+        return { ...course, status: 'cancelled' as const };
+      }
+      return course;
+    });
+    
+    setRegisteredCourses(updatedCourses);
+    await persistState(courseHistory, updatedCourses);
+    setDropCourseId(null);
+    showToast('❌ Course dropped. Status changed to cancelled.', 'error');
   };
 
   useEffect(() => clearTimers, []);
@@ -618,9 +661,9 @@ const CourseMatchingPage = () => {
       const success = await upsertRegistration(updatedEntry, normalizedFormat, 'AI matched', updatedEntry.tutor, slot?.time);
       const sectionLabel = slot?.section ?? `${course.code} - best available section`;
       
-      // Show success notification only if registration succeeded
+      // Show waiting notification only if registration succeeded
       if (success) {
-        showToast(`✅ Successfully AI matched to ${sectionLabel}!`, 'success');
+        showToast(`⏳ Registration submitted for ${sectionLabel}. Status: Waiting for approval.`, 'warning');
       }
       setAiAnalyzing(false);
       setModalCourse(null);
@@ -729,6 +772,7 @@ const CourseMatchingPage = () => {
                     </>
                   )}
                   <th className="pb-4 text-left text-sm font-semibold text-slate-700">Registered</th>
+                  <th className="pb-4 text-right text-sm font-semibold text-slate-700">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -773,6 +817,43 @@ const CourseMatchingPage = () => {
                       )}
                       <td className="py-4">
                         <p className="text-sm text-slate-600">{course.registeredDate || 'N/A'}</p>
+                      </td>
+                      <td className="py-4">
+                        <div className="flex justify-end gap-2">
+                          {!isStudentView && normalized === 'waiting' && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenClass(course.id)}
+                                className="flex items-center gap-1.5 rounded-full bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700"
+                              >
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                                Open Class
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setRejectCourseId(course.id)}
+                                className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-700"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                                Reject Class
+                              </button>
+                            </>
+                          )}
+                          {isStudentView && normalized === 'waiting' && (
+                            <button
+                              type="button"
+                              onClick={() => setDropCourseId(course.id)}
+                              className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-700"
+                            >
+                              <X className="h-3.5 w-3.5" />
+                              Drop Class
+                            </button>
+                          )}
+                          {normalized !== 'cancelled' && normalized !== 'waiting' && (
+                            <span className="text-xs text-slate-400">—</span>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -1230,6 +1311,82 @@ const CourseMatchingPage = () => {
           </div>
         )}
       </div>
+
+      {/* Reject Class Confirmation Modal */}
+      {rejectCourseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-full bg-red-100 p-3">
+                <X className="h-6 w-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-ink">Reject Class</h3>
+                <p className="text-sm text-slate-500">This action cannot be undone</p>
+              </div>
+            </div>
+            
+            <p className="mb-6 text-slate-600">
+              Are you sure you want to reject this class? The course status will be changed to cancelled and the student count will be set to 0.
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setRejectCourseId(null)}
+                className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleRejectClass(rejectCourseId)}
+                className="flex-1 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                Reject Class
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Drop Class Confirmation Modal for Students */}
+      {dropCourseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-full bg-red-100 p-3">
+                <X className="h-6 w-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-ink">Drop Class</h3>
+                <p className="text-sm text-slate-500">This action cannot be undone</p>
+              </div>
+            </div>
+            
+            <p className="mb-6 text-slate-600">
+              Are you sure you want to drop this class? The course status will be changed to cancelled.
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setDropCourseId(null)}
+                className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Keep Class
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropClass(dropCourseId)}
+                className="flex-1 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                Drop Class
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

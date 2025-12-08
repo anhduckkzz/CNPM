@@ -106,17 +106,6 @@
                 "actionLabel": "Register Course",
                 "instructor": "Dr. Võ Văn I",
                 "schedule": "Tue, Thu 10:00-12:00"
-            },
-            {
-                "id": "c-machine-learning",
-                "title": "Machine Learning Fundamentals",
-                "code": "CS4001",
-                "format": "Online",
-                "capacity": "55/80",
-                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Course",
-                "instructor": "Dr. Trần Văn J",
-                "schedule": "Mon, Wed 14:00-16:00"
             }
         ],
         "history": [
@@ -245,6 +234,33 @@
                 "actionLabel": "Go To Your Course",
                 "badge": "",
                 "accent": ""
+            },
+            {
+                "id": "c-cloud-computing",
+                "title": "Cloud Computing Fundamentals",
+                "code": "CS3045",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "56/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CLOUD"
+                ],
+                "actionLabel": "Go To Your Course",
+                "badge": "AI matched",
+                "accent": ""
+            },
+            {
+                "id": "c-machine-learning",
+                "title": "Machine Learning Fundamentals",
+                "code": "CS4001",
+                "format": "Online",
+                "capacity": "55/80",
+                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
+                "actionLabel": "Go To Your Course",
+                "instructor": "Dr. Trần Văn J",
+                "schedule": "Mon, Wed 14:00-16:00",
+                "tutor": "Nguyễn Văn Bình"
             }
         ],
         "modal": {
@@ -362,6 +378,28 @@
                 "instructor": "Prof. Vũ Thị F",
                 "format": "In-person",
                 "schedule": "Mon, Wed 13:00-15:00"
+            },
+            {
+                "id": "c-cloud-computing",
+                "title": "Cloud Computing Fundamentals",
+                "code": "CS3045",
+                "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
+                "status": "waiting",
+                "registeredDate": "2025-12-08",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "schedule": "Fri 14:00-16:00"
+            },
+            {
+                "id": "c-machine-learning",
+                "title": "Machine Learning Fundamentals",
+                "code": "CS4001",
+                "thumbnail": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80",
+                "status": "waiting",
+                "registeredDate": "2025-12-08",
+                "format": "Online",
+                "instructor": "Nguyễn Văn Bình",
+                "schedule": "Wed 9:00-11:00"
             }
         ]
     },
@@ -1544,55 +1582,60 @@
         },
         "c-cloud-computing": {
             "courseId": "c-cloud-computing",
-            "title": "Cloud Computing Fundamentals",
+            "title": "Cloud Computing & Infrastructure",
             "upcomingSessions": [
                 {
-                    "id": "cloud-sess-1",
-                    "title": "AWS Services Overview",
-                    "date": "Monday, Oct 6",
+                    "id": "cloud-1",
+                    "title": "AWS Services & Architecture",
+                    "date": "Wednesday, Oct 1",
+                    "time": "9:00 AM - 11:00 AM",
+                    "cta": "Join Session"
+                },
+                {
+                    "id": "cloud-2",
+                    "title": "GCP & Azure Cloud Platforms",
+                    "date": "Friday, Oct 3",
                     "time": "2:00 PM - 4:00 PM",
                     "cta": "Join Session"
                 },
                 {
-                    "id": "cloud-sess-2",
-                    "title": "GCP & Azure Comparison",
-                    "date": "Wednesday, Oct 8",
+                    "id": "cloud-3",
+                    "title": "Serverless & Microservices",
+                    "date": "Sunday, Oct 5",
                     "time": "4:00 PM - 6:00 PM",
                     "cta": "Join Session"
                 },
                 {
-                    "id": "cloud-sess-3",
-                    "title": "Serverless Architecture",
-                    "date": "Friday, Oct 10",
-                    "time": "3:00 PM - 5:00 PM",
-                    "cta": "Join Session"
-                },
-                {
-                    "id": "cloud-sess-4",
+                    "id": "cloud-4",
                     "title": "Cloud Security & Compliance",
-                    "date": "Tuesday, Oct 14",
-                    "time": "11:00 AM - 1:00 PM",
+                    "date": "Tuesday, Oct 7",
+                    "time": "12:00 PM - 2:00 PM",
                     "cta": "Join Session"
                 }
             ],
             "materials": [
                 {
-                    "title": "Cloud: AWS Well-Architected Framework",
+                    "title": "Cloud: AWS Fundamentals",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material1.pdf"
                 },
                 {
-                    "title": "Cloud: Cost Optimization",
+                    "title": "Cloud: Google Cloud Platform",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material2.pdf"
                 },
                 {
-                    "title": "Cloud: Disaster Recovery Planning",
+                    "title": "Cloud: Azure & Hybrid",
                     "type": "pdf",
-                    "url": "/pdfs/"
+                    "url": "/pdfs/material3.pdf"
                 },
                 {
-                    "title": "Cloud: Cloud Architecture Patterns",
+                    "title": "Cloud: Serverless Architecture",
+                    "type": "pdf",
+                    "url": "/pdfs/material1.pdf"
+                },
+                {
+                    "title": "Cloud: Deployment Templates",
                     "type": "sheet",
                     "url": "/materials/note.txt"
                 }
@@ -1600,30 +1643,30 @@
             "quizzes": [
                 {
                     "id": "cloud-quiz-1",
-                    "title": "Cloud Services & Platforms",
-                    "category": "Fundamentals",
-                    "date": "October 13, 2025 - 02:00 PM",
+                    "title": "AWS Services Quiz",
+                    "category": "Cloud Platforms",
+                    "date": "October 8, 2025 - 10:00 AM",
                     "status": "Attempt Quiz",
                     "questions": 11,
-                    "timeLimit": "50 minutes"
-                },
-                {
-                    "id": "cloud-quiz-2",
-                    "title": "Architecture & Design Patterns",
-                    "category": "Architecture",
-                    "date": "October 20, 2025 - 02:00 PM",
-                    "status": "Attempt Quiz",
-                    "questions": 10,
                     "timeLimit": "45 minutes"
                 },
                 {
+                    "id": "cloud-quiz-2",
+                    "title": "Multi-Cloud & Architecture",
+                    "category": "Cloud Architecture",
+                    "date": "October 15, 2025 - 10:00 AM",
+                    "status": "Attempt Quiz",
+                    "questions": 10,
+                    "timeLimit": "50 minutes"
+                },
+                {
                     "id": "cloud-quiz-3",
-                    "title": "Cloud Security & Best Practices",
-                    "category": "Security",
-                    "date": "October 27, 2025 - 02:00 PM",
+                    "title": "Serverless & Security",
+                    "category": "Advanced Cloud",
+                    "date": "October 22, 2025 - 10:00 AM",
                     "status": "Attempt Quiz",
                     "questions": 9,
-                    "timeLimit": "40 minutes"
+                    "timeLimit": "55 minutes"
                 }
             ]
         }
@@ -1835,20 +1878,36 @@
                     "busy",
                     "free",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open"
                 ]
             },
             {
                 "day": "Tuesday",
                 "blocks": [
                     "busy",
+                    "open",
+                    "open",
                     "free",
                     "busy",
+                    "open",
+                    "open",
                     "busy",
+                    "open",
+                    "open",
+                    "open",
                     "busy",
-                    "free",
-                    "busy",
-                    "busy"
+                    "open",
+                    "open",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1857,11 +1916,19 @@
                     "free",
                     "free",
                     "busy",
-                    "busy",
+                    "open",
                     "free",
                     "free",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "open",
+                    "busy",
+                    "open",
+                    "free",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1869,12 +1936,20 @@
                 "blocks": [
                     "free",
                     "busy",
-                    "busy",
-                    "busy",
                     "free",
+                    "open",
+                    "free",
+                    "open",
                     "busy",
                     "busy",
-                    "busy"
+                    "open",
+                    "open",
+                    "open",
+                    "busy",
+                    "open",
+                    "free",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1887,12 +1962,28 @@
                     "free",
                     "busy",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "busy",
+                    "busy",
+                    "open",
+                    "open",
+                    "free",
+                    "open"
                 ]
             },
             {
                 "day": "Saturday",
                 "blocks": [
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
                     "open",
                     "open",
                     "open",
@@ -1906,6 +1997,14 @@
             {
                 "day": "Sunday",
                 "blocks": [
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
                     "open",
                     "open",
                     "open",

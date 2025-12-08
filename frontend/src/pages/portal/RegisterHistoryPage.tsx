@@ -20,6 +20,8 @@ const RegisterHistoryPage = () => {
   const { toasts, showToast } = useStackedToasts(3000);
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'status'>('date');
+  const [rejectCourseId, setRejectCourseId] = useState<string | null>(null);
+  const [dropCourseId, setDropCourseId] = useState<string | null>(null);
 
   if (!registered) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">No course history found.</div>;
@@ -60,7 +62,7 @@ const RegisterHistoryPage = () => {
     }
   };
 
-  const handleStartClass = async (courseId: string) => {
+  const handleOpenClass = async (courseId: string) => {
     if (!portal) return;
     
     const updatedCourses = registered.courses.map(course => {
@@ -78,10 +80,32 @@ const RegisterHistoryPage = () => {
       }
     });
 
-    showToast('Class started successfully!');
+    showToast('✅ Class opened successfully! Course is now active.', 'success');
   };
 
-  const handleCancelClass = async (courseId: string) => {
+  const handleRejectClass = async (courseId: string) => {
+    if (!portal) return;
+    
+    const updatedCourses = registered.courses.map(course => {
+      if (course.id === courseId) {
+        return { ...course, status: 'cancelled', studentCount: 0 };
+      }
+      return course;
+    });
+
+    await updatePortal({
+      ...portal,
+      courses: {
+        ...registered,
+        courses: updatedCourses
+      }
+    });
+
+    setRejectCourseId(null);
+    showToast('❌ Class rejected. Status changed to cancelled.', 'error');
+  };
+
+  const handleDropClass = async (courseId: string) => {
     if (!portal) return;
     
     const updatedCourses = registered.courses.map(course => {
@@ -99,7 +123,8 @@ const RegisterHistoryPage = () => {
       }
     });
 
-    showToast('Class cancelled successfully');
+    setDropCourseId(null);
+    showToast('❌ Course dropped. Status changed to cancelled.', 'error');
   };
 
   // Filter courses by status
@@ -224,21 +249,31 @@ const RegisterHistoryPage = () => {
                           <>
                             <button
                               type="button"
-                              onClick={() => handleStartClass(course.id)}
+                              onClick={() => handleOpenClass(course.id)}
                               className="flex items-center gap-1.5 rounded-full bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700"
                             >
                               <PlayCircle className="h-3.5 w-3.5" />
-                              Start Class
+                              Open Class
                             </button>
                             <button
                               type="button"
-                              onClick={() => handleCancelClass(course.id)}
+                              onClick={() => setRejectCourseId(course.id)}
                               className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-700"
                             >
                               <Ban className="h-3.5 w-3.5" />
-                              Cancel
+                              Reject Class
                             </button>
                           </>
+                        )}
+                        {role === 'student' && normalizeStatus((course as any).status) === 'waiting' && (
+                          <button
+                            type="button"
+                            onClick={() => setDropCourseId(course.id)}
+                            className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-red-700"
+                          >
+                            <XCircle className="h-3.5 w-3.5" />
+                            Drop Class
+                          </button>
                         )}
                         {normalizeStatus((course as any).status) !== 'cancelled' && (
                           <button
@@ -267,6 +302,82 @@ const RegisterHistoryPage = () => {
           </div>
         )}
       </section>
+
+      {/* Reject Class Confirmation Modal */}
+      {rejectCourseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-full bg-red-100 p-3">
+                <Ban className="h-6 w-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-ink">Reject Class</h3>
+                <p className="text-sm text-slate-500">This action cannot be undone</p>
+              </div>
+            </div>
+            
+            <p className="mb-6 text-slate-600">
+              Are you sure you want to reject this class? The course status will be changed to cancelled and the student count will be set to 0.
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setRejectCourseId(null)}
+                className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleRejectClass(rejectCourseId)}
+                className="flex-1 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                Reject Class
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Drop Class Confirmation Modal for Students */}
+      {dropCourseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-full bg-red-100 p-3">
+                <XCircle className="h-6 w-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-ink">Drop Class</h3>
+                <p className="text-sm text-slate-500">This action cannot be undone</p>
+              </div>
+            </div>
+            
+            <p className="mb-6 text-slate-600">
+              Are you sure you want to drop this class? The course status will be changed to cancelled.
+            </p>
+            
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setDropCourseId(null)}
+                className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Keep Class
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDropClass(dropCourseId)}
+                className="flex-1 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+              >
+                Drop Class
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div aria-live="polite" className="pointer-events-none fixed top-6 left-1/2 -translate-x-1/2 z-40 flex w-full max-w-sm flex-col gap-2">
         {toasts.map((toast) => (

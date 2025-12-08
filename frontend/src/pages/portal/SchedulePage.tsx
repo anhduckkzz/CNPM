@@ -11,6 +11,152 @@ type PortalOutletContext = {
   isSidebarOpen: boolean;
 };
 
+// Helper functions to parse session/quiz dates and times
+function parseDateToDay(dateStr: string): string | null {
+  // Parse formats like "Friday, Oct 4" or "October 12, 2025 - 08:00 AM"
+  const dayMap: Record<string, string> = {
+    monday: 'Mon',
+    tuesday: 'Tue',
+    wednesday: 'Wed',
+    thursday: 'Thu',
+    friday: 'Fri',
+    saturday: 'Sat',
+    sunday: 'Sun',
+  };
+  
+  const lowerDate = dateStr.toLowerCase();
+  for (const [fullDay, abbr] of Object.entries(dayMap)) {
+    if (lowerDate.includes(fullDay)) {
+      return abbr;
+    }
+  }
+  
+  // For "October 12, 2025" format, parse with dayjs
+  const parsed = dayjs(dateStr.split(' - ')[0].trim());
+  if (parsed.isValid()) {
+    return parsed.format('ddd');
+  }
+  
+  return null;
+}
+
+function parseTimeRange(timeStr: string): { start: string; end: string } | null {
+  // Parse formats like "7:30 AM - 9:30 AM"
+  const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!match) return null;
+  
+  const [, startHour, startMin, startPeriod, endHour, endMin, endPeriod] = match;
+  
+  const formatTime = (hour: string, min: string, period: string) => {
+    let h = parseInt(hour, 10);
+    if (period.toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (period.toUpperCase() === 'AM' && h === 12) h = 0;
+    return `${h.toString().padStart(2, '0')}:${min}`;
+  };
+  
+  return {
+    start: formatTime(startHour, startMin, startPeriod),
+    end: formatTime(endHour, endMin, endPeriod),
+  };
+}
+
+function parseQuizTime(dateStr: string): { day: string; start: string; end: string } | null {
+  // Parse formats like "October 12, 2025 - 08:00 AM"
+  const parts = dateStr.split(' - ');
+  if (parts.length !== 2) return null;
+  
+  const datePart = parts[0].trim();
+  const timePart = parts[1].trim();
+  
+  const parsed = dayjs(datePart);
+  if (!parsed.isValid()) return null;
+  
+  const day = parsed.format('ddd');
+  
+  // Parse time
+  const timeMatch = timePart.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!timeMatch) return null;
+  
+  const [, hour, min, period] = timeMatch;
+  let h = parseInt(hour, 10);
+  if (period.toUpperCase() === 'PM' && h !== 12) h += 12;
+  if (period.toUpperCase() === 'AM' && h === 12) h = 0;
+  
+  const start = `${h.toString().padStart(2, '0')}:${min}`;
+  // Assume quizzes are 2 hours long
+  const endH = h + 2;
+  const end = `${endH.toString().padStart(2, '0')}:${min}`;
+  
+  return { day, start, end };
+}
+
+// Helper to detect overlapping events and calculate layout
+function layoutEvents(events: ScheduleEvent[]) {
+  if (events.length === 0) return [];
+  
+  // Sort events by start time
+  const sorted = [...events].sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
+  
+  // Group overlapping events
+  const columns: ScheduleEvent[][] = [];
+  
+  sorted.forEach(event => {
+    const eventStart = toMinutes(event.start);
+    const eventEnd = toMinutes(event.end);
+    
+    // Find a column where this event doesn't overlap
+    let placed = false;
+    for (let col of columns) {
+      // Check if this event can fit after all events in this column
+      const canFit = col.every(colEvent => {
+        const colStart = toMinutes(colEvent.start);
+        const colEnd = toMinutes(colEvent.end);
+        // No overlap if event starts after column event ends, or event ends before column event starts
+        return eventEnd <= colStart || eventStart >= colEnd;
+      });
+      
+      if (canFit) {
+        col.push(event);
+        placed = true;
+        break;
+      }
+    }
+    
+    // If no suitable column found, create a new one
+    if (!placed) {
+      columns.push([event]);
+    }
+  });
+  
+  // Calculate layout properties for each event
+  const layout: Array<{ event: ScheduleEvent; column: number; totalColumns: number }> = [];
+  
+  sorted.forEach(event => {
+    const eventStart = toMinutes(event.start);
+    const eventEnd = toMinutes(event.end);
+    
+    // Find which columns this event overlaps with
+    const overlappingColumns = columns.filter(col =>
+      col.some(e => {
+        const eStart = toMinutes(e.start);
+        const eEnd = toMinutes(e.end);
+        return !(eventEnd <= eStart || eventStart >= eEnd);
+      })
+    );
+    
+    // Find which column contains this event
+    const columnIndex = columns.findIndex(col => col.includes(event));
+    
+    layout.push({
+      event,
+      column: columnIndex,
+      totalColumns: overlappingColumns.length,
+    });
+  });
+  
+  return layout;
+}
+
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const START_HOUR = 7;
 const END_HOUR = 18;
@@ -89,7 +235,6 @@ const SchedulePage = () => {
   const navigate = useNavigate();
   const { role } = useParams();
   const { isSidebarOpen } = useOutletContext<PortalOutletContext>();
-  const schedule = portal?.schedule;
   const [scheduleScheme, setScheduleScheme] = useState<'none' | 'tight' | 'light'>(
     (portal as any)?.scheduleScheme || 'none'
   );
@@ -111,10 +256,64 @@ const SchedulePage = () => {
     }
     return portal?.courses;
   }, [portal?.courses, portal?.courseMatching?.history, role]);
+  
+  // Generate dynamic events from registered courses
+  const dynamicEvents = useMemo(() => {
+    const events: ScheduleEvent[] = [];
+    
+    // Get in-progress courses
+    const inProgressCourses = portal?.courses?.courses?.filter(
+      (course) => course.status === 'in-progress'
+    ) ?? [];
+    
+    // For each in-progress course, extract sessions and quizzes
+    inProgressCourses.forEach((course) => {
+      const courseDetails = portal?.courseDetails?.[course.id];
+      if (!courseDetails) return;
+      
+      // Add upcoming sessions
+      courseDetails.upcomingSessions?.forEach((session) => {
+        const day = parseDateToDay(session.date);
+        const timeRange = parseTimeRange(session.time);
+        
+        if (day && timeRange) {
+          events.push({
+            id: `session-${session.id}`,
+            title: `${course.title}: ${session.title}`,
+            day,
+            start: timeRange.start,
+            end: timeRange.end,
+            type: 'busy',
+            location: course.format === 'In-person' ? 'Campus' : 'Online',
+          });
+        }
+      });
+      
+      // Add quizzes
+      courseDetails.quizzes?.forEach((quiz) => {
+        const parsed = parseQuizTime(quiz.date);
+        
+        if (parsed) {
+          events.push({
+            id: `quiz-${quiz.id}`,
+            title: `Quiz: ${quiz.title}`,
+            day: parsed.day,
+            start: parsed.start,
+            end: parsed.end,
+            type: 'busy',
+            location: 'Online',
+          });
+        }
+      });
+    });
+    
+    return events;
+  }, [portal?.courses?.courses, portal?.courseDetails]);
+  
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
   const [activeEventId, setActiveEventId] = useState<string | null>(null);
   const eventDetailMap = useMemo(() => {
-    const events = schedule?.events ?? [];
+    const events = dynamicEvents;
     return events.reduce<Record<string, EventDetail>>((acc, event, index) => {
       const template = DETAIL_TEMPLATES[index % DETAIL_TEMPLATES.length];
       const replaceToken = (text: string) => text.replace(/\{TITLE\}/g, event.title);
@@ -127,17 +326,17 @@ const SchedulePage = () => {
       };
       return acc;
     }, {});
-  }, [schedule?.events]);
+  }, [dynamicEvents]);
   const activeEvent = useMemo(
-    () => (activeEventId ? schedule?.events.find((evt) => evt.id === activeEventId) : undefined),
-    [activeEventId, schedule?.events],
+    () => (activeEventId ? dynamicEvents.find((evt) => evt.id === activeEventId) : undefined),
+    [activeEventId, dynamicEvents],
   );
   const activeDetails = activeEvent ? eventDetailMap[activeEvent.id] : undefined;
 
-  const grouped = schedule?.events.reduce<Record<string, ScheduleEvent[]>>((acc, event) => {
+  const grouped = dynamicEvents.reduce<Record<string, ScheduleEvent[]>>((acc, event) => {
     acc[event.day] = acc[event.day] ? [...acc[event.day], event] : [event];
     return acc;
-  }, {}) ?? {};
+  }, {});
   const today = dayjs();
   const todayLabel = today.format('dddd, D MMMM YYYY');
   const todayAbbrev = today.format('ddd');
@@ -153,10 +352,6 @@ const SchedulePage = () => {
       document.body.style.overflow = originalOverflow;
     };
   }, [activeEventId]);
-
-  if (!schedule) {
-    return <div className="rounded-3xl bg-white p-8 shadow-soft">Schedule data unavailable.</div>;
-  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[3fr_1.2fr]">
@@ -214,6 +409,8 @@ const SchedulePage = () => {
                 </div>
                 {days.map((day) => {
                   const dayEvents = grouped[day] ?? [];
+                  const eventLayout = layoutEvents(dayEvents);
+                  
                   return (
                     <div key={`column-${day}`} className="relative h-[540px] overflow-hidden rounded-2xl border border-slate-100 bg-white">
                       {timeStops.map((_, idx) =>
@@ -225,7 +422,7 @@ const SchedulePage = () => {
                           />
                         ),
                       )}
-                      {dayEvents.map((event) => {
+                      {eventLayout.map(({ event, column, totalColumns }) => {
                         const startMinutes = toMinutes(event.start);
                         const endMinutes = toMinutes(event.end);
                         const clampedStart = Math.max(startMinutes, START_HOUR * 60);
@@ -240,30 +437,39 @@ const SchedulePage = () => {
                         const showTime = durationMinutes > 60;
                         const color = eventColorMap[event.type] ?? eventColorMap.default;
                         const detailAvailable = !!eventDetailMap[event.id];
+                        
+                        // Calculate width and position based on overlaps
+                        const columnWidth = 100 / totalColumns;
+                        const leftPosition = column * columnWidth;
+                        const padding = 0.5; // Small padding between overlapping events
+                        
                         return (
                           <button
                             key={event.id}
                             type="button"
                             onClick={() => setActiveEventId(event.id)}
                             className={clsx(
-                              'absolute inset-x-0 flex h-auto flex-col gap-0.5 overflow-hidden rounded-2xl p-2 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
+                              'absolute flex h-auto flex-col gap-0.5 overflow-hidden rounded-2xl p-2 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
                               color.bg,
                               color.text,
-                              detailAvailable ? 'cursor-pointer transition hover:translate-y-px' : 'cursor-default',
+                              detailAvailable ? 'cursor-pointer transition hover:translate-y-px hover:shadow-md' : 'cursor-default',
                             )}
-                            style={{ top: `${top}%`, height: `${blockHeight}%`, marginLeft: '0.35rem', marginRight: '0.35rem' }}
+                            style={{ 
+                              top: `${top}%`, 
+                              height: `${blockHeight}%`, 
+                              left: `calc(${leftPosition}% + ${padding}%)`,
+                              width: `calc(${columnWidth}% - ${padding * 2}%)`,
+                            }}
                             aria-label={`View details for ${event.title}`}
                           >
                             <p
-                              className={`truncate font-semibold leading-tight ${isSidebarOpen ? 'text-[9px]' : 'text-[11px]'}`}
+                              className={`truncate font-semibold leading-tight ${totalColumns > 2 ? 'text-[8px]' : isSidebarOpen ? 'text-[9px]' : 'text-[11px]'}`}
                             >
                               {event.title}
                             </p>
                             {showTime && (
                               <p
-                                className={`truncate font-medium opacity-80 ${
-                                  isSidebarOpen ? 'text-[9px]' : 'text-[10px]'
-                                }`}
+                                className={`truncate font-medium opacity-80 ${totalColumns > 2 ? 'text-[7px]' : isSidebarOpen ? 'text-[9px]' : 'text-[10px]'}`}
                               >
                                 {formatRange(event.start, event.end)}
                               </p>

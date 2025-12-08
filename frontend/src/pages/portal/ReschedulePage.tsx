@@ -19,23 +19,39 @@ const statusOptions: Array<{ value: SlotType; label: string; description: string
 ];
 
 const ReschedulePage = () => {
-  const { portal } = useAuth();
+  const { portal, updatePortal } = useAuth();
   const reschedule = portal?.reschedule;
-  const [gridState, setGridState] = useState<RescheduleSection['grid']>(reschedule?.grid ?? []);
-  const [selectedType, setSelectedType] = useState<SlotType>('free');
-  const dayColumns = useMemo(() => gridState.map((row) => row.day), [gridState]);
+  
+  // Updated to show only 6am to 9pm (15 hours)
   const timelineLabels = useMemo(() => {
     const labels: string[] = [];
-    for (let hour = 1; hour <= 11; hour += 1) {
+    for (let hour = 6; hour <= 11; hour += 1) {
       labels.push(`${hour.toString().padStart(2, '0')}:00 AM`);
     }
     labels.push('12:00 PM');
-    for (let hour = 1; hour <= 11; hour += 1) {
+    for (let hour = 1; hour <= 9; hour += 1) {
       labels.push(`${hour.toString().padStart(2, '0')}:00 PM`);
     }
-    labels.push('12:00 AM');
     return labels;
   }, []);
+
+  // Initialize grid state with correct number of time slots (15 hours)
+  const initializeGrid = () => {
+    if (!reschedule?.grid) return [];
+    
+    return reschedule.grid.map(row => ({
+      ...row,
+      blocks: Array(timelineLabels.length).fill('open').map((_, idx) => {
+        // Preserve existing data if available
+        return row.blocks[idx] || 'open';
+      })
+    }));
+  };
+
+  const [gridState, setGridState] = useState<RescheduleSection['grid']>(initializeGrid());
+  const [selectedType, setSelectedType] = useState<SlotType>('free');
+  const dayColumns = useMemo(() => gridState.map((row) => row.day), [gridState]);
+  
   const { toasts, showToast } = useStackedToasts();
 
   if (!reschedule) {
@@ -51,6 +67,23 @@ const ReschedulePage = () => {
           : row,
       ),
     );
+  };
+
+  const handleSaveSchedule = async () => {
+    if (!portal || !updatePortal) {
+      showToast('Unable to save schedule. Please try again.');
+      return;
+    }
+
+    // Update the reschedule section with new grid
+    await updatePortal({
+      reschedule: {
+        ...reschedule,
+        grid: gridState
+      } as RescheduleSection
+    });
+    
+    showToast('✅ Availability updated successfully! Schedule has been saved.');
   };
 
   return (
@@ -146,7 +179,7 @@ const ReschedulePage = () => {
         <button
           className="mt-6 w-full rounded-2xl bg-primary px-6 py-3 font-semibold text-white shadow-soft transition hover:bg-primary/90"
           type="button"
-          onClick={() => showToast('Availability updated successfully')}
+          onClick={handleSaveSchedule}
         >
           Confirm changes
         </button>

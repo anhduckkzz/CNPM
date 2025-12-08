@@ -93,15 +93,6 @@
                 "actionLabel": "Register Tutor"
             },
             {
-                "id": "c-literary-analysis",
-                "title": "Literary Analysis",
-                "code": "EN1002",
-                "format": "In-person",
-                "capacity": "62/80",
-                "thumbnail": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80",
-                "actionLabel": "Register Tutor"
-            },
-            {
                 "id": "c-digital-signal",
                 "title": "Digital Signal Processing",
                 "code": "CO3002",
@@ -255,6 +246,51 @@
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
                 "format": "Blended",
                 "capacity": "50/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CS"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-literary-analysis",
+                "title": "Literary Analysis",
+                "code": "EN1004",
+                "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
+                "format": "Blended",
+                "capacity": "35/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "LITERATURE"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-mobile-development",
+                "title": "Mobile App Development",
+                "code": "CS3070",
+                "thumbnail": "https://images.unsplash.com/photo-1512941691920-25bca6c48a7e?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "40/100",
+                "tutor": "Nguyễn Văn Dũng",
+                "tags": [
+                    "CS"
+                ],
+                "actionLabel": "Manage Your Course",
+                "badge": "",
+                "accent": ""
+            },
+            {
+                "id": "c-database-design",
+                "title": "Advanced Database Design",
+                "code": "CS3020",
+                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+                "format": "In-person",
+                "capacity": "46/100",
                 "tutor": "Nguyễn Văn Dũng",
                 "tags": [
                     "CS"
@@ -422,12 +458,13 @@
                 "title": "Advanced Calculus",
                 "code": "M1T003",
                 "thumbnail": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "instructor": "Nguyễn Văn Dũng",
+                "status": "completed",
+                "registeredDate": "2025-12-02",
+                "instructor": "Prof. Lê Hoàng B",
                 "format": "In-person",
-                "timeStudy": "Mon & Tue 10:00-12:00",
-                "studentCount": 0,
+                "schedule": "Tue, Thu 09:00-11:00",
+                "timeStudy": "Tue & Thu 09:00-11:00",
+                "studentCount": 52,
                 "tutor": "You",
                 "tags": [
                     "MATH"
@@ -489,12 +526,13 @@
                 "title": "Cellular Biology",
                 "code": "BI3002",
                 "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
-                "registeredDate": "2025-12-08",
-                "instructor": "Nguyễn Văn Dũng",
+                "status": "waiting",
+                "registeredDate": "2025-12-07",
+                "instructor": "Dr. Ngô Xuân F",
                 "format": "Blended",
-                "timeStudy": "Mon & Tue 8:00-10:00",
-                "studentCount": 0,
+                "schedule": "Wed, Sat 09:00-11:00",
+                "timeStudy": "Wed & Sat 09:00-11:00",
+                "studentCount": 35,
                 "tutor": "You",
                 "tags": [
                     "BIOLOGY"
@@ -505,16 +543,29 @@
                 "title": "Web Development Advanced Topics",
                 "code": "CS3050",
                 "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=900&q=80",
-                "status": "in-progress",
+                "status": "completed",
                 "registeredDate": "2025-12-08",
-                "instructor": "Nguyễn Văn Dũng",
-                "format": "Blended",
-                "timeStudy": "Mon & Tue 13:00-15:00",
-                "studentCount": 0,
+                "instructor": "Prof. Bùi Minh G",
+                "format": "In-person",
+                "schedule": "Tue, Thu 10:00-12:00",
+                "timeStudy": "Tue & Thu 10:00-12:00",
+                "studentCount": 44,
                 "tutor": "You",
                 "tags": [
                     "CS"
                 ]
+            },
+            {
+                "id": "c-database-design",
+                "title": "Advanced Database Design",
+                "code": "CS3020",
+                "thumbnail": "https://images.unsplash.com/photo-1516321318423-f06f70570ec0?auto=format&fit=crop&w=900&q=80",
+                "status": "in-progress",
+                "registeredDate": "2025-12-08",
+                "format": "In-person",
+                "instructor": "Nguyễn Văn Dũng",
+                "studentCount": 0,
+                "timeStudy": "Mon & Tue 8:00-10:00"
             }
         ]
     },
@@ -1889,7 +1940,15 @@
                     "busy",
                     "free",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "busy",
+                    "open",
+                    "busy",
+                    "open"
                 ]
             },
             {
@@ -1902,7 +1961,15 @@
                     "busy",
                     "free",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1915,7 +1982,15 @@
                     "free",
                     "free",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "open",
+                    "free",
+                    "free",
+                    "open",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1928,7 +2003,15 @@
                     "free",
                     "busy",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "open",
+                    "busy",
+                    "open",
+                    "open",
+                    "busy",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1941,7 +2024,15 @@
                     "free",
                     "busy",
                     "busy",
-                    "busy"
+                    "busy",
+                    "open",
+                    "free",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open"
                 ]
             },
             {
@@ -1954,12 +2045,28 @@
                     "open",
                     "open",
                     "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "free",
+                    "open",
+                    "open",
                     "open"
                 ]
             },
             {
                 "day": "Sunday",
                 "blocks": [
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
+                    "open",
                     "open",
                     "open",
                     "open",
@@ -2283,5 +2390,6 @@
     },
     "avatars": {
         "tutor@hcmut.edu.vn": "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=300&q=80"
-    }
+    },
+    "scheduleScheme": "tight"
 }
