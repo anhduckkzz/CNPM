@@ -1,15 +1,18 @@
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, FileSpreadsheet } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
+import { generatePerformanceAnalysisSpreadsheet, generateScholarshipReportSpreadsheet, generateFeedbackReportSpreadsheet } from '../../utils/excelGenerator';
 
 const ReportSection = ({
   title,
   report,
   onAction,
+  onGenerateExcel,
 }: {
   title: string;
   report: { reportName: string; academicYear: string; semester?: string; filters: { label: string; value: string }[]; options: string[] };
   onAction: (message: string) => void;
+  onGenerateExcel: () => void;
 }) => (
   <section className="rounded-[32px] bg-white p-8 shadow-soft">
     <p className="text-sm uppercase tracking-widest text-slate-400">{title}</p>
@@ -59,6 +62,14 @@ const ReportSection = ({
         Generate Report
       </button>
       <button
+        className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-emerald-700"
+        type="button"
+        onClick={onGenerateExcel}
+      >
+        <FileSpreadsheet className="h-4 w-4" />
+        Export to Excel
+      </button>
+      <button
         className="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-500 transition hover:border-primary/40 hover:text-primary"
         type="button"
         onClick={() => onAction(`Sent ${report.reportName} to Office of Student Affairs`)}
@@ -79,18 +90,58 @@ const ReportSection = ({
 const ReportBuilderPage = () => {
   const { portal, role } = useAuth();
   const reports = portal?.reports;
+  const staffRecords = portal?.staffRecords;
   const { toasts, showToast } = useStackedToasts();
 
   if (role !== 'staff' || !reports) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Report builder available for staff only.</div>;
   }
 
+  // Prepare mock student data for Excel generation
+  const mockStudentData = staffRecords?.table || [
+    { studentId: 'STU-20127001', name: 'Nguyễn Văn An', major: 'Computer Science', gpa: '3.85', status: 'Active' },
+    { studentId: 'STU-20127002', name: 'Trần Thị Bình', major: 'Electrical Engineering', gpa: '3.92', status: 'Active' },
+    { studentId: 'STU-20127003', name: 'Lê Văn Cường', major: 'Mechanical Engineering', gpa: '3.67', status: 'Active' },
+    { studentId: 'STU-20127004', name: 'Phạm Thị Dung', major: 'Civil Engineering', gpa: '3.78', status: 'Active' },
+    { studentId: 'STU-20127005', name: 'Hoàng Văn Em', major: 'Chemical Engineering', gpa: '3.56', status: 'Active' },
+  ];
+
+  const handleGeneratePerformanceExcel = () => {
+    generatePerformanceAnalysisSpreadsheet(mockStudentData);
+    showToast('✅ Performance analysis spreadsheet downloaded successfully!');
+  };
+
+  const handleGenerateScholarshipExcel = () => {
+    generateScholarshipReportSpreadsheet(mockStudentData);
+    showToast('✅ Scholarship report spreadsheet downloaded successfully!');
+  };
+
+  const handleGenerateFeedbackExcel = () => {
+    generateFeedbackReportSpreadsheet(mockStudentData);
+    showToast('✅ Feedback report spreadsheet downloaded successfully!');
+  };
+
   return (
     <>
       <div className="space-y-8">
-        <ReportSection title="Academic Report" report={reports.academic} onAction={showToast} />
-        <ReportSection title="Scholarship Report" report={reports.scholarship} onAction={showToast} />
-        <ReportSection title="Feedback Generation" report={reports.feedback} onAction={showToast} />
+        <ReportSection 
+          title="Academic Report" 
+          report={reports.academic} 
+          onAction={showToast}
+          onGenerateExcel={handleGeneratePerformanceExcel}
+        />
+        <ReportSection 
+          title="Scholarship Report" 
+          report={reports.scholarship} 
+          onAction={showToast}
+          onGenerateExcel={handleGenerateScholarshipExcel}
+        />
+        <ReportSection 
+          title="Feedback Generation" 
+          report={reports.feedback} 
+          onAction={showToast}
+          onGenerateExcel={handleGenerateFeedbackExcel}
+        />
       </div>
 
       <div aria-live="assertive" className="pointer-events-none fixed left-6 top-6 z-[60] flex w-full max-w-xs flex-col gap-2">

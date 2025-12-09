@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { AcademicRecordSection, StaffRecordsSection } from '../../types/portal';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
+import { generatePerformanceAnalysisSpreadsheet, generateScholarshipReportSpreadsheet, generateFeedbackReportSpreadsheet } from '../../utils/excelGenerator';
 
 type DropdownSection = {
   id: 'scholarship' | 'training' | 'academic';
@@ -476,6 +477,46 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          <div className="rounded-[32px] bg-white p-6 shadow-soft">
+            <h3 className="text-lg font-semibold text-ink">Generate Reports</h3>
+            <p className="mt-1 text-sm text-slate-500">Export comprehensive spreadsheets with student data.</p>
+            <div className="mt-4 space-y-3">
+              <button
+                type="button"
+                onClick={() => {
+                  generatePerformanceAnalysisSpreadsheet(baseRows);
+                  showToast('Performance analysis spreadsheet generated!');
+                }}
+                className="flex w-full items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-ink transition hover:border-primary/40 hover:text-primary"
+              >
+                <span>Performance Analysis</span>
+                <FileText className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  generateScholarshipReportSpreadsheet(baseRows);
+                  showToast('Scholarship report spreadsheet generated!');
+                }}
+                className="flex w-full items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-ink transition hover:border-primary/40 hover:text-primary"
+              >
+                <span>Scholarship Report</span>
+                <FileText className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  generateFeedbackReportSpreadsheet(baseRows);
+                  showToast('Feedback report spreadsheet generated!');
+                }}
+                className="flex w-full items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-ink transition hover:border-primary/40 hover:text-primary"
+              >
+                <span>Feedback Generation</span>
+                <FileText className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
