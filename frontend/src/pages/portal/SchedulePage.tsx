@@ -280,7 +280,14 @@ const SchedulePage = () => {
   );
   const registered = useMemo(() => {
     if (portal?.courses?.courses?.length) {
-      return portal.courses;
+      // Filter to only show courses with status 'in-progress' (actively registered)
+      const inProgressCourses = portal.courses.courses.filter(
+        (course) => course.status === 'in-progress'
+      );
+      return {
+        ...portal.courses,
+        courses: inProgressCourses
+      };
     }
     if (role === 'tutor' && portal?.courseMatching?.history?.length) {
       return {
@@ -326,6 +333,8 @@ const SchedulePage = () => {
             type: 'busy',
             location: course.format === 'In-person' ? 'Campus' : 'Online',
             courseId: course.id,
+            instructor: course.instructor || course.tutor || 'TBA',
+            isSession: true,
           } as any);
         }
       });
@@ -344,6 +353,8 @@ const SchedulePage = () => {
             type: 'busy',
             location: 'Online',
             courseId: course.id,
+            instructor: course.instructor || course.tutor || 'TBA',
+            isQuiz: true,
           } as any);
         }
       });
@@ -359,8 +370,10 @@ const SchedulePage = () => {
     return events.reduce<Record<string, EventDetail>>((acc, event, index) => {
       const template = DETAIL_TEMPLATES[index % DETAIL_TEMPLATES.length];
       const replaceToken = (text: string) => text.replace(/\{TITLE\}/g, event.title);
+      // Use the actual instructor from the event if available, otherwise use template facilitator
+      const eventInstructor = (event as any).instructor;
       acc[event.id] = {
-        facilitator: template.facilitator,
+        facilitator: eventInstructor || template.facilitator,
         preparation: template.preparation,
         reminder: template.reminder,
         description: replaceToken(template.description),
@@ -396,12 +409,12 @@ const SchedulePage = () => {
   }, [activeEventId]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[3fr_1.2fr]">
-      <section className="rounded-[32px] bg-white p-8 shadow-soft">
+    <div className="grid gap-6 lg:grid-cols-[4fr_1fr]">
+      <section className="rounded-[32px] bg-white p-10 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-widest text-slate-400">Schedule Overview</p>
-            <h1 className="text-3xl font-semibold text-ink">{monthLabel}</h1>
+            <p className="text-base uppercase tracking-widest text-slate-400">Schedule Overview</p>
+            <h1 className="text-4xl font-semibold text-ink">{monthLabel}</h1>
           </div>
           <div className="flex gap-3">
             <button
@@ -429,20 +442,20 @@ const SchedulePage = () => {
         <div className="mt-6 space-y-2">
           {viewMode === 'week' ? (
             <>
-              <div className="grid grid-cols-[80px_repeat(7,minmax(0,1fr))] gap-4 text-sm font-semibold text-slate-500">
-                <div className="text-xs uppercase tracking-widest text-slate-400">Time</div>
+              <div className="grid grid-cols-[100px_repeat(7,minmax(0,1fr))] gap-5 text-base font-semibold text-slate-600">
+                <div className="text-sm uppercase tracking-widest text-slate-400">Time</div>
                 {days.map((day) => (
                   <div key={`label-${day}`} className="text-center">
                     {day}
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-[80px_repeat(7,minmax(0,1fr))] gap-4">
-                <div className="relative h-[540px]">
+              <div className="grid grid-cols-[100px_repeat(7,minmax(0,1fr))] gap-5">
+                <div className="relative h-[680px]">
                   {timeStops.map((hour, idx) => (
                     <div
                       key={`axis-${hour}`}
-                      className="absolute left-0 flex -translate-y-1/2 items-center justify-end pr-3 text-xs font-semibold text-slate-400"
+                      className="absolute left-0 flex -translate-y-1/2 items-center justify-end pr-4 text-sm font-semibold text-slate-500"
                       style={{ top: `${(idx / (timeStops.length - 1)) * 100}%` }}
                     >
                       {formatHourLabel(hour)}
@@ -454,7 +467,7 @@ const SchedulePage = () => {
                   const eventLayout = layoutEvents(dayEvents);
                   
                   return (
-                    <div key={`column-${day}`} className="relative h-[540px] overflow-hidden rounded-2xl border border-slate-100 bg-white">
+                    <div key={`column-${day}`} className="relative h-[680px] overflow-hidden rounded-2xl border border-slate-100 bg-white">
                       {timeStops.map((_, idx) =>
                         idx === 0 ? null : (
                           <div
@@ -491,9 +504,31 @@ const SchedulePage = () => {
                           <button
                             key={event.id}
                             type="button"
-                            onClick={() => setActiveEventId(event.id)}
+                            onClick={() => {
+                              const eventData = event as any;
+                              if (courseId && role) {
+                                const slug = toCourseSlug(courseId) ?? courseId;
+                                
+                                // Navigate to quiz page if it's a quiz event
+                                if (eventData.isQuiz) {
+                                  const quizId = event.id.replace('quiz-', '');
+                                  navigate(`/portal/${role}/course-detail/${slug}/quiz/${quizId}`);
+                                  return;
+                                }
+                                
+                                // Navigate to session page if it's a session event
+                                if (eventData.isSession) {
+                                  const sessionId = event.id.replace('session-', '');
+                                  navigate(`/portal/${role}/course-detail/${slug}/session/${sessionId}`);
+                                  return;
+                                }
+                              }
+                              
+                              // Default: show event details modal
+                              setActiveEventId(event.id);
+                            }}
                             className={clsx(
-                              'absolute flex h-auto flex-col gap-0.5 overflow-hidden rounded-2xl p-2 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
+                              'absolute flex h-auto flex-col gap-1 overflow-hidden rounded-2xl p-3 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
                               color.bg,
                               color.text,
                               detailAvailable ? 'cursor-pointer transition hover:translate-y-px hover:shadow-md' : 'cursor-default',
@@ -507,20 +542,20 @@ const SchedulePage = () => {
                             aria-label={`View details for ${event.title}`}
                           >
                             <p
-                              className={`truncate font-semibold leading-tight ${totalColumns > 2 ? 'text-[8px]' : isSidebarOpen ? 'text-[9px]' : 'text-[11px]'}`}
+                              className={`truncate font-semibold leading-tight ${totalColumns > 2 ? 'text-[10px]' : isSidebarOpen ? 'text-xs' : 'text-sm'}`}
                             >
                               {event.title}
                             </p>
                             {showTime && (
                               <p
-                                className={`truncate font-medium opacity-80 ${totalColumns > 2 ? 'text-[7px]' : isSidebarOpen ? 'text-[9px]' : 'text-[10px]'}`}
+                                className={`truncate font-medium opacity-90 ${totalColumns > 2 ? 'text-[9px]' : isSidebarOpen ? 'text-[11px]' : 'text-xs'}`}
                               >
                                 {formatRange(event.start, event.end)}
                               </p>
                             )}
                             {event.location && (
                               <p
-                                className={`truncate opacity-70 ${isSidebarOpen ? 'text-[9px]' : 'text-[10px]'}`}
+                                className={`truncate opacity-80 ${isSidebarOpen ? 'text-[10px]' : 'text-xs'}`}
                               >
                                 {event.location}
                               </p>
@@ -554,19 +589,41 @@ const SchedulePage = () => {
                       <button
                         key={event.id}
                         type="button"
-                        onClick={() => setActiveEventId(event.id)}
+                        onClick={() => {
+                          const eventData = event as any;
+                          if (courseId && role) {
+                            const slug = toCourseSlug(courseId) ?? courseId;
+                            
+                            // Navigate to quiz page if it's a quiz event
+                            if (eventData.isQuiz) {
+                              const quizId = event.id.replace('quiz-', '');
+                              navigate(`/portal/${role}/course-detail/${slug}/quiz/${quizId}`);
+                              return;
+                            }
+                            
+                            // Navigate to session page if it's a session event
+                            if (eventData.isSession) {
+                              const sessionId = event.id.replace('session-', '');
+                              navigate(`/portal/${role}/course-detail/${slug}/session/${sessionId}`);
+                              return;
+                            }
+                          }
+                          
+                          // Default: show event details modal
+                          setActiveEventId(event.id);
+                        }}
                         className={clsx(
-                          'flex flex-col gap-1 rounded-2xl border border-slate-100 p-4 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
+                          'flex flex-col gap-2 rounded-2xl border border-slate-100 p-5 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70',
                           color.bg,
                           color.text,
                         )}
                       >
                         <div className="flex items-center justify-between gap-4">
-                          <p className="text-lg font-semibold">{event.title}</p>
-                          <span className="text-xs font-semibold uppercase tracking-widest">{event.day}</span>
+                          <p className="text-xl font-semibold">{event.title}</p>
+                          <span className="text-sm font-semibold uppercase tracking-widest">{event.day}</span>
                         </div>
-                        <p className="text-sm font-medium opacity-80">{formatRange(event.start, event.end)}</p>
-                        {event.location && <p className="text-sm opacity-80">{event.location}</p>}
+                        <p className="text-base font-medium opacity-90">{formatRange(event.start, event.end)}</p>
+                        {event.location && <p className="text-base opacity-80">{event.location}</p>}
                       </button>
                     );
                   })

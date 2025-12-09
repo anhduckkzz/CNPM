@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { CheckCircle2, Star } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
@@ -13,6 +13,65 @@ const FeedbackPage = () => {
   const [systemFeedback, setSystemFeedback] = useState('Please improve system performance and navigation clarity.');
   const [activeTab, setActiveTab] = useState<'submit' | 'history'>('submit');
   const { toasts, showToast } = useStackedToasts();
+
+  // Helper to parse various date formats
+  const parseSessionDate = useCallback((dateStr: string): Date | null => {
+    try {
+      // Handle "Monday, Oct 6" format
+      const monthMap: Record<string, number> = {
+        jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+        jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+      };
+      
+      const match = dateStr.match(/(\w+),\s*(\w+)\s+(\d+)/i);
+      if (match) {
+        const [, , month, day] = match;
+        const monthNum = monthMap[month.toLowerCase().slice(0, 3)];
+        if (monthNum !== undefined) {
+          const year = 2025; // Current academic year
+          return new Date(year, monthNum, parseInt(day));
+        }
+      }
+      
+      // Try standard date parsing
+      const parsed = new Date(dateStr);
+      if (!isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    } catch (e) {
+      // Ignore parse errors
+    }
+    return null;
+  }, []);
+
+  // Generate available sessions from registered in-progress courses
+  const availableSessions = useMemo(() => {
+    const sessions: string[] = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Get in-progress courses
+    const inProgressCourses = portal?.courses?.courses?.filter(
+      (course) => course.status === 'in-progress'
+    ) || [];
+
+    inProgressCourses.forEach((course) => {
+      const courseDetails = portal?.courseDetails?.[course.id];
+      if (!courseDetails?.upcomingSessions) return;
+
+      courseDetails.upcomingSessions.forEach((session) => {
+        // Parse session date
+        const sessionDate = parseSessionDate(session.date);
+        if (sessionDate && sessionDate < today) {
+          // Only include past sessions
+          const formattedSession = `${course.code || course.id.toUpperCase()} - ${session.title} - ${session.date}`;
+          sessions.push(formattedSession);
+        }
+      });
+    });
+
+    return sessions;
+  }, [portal?.courses?.courses, portal?.courseDetails, parseSessionDate]);
 
   if (!feedback) {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Feedback data unavailable.</div>;
@@ -48,8 +107,6 @@ const FeedbackPage = () => {
       }
     }));
     
-    showToast('Student feedback submitted successfully');
-    
     // Reset form
     setSelectedSession('');
     setSessionComments('The session was very insightful and promoted active learning.');
@@ -57,8 +114,10 @@ const FeedbackPage = () => {
     setRating(4);
     setExperience(4);
     
-    // Switch to history tab
+    // Switch to history tab to show the new feedback
     setActiveTab('history');
+    
+    showToast('Feedback submitted successfully and added to history');
   };
 
   return (
@@ -100,9 +159,13 @@ const FeedbackPage = () => {
                   onChange={(e) => setSelectedSession(e.target.value)}
                 >
                   <option value="">Choose a session...</option>
-                  {feedback.sessions.map((session) => (
-                    <option key={session} value={session}>{session}</option>
-                  ))}
+                  {availableSessions.length > 0 ? (
+                    availableSessions.map((session) => (
+                      <option key={session} value={session}>{session}</option>
+                    ))
+                  ) : (
+                    <option disabled>No past sessions available</option>
+                  )}
                 </select>
               </label>
               <label className="block text-sm font-semibold text-slate-500">

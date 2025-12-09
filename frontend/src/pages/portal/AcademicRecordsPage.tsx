@@ -524,6 +524,7 @@ const StaffAcademicRecords = ({ records }: { records: StaffRecordsSection }) => 
 };
 
 const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection }) => {
+  const { portal } = useAuth();
   const defaultGradePoints: Record<string, number> = {
     A: 4,
     B: 3,
@@ -542,6 +543,18 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
   const [scanStage, setScanStage] = useState(SCORE_SCAN_STAGES[0].label);
   const [showSyllabus, setShowSyllabus] = useState(false);
   const portalTarget = typeof document !== 'undefined' ? document.body : null;
+
+  // Generate tutor lessons dynamically from registered courses
+  const tutorLessons = useMemo(() => {
+    if (!portal?.courses?.courses) return [];
+    
+    return portal.courses.courses
+      .filter((course) => course.status === 'in-progress' && course.instructor)
+      .map((course) => ({
+        title: course.title,
+        tutor: course.instructor!,
+      }));
+  }, [portal?.courses?.courses]);
 
   const normalizeGrade = (value: string) => value.replace('+', '').trim().toUpperCase();
   const resolveScale4 = (gradeEntry: AcademicRecordSection['grades'][number]) => {
@@ -914,12 +927,16 @@ const StudentAcademicRecords = ({ records }: { records: AcademicRecordSection })
             <h3 className="text-lg font-semibold text-ink">Tutor Program Lessons</h3>
           </div>
           <ul className="mt-4 space-y-3 text-sm text-slate-600">
-            {records.tutorLessons.map((lesson) => (
-              <li key={lesson.title} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
-                <span className="font-medium text-ink">{lesson.title}</span>
-                <span className="text-primary">{lesson.tutor}</span>
-              </li>
-            ))}
+            {tutorLessons.length > 0 ? (
+              tutorLessons.map((lesson) => (
+                <li key={lesson.title} className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3">
+                  <span className="font-medium text-ink">{lesson.title}</span>
+                  <span className="text-primary">{lesson.tutor}</span>
+                </li>
+              ))
+            ) : (
+              <li className="text-center text-slate-400 py-2">No active courses with instructors</li>
+            )}
           </ul>
         </div>
       </aside>

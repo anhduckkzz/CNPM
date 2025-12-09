@@ -1,5 +1,6 @@
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { RescheduleSection } from '../../types/portal';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
@@ -19,7 +20,8 @@ const statusOptions: Array<{ value: SlotType; label: string; description: string
 ];
 
 const ReschedulePage = () => {
-  const { portal, updatePortal } = useAuth();
+  const { portal, updatePortal, role } = useAuth();
+  const navigate = useNavigate();
   const reschedule = portal?.reschedule;
   
   // Updated to show only 6am to 9pm (15 hours)
@@ -90,6 +92,16 @@ const ReschedulePage = () => {
     <>
       <div className="grid gap-6 lg:grid-cols-[3fr_1fr]">
         <section className="rounded-[32px] bg-white p-8 shadow-soft">
+        <div className="mb-6">
+          <button
+            type="button"
+            onClick={() => navigate(`/portal/${role}/schedule`)}
+            className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-primary/30 hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Return to Schedule
+          </button>
+        </div>
         <h1 className="text-3xl font-semibold text-ink">Reschedule</h1>
         <p className="mt-2 text-slate-500">Be specific about your desired timetable for better matching.</p>
         <div className="mt-6">

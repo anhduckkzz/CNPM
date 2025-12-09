@@ -16,3 +16,5 @@ __pycache__/
 .coverage
 htmlcov/
 backend/fonts/*.zip
+backend/.venv
+backend/app/__pycache__/*

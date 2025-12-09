@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStackedToasts } from '../../hooks/useStackedToasts';
@@ -10,7 +10,67 @@ const TutorFeedbackPage = () => {
   const [sessionReflection, setSessionReflection] = useState('Session was insightful and promoted active learning.');
   const [systemFeedback, setSystemFeedback] = useState('Improve performance and navigation clarity.');
   const [sessionRating, setSessionRating] = useState(data?.sessionRating || 5);
+  const [activeTab, setActiveTab] = useState<'submit' | 'history'>('submit');
   const { toasts, showToast } = useStackedToasts();
+
+  // Helper to parse various date formats
+  const parseSessionDate = useCallback((dateStr: string): Date | null => {
+    try {
+      // Handle "Monday, Oct 6" format
+      const monthMap: Record<string, number> = {
+        jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+        jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+      };
+      
+      const match = dateStr.match(/(\w+),\s*(\w+)\s+(\d+)/i);
+      if (match) {
+        const [, , month, day] = match;
+        const monthNum = monthMap[month.toLowerCase().slice(0, 3)];
+        if (monthNum !== undefined) {
+          const year = 2025; // Current academic year
+          return new Date(year, monthNum, parseInt(day));
+        }
+      }
+      
+      // Try standard date parsing
+      const parsed = new Date(dateStr);
+      if (!isNaN(parsed.getTime())) {
+        return parsed;
+      }
+    } catch (e) {
+      // Ignore parse errors
+    }
+    return null;
+  }, []);
+
+  // Generate available sessions from registered in-progress courses
+  const availableSessions = useMemo(() => {
+    const sessions: string[] = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Get in-progress courses (courses tutor is teaching)
+    const inProgressCourses = portal?.courses?.courses?.filter(
+      (course) => course.status === 'in-progress'
+    ) || [];
+
+    inProgressCourses.forEach((course) => {
+      const courseDetails = portal?.courseDetails?.[course.id];
+      if (!courseDetails?.upcomingSessions) return;
+
+      courseDetails.upcomingSessions.forEach((session) => {
+        // Parse session date
+        const sessionDate = parseSessionDate(session.date);
+        if (sessionDate && sessionDate < today) {
+          // Only include past sessions
+          const formattedSession = `${course.code || course.id.toUpperCase()} - ${session.title} - ${session.date}`;
+          sessions.push(formattedSession);
+        }
+      });
+    });
+
+    return sessions;
+  }, [portal?.courses?.courses, portal?.courseDetails, parseSessionDate]);
 
   if (role !== 'tutor') {
     return <div className="rounded-3xl bg-white p-8 shadow-soft">Tutor feedback is only available for tutors.</div>;
@@ -48,13 +108,16 @@ const TutorFeedbackPage = () => {
       }
     }));
     
-    showToast('Tutor feedback submitted successfully');
-    
     // Reset form
     setSelectedSession('');
     setSessionReflection('Session was insightful and promoted active learning.');
     setSystemFeedback('Improve performance and navigation clarity.');
     setSessionRating(5);
+    
+    // Switch to history tab to show the new feedback
+    setActiveTab('history');
+    
+    showToast('Feedback submitted successfully and added to history');
   };
 
   return (
@@ -77,6 +140,30 @@ const TutorFeedbackPage = () => {
           ))}
         </div>
       )}
+      <div className="mb-6 flex gap-3">
+        <button
+          onClick={() => setActiveTab('submit')}
+          className={`rounded-2xl px-6 py-3 font-semibold transition ${
+            activeTab === 'submit'
+              ? 'bg-primary text-white shadow-soft'
+              : 'bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Submit Feedback
+        </button>
+        <button
+          onClick={() => setActiveTab('history')}
+          className={`rounded-2xl px-6 py-3 font-semibold transition ${
+            activeTab === 'history'
+              ? 'bg-primary text-white shadow-soft'
+              : 'bg-white text-slate-600 hover:bg-slate-50'
+          }`}
+        >
+          Feedback History
+        </button>
+      </div>
+
+      {activeTab === 'submit' ? (
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
       <section className="rounded-[32px] bg-white p-8 shadow-soft">
         <h1 className="text-3xl font-semibold text-ink">Tutor Feedback and Evaluation</h1>
@@ -122,9 +209,13 @@ const TutorFeedbackPage = () => {
               onChange={(e) => setSelectedSession(e.target.value)}
             >
               <option value="">Choose a session...</option>
-              {data.sessions?.map((session) => (
-                <option key={session} value={session}>{session}</option>
-              ))}
+              {availableSessions.length > 0 ? (
+                availableSessions.map((session) => (
+                  <option key={session} value={session}>{session}</option>
+                ))
+              ) : (
+                <option disabled>No past sessions available</option>
+              )}
             </select>
           </label>
         </div>
@@ -180,6 +271,31 @@ const TutorFeedbackPage = () => {
         </div>
       </aside>
     </div>
+      ) : (
+        <div className="rounded-[32px] bg-white p-8 shadow-soft">
+          <h2 className="text-2xl font-semibold text-ink">Feedback History</h2>
+          <p className="mt-2 text-sm text-slate-500">All your submitted feedback and their status</p>
+          <div className="mt-6 space-y-4">
+            {data.history.map((item) => (
+              <div key={item.id} className="rounded-2xl border border-slate-100 px-6 py-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-base font-semibold text-ink">{item.course}</p>
+                    <p className="mt-1 text-xs text-slate-400">Submitted on {item.submittedOn}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary">
+                      {item.status}
+                    </span>
+                    <span className="font-semibold text-slate-600">Rating: {item.rating}/7</span>
+                  </div>
+                </div>
+                <p className="mt-3 text-sm text-slate-600">{item.summary}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 };

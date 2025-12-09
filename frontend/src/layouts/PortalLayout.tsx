@@ -290,7 +290,7 @@ const PortalLayout = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-ink">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-6 lg:py-8">
+      <div className="mx-auto flex w-full max-w-[1800px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-6 lg:py-8">
         {isMobileSidebarOpen && (
           <button
             type="button"
@@ -333,8 +333,8 @@ const PortalLayout = () => {
           onMouseEnter={() => setSidebarHovered(true)}
           onMouseLeave={() => setSidebarHovered(false)}
           className={clsx(
-            'group hidden rounded-3xl bg-white p-5 shadow-soft transition-[width] duration-500 ease-out lg:block',
-            isSidebarOpen ? 'w-72' : 'w-20',
+            'group hidden rounded-3xl bg-white shadow-soft transition-[width] duration-500 ease-out lg:block',
+            isSidebarOpen ? 'w-72 p-5' : 'w-16 p-3',
           )}
         >
           <div
@@ -346,7 +346,10 @@ const PortalLayout = () => {
             <img
               src={hcmutLogoUrl}
               alt="HCMUT logo"
-              className="h-11 w-11 shrink-0 rounded-2xl border border-primary/10 bg-white p-1 object-contain shadow-sm"
+              className={clsx(
+                'shrink-0 rounded-2xl border border-primary/10 bg-white p-1 object-contain shadow-sm transition-all duration-300',
+                isSidebarOpen ? 'h-11 w-11' : 'h-10 w-10'
+              )}
             />
             <div className={clsx('transition-all duration-300 ease-out', isSidebarOpen ? 'translate-x-0 opacity-100' : 'hidden')}>
               <p className="text-xs uppercase tracking-wide text-slate-400">HCMUT e-learning</p>
